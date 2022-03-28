@@ -14,7 +14,8 @@ struct FitnessPadApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(TrainingsViewModel())
+//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

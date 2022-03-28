@@ -1,0 +1,50 @@
+//
+//  TrainingDay.swift
+//  FitnessPad
+//
+//  Created by Марк Кулик on 25.03.2022.
+//
+
+import SwiftUI
+
+struct TrainingDay: View {
+    @EnvironmentObject var viewModel: TrainingsViewModel
+    
+//    @State var date = Date()
+    
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMMM yyyy"
+        return formatter
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            
+            Text("\(viewModel.chosenDate, formatter: dateFormatter)")
+                .font(.system(size: 43))
+                .fontWeight(.medium)
+                .foregroundColor(.white)
+                .padding(.leading)
+            
+            Text("Pull-Ups, Push-Ups, Pike Push-Ups, Squat")
+                .font(.system(size: 27))
+                .fontWeight(.regular)
+                .foregroundColor(.white)
+                .lineLimit(1)
+                .padding(.leading)
+            
+        }
+        .frame(width: 380, height: 160, alignment: .leading)
+        .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
+        .cornerRadius(15, corners: .allCorners)
+    }
+}
+
+struct TrainingDay_Previews: PreviewProvider {
+   
+    static var previews: some View {
+        TrainingDay()
+            .environmentObject(TrainingsViewModel())
+    }
+}

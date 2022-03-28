@@ -9,16 +9,30 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-
+    @AppStorage("selectedTab") var selectedTab: Tab = .home
     
     var body: some View {
-        TabBarView()
+        ZStack {
+            switch selectedTab {
+            case .home:
+                HomeView()
+            case .trainings:
+                TrainingsView()
+            case .exercises:
+                ExercisesView()
+            case .progress:
+                ProgressView()
+            }
+            
+            TabBarView()
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environmentObject(TrainingsViewModel())
     }
 }
 
