@@ -9,8 +9,9 @@ import SwiftUI
 
 struct ExercisesView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
+   
     @State var isPresented = false
-    var exercises = ["Pull-Ups", "Push-Ups", "Pike Push-Ups", "Squat", "Pistol Squats", "Bench Press", "Shoulder Press", "Bicep Curls"]
+    
     
     var body: some View {
         
@@ -23,11 +24,11 @@ struct ExercisesView: View {
                     .padding(.top, 50)
                     .padding(.bottom, 20)
                     
-                ForEach(exercises, id: \.self) { exercise in
+                ForEach(viewModel.exercises, id: \.id) { exercise in
                     Button {
                         self.isPresented.toggle()
                     } label: {
-                        Text(exercise)
+                        Text("\(exercise.exerciseName)")
                             .font(.system(size: 27))
                             .fontWeight(.regular)
                             .foregroundColor(.white)
@@ -37,7 +38,6 @@ struct ExercisesView: View {
                     }
                     .fullScreenCover(isPresented: $isPresented, content: { CreatedTrainingDayView() })
                     .cornerRadius(15, corners: .allCorners)
-                    
                 }
             }
         }
@@ -50,5 +50,6 @@ struct ExercisesView: View {
 struct ExercisesView_Previews: PreviewProvider {
     static var previews: some View {
         ExercisesView()
+            .environmentObject(TrainingsViewModel())
     }
 }

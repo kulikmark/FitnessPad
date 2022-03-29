@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreatedTrainingDayView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
-    var exercises = ["Pull-Ups"]
+    
     @State var text1 = ""
     @State var text2 = ""
     
@@ -18,7 +18,7 @@ struct CreatedTrainingDayView: View {
         formatter.dateFormat = "dd MMMM yyyy"
         return formatter
     }
-        
+    
     var body: some View {
         
         ScrollView(showsIndicators: false) {
@@ -28,19 +28,19 @@ struct CreatedTrainingDayView: View {
                     .fontWeight(.medium)
                     .foregroundColor(.white)
                     .padding(.top, 50)
-                    
+                
                 Text("\(viewModel.chosenDate, formatter: dateFormatter)")
                     .font(.system(size: 27))
                     .fontWeight(.regular)
                     .foregroundColor(.white)
                     .padding(.top, -5)
                     .padding(.bottom, 20)
-                    
-                ForEach(exercises, id: \.self) { exercise in
+                
+                ForEach(viewModel.exercises) { exercise in
                     Button {
-                       
+                        
                     } label: {
-                        Text(exercise)
+                        Text("")
                             .font(.system(size: 27))
                             .fontWeight(.regular)
                             .foregroundColor(.white)
@@ -51,52 +51,33 @@ struct CreatedTrainingDayView: View {
                     .cornerRadius(15, corners: .allCorners)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 20)
+            
             
             
             VStack (spacing: 30) {
                 HStack(spacing: 30) {
-                        Text("Set 1")
-                            .font(.system(size: 27))
-                            .fontWeight(.medium)
-                            .foregroundColor(.white)
-                      
-                    TextField("0", text: $text1)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.center)
-                            .frame(width: 125, height: 70)
-                            .font(.system(size: 27))
-                            .background()
-                            .cornerRadius(15, corners: .allCorners)
-                        
-                    TextField("12", text: $text2)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.center)
-                            .frame(width: 125, height: 70, alignment: .leading)
-                            .font(.system(size: 27))
-                            .background()
-                            .cornerRadius(15, corners: .allCorners)
-                }
-                HStack(spacing: 30) {
-                        Text("Set 2")
-                            .font(.system(size: 27))
-                            .fontWeight(.medium)
-                            .foregroundColor(.white)
-                      
+                    Text("Set 1")
+                        .font(.system(size: 27))
+                        .fontWeight(.medium)
+                        .foregroundColor(.white)
+                    
                     TextField("Weight", text: $text1)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.center)
-                            .frame(width: 125, height: 70)
-                            .font(.system(size: 27))
-                            .background()
-                            .cornerRadius(15, corners: .allCorners)
-                        
+                        .frame(width: 125, height: 70)
+                        .font(.system(size: 27))
+                        .background()
+                        .cornerRadius(15, corners: .allCorners)
+                    
                     TextField("Reps", text: $text2)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.center)
-                            .frame(width: 125, height: 70, alignment: .leading)
-                            .font(.system(size: 27))
-                            .background()
-                            .cornerRadius(15, corners: .allCorners)
+                        .frame(width: 125, height: 70, alignment: .leading)
+                        .font(.system(size: 27))
+                        .background()
+                        .cornerRadius(15, corners: .allCorners)
                 }
                 
                 HStack(spacing: 50) {
@@ -104,7 +85,6 @@ struct CreatedTrainingDayView: View {
                         .font(.system(size: 23)).foregroundColor(.white)
                     
                     Button {
-                        
                         
                     } label: {
                         Image("plus")
@@ -129,14 +109,12 @@ struct CreatedTrainingDayView: View {
                             .padding(.leading, 20)
                             .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
                     }
-                    }
-                    .cornerRadius(15, corners: .allCorners)
+                }
+                .cornerRadius(15, corners: .allCorners)
                 
                 .padding()
             }
             .padding(.top, 30)
-            
-            
         }
         .onTapGesture {
             hideKeyboard()

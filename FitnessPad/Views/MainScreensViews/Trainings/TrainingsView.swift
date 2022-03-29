@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TrainingsView: View {
-   
+    @EnvironmentObject var viewModel: TrainingsViewModel
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -19,8 +19,8 @@ struct TrainingsView: View {
                     .foregroundColor(.white)
                     .padding(.bottom, 20)
                 
-                ForEach(1..<10) { trainingDay in
-                    TrainingDay()
+                ForEach(1..<2) { trainingDay in
+                    TrainingDay().environmentObject(viewModel)
                 }
             }
         }
