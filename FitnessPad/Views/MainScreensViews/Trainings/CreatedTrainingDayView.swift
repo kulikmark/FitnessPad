@@ -48,7 +48,7 @@ struct CreatedTrainingDayView: View {
                     
             }
             .cornerRadius(15, corners: .allCorners)
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 10)
             
             VStack (spacing: 30) {
                 HStack(spacing: 30) {
@@ -61,7 +61,7 @@ struct CreatedTrainingDayView: View {
                     TextField("Weight", text: $text1)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.center)
-                        .frame(minWidth: 100, maxWidth: .infinity, minHeight: 70, maxHeight: 70)
+                        .frame(minWidth: 90, maxWidth: .infinity, minHeight: 70, maxHeight: 70)
                         .font(.system(size: 23))
                         .background()
                         .cornerRadius(15, corners: .allCorners)
@@ -69,7 +69,7 @@ struct CreatedTrainingDayView: View {
                     TextField("Reps", text: $text2)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.center)
-                        .frame(minWidth: 100, maxWidth: .infinity, minHeight: 70, maxHeight: 70)
+                        .frame(minWidth: 90, maxWidth: .infinity, minHeight: 70, maxHeight: 70)
                         .font(.system(size: 23))
                         .background()
                         .cornerRadius(15, corners: .allCorners)

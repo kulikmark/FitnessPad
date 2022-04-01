@@ -14,7 +14,7 @@ struct HomeView: View {
         
         VStack {
             
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading) {
                 Text("FitnessPad")
                     .font(.system(size: 43))
                     .fontWeight(.medium)
@@ -33,7 +33,8 @@ struct HomeView: View {
                     }
                 }
             }
-            Spacer()
+//            .padding(.bottom, 100)
+            
             
             VStack {
                 HStack(spacing: 50) {
@@ -50,10 +51,13 @@ struct HomeView: View {
                         .fullScreenCover(isPresented: $isPresented, content: { NewTrainingDayView() })
                 }
             }
-            
-            Spacer()
+            .frame(maxWidth: .infinity)
+            .padding(.top, 50)
+            .padding(.bottom, 120)
+//            Spacer()
             
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))
     }
 }
@@ -72,6 +76,6 @@ struct homeScreenImage: View {
         Image(imageName)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(maxWidth: .infinity, minHeight: 300, maxHeight: 400)
+            .frame(maxWidth: .infinity, minHeight: 380, maxHeight: 478)
     }
 }

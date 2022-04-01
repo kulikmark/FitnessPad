@@ -13,19 +13,20 @@ struct ProgressView: View {
         
         
         VStack(alignment: .leading) {
+            
             Text("Progress")
                 .font(.system(size: 43))
                 .fontWeight(.medium)
                 .foregroundColor(.white)
                 .padding(.leading, 20)
                 .padding(.bottom, 20)
- 
+            VStack {
             Image("progressImage")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: .infinity, minHeight: 300, maxHeight: 360)
-                .padding(.vertical, 20)
-                .padding(.horizontal, 20)
+                .padding(.vertical, 40)
+                .padding(.horizontal, 10)
             
             VStack {
                 HStack(spacing:25) {
@@ -54,6 +55,7 @@ struct ProgressView: View {
             }
             .padding(.horizontal, 10)
             .padding(.bottom, 100)
+        }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))

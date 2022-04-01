@@ -37,10 +37,7 @@ struct ExercisesView: View {
                                             .aspectRatio(contentMode: .fill)
                                             .frame(minHeight: 150, maxHeight: 200, alignment: .top)
                                             .cornerRadius(15, corners: .allCorners)
-                                       
-                                        
-                                        
-                                        
+                        
                                         VStack {
                                             Text("\(item.exerciseName)")
                                                 .font(.system(size: 23))
@@ -51,7 +48,6 @@ struct ExercisesView: View {
 //                                                .padding(.top, 10)
                                         }
                                     }
-                                    .frame(width: .infinity, height: .infinity)
                                     .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
                                     
                                 }
@@ -64,7 +60,6 @@ struct ExercisesView: View {
                 }
                 .padding(.bottom, 70)
             }
-        
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))
         
         

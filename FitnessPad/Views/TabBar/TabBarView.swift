@@ -24,7 +24,7 @@ struct TabBarView: View {
                             Image(item.image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(minWidth: 20, maxWidth: 20, minHeight: 20, maxHeight: 20, alignment: .center)
+                                .frame(minWidth: 20, maxWidth: 25, minHeight: 20, maxHeight: 25, alignment: .center)
                                 .frame(maxWidth: .infinity)
                             Text(item.text)
                                 .foregroundColor(.white)
@@ -36,7 +36,7 @@ struct TabBarView: View {
                 }
                 
             }
-            .frame(minHeight: 80, maxHeight: 90)
+            .frame(minHeight: 80, maxHeight: 100)
             .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
             .cornerRadius(30, corners: [.topLeft, .topRight])
         }
