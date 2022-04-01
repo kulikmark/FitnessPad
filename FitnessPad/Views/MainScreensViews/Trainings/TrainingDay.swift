@@ -35,9 +35,10 @@ struct TrainingDay: View {
                 .padding(.leading)
             
         }
-        .frame(width: 380, height: 160, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: 150, maxHeight: 160)
         .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
         .cornerRadius(15, corners: .allCorners)
+        .padding(.horizontal , 20)
     }
 }
 

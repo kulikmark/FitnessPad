@@ -9,41 +9,65 @@ import SwiftUI
 
 struct ExercisesView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
-   
+    @State var selectedExercise = ""
     @State var isPresented = false
-    
+    let gridForm = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
         
-        ScrollView(showsIndicators: false) {
+     
             VStack(alignment: .leading, spacing: 20) {
                 Text("Exercises")
                     .font(.system(size: 43))
                     .fontWeight(.medium)
                     .foregroundColor(.white)
-                    .padding(.top, 50)
+                    .padding(.leading, 20)
                     .padding(.bottom, 20)
-                    
-                ForEach(viewModel.exercises, id: \.id) { exercise in
-                    Button {
-                        self.isPresented.toggle()
-                    } label: {
-                        Text("\(exercise.exerciseName)")
-                            .font(.system(size: 27))
-                            .fontWeight(.regular)
-                            .foregroundColor(.white)
-                            .frame(width: 380, height: 60, alignment: .leading)
-                            .padding(.leading, 20)
-                            .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
+                VStack {
+                    ScrollView(showsIndicators: false) {
+                        LazyVGrid (columns: gridForm) {
+                            ForEach(viewModel.exercises, id: \.id) { item in
+                                Button {
+                                    self.selectedExercise = item.exerciseName
+                                    self.isPresented.toggle()
+                                } label: {
+                                    VStack {
+                                        Image(item.exerciseImage)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(minHeight: 150, maxHeight: 200, alignment: .top)
+                                            .cornerRadius(15, corners: .allCorners)
+                                       
+                                        
+                                        
+                                        
+                                        VStack {
+                                            Text("\(item.exerciseName)")
+                                                .font(.system(size: 23))
+                                                .fontWeight(.medium)
+                                                .foregroundColor(.white)
+                                                .padding(.vertical, 10)
+    //                                            .frame(minHeight: 100, maxHeight: 100, alignment: .top)
+//                                                .padding(.top, 10)
+                                        }
+                                    }
+                                    .frame(width: .infinity, height: .infinity)
+                                    .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
+                                    
+                                }
+                                .fullScreenCover(isPresented: $isPresented, content: { CreatedTrainingDayView(selectedExercise: $selectedExercise) })
+                                .cornerRadius(15, corners: .allCorners)
+                                .padding(.horizontal, 10)
+                            }
+                        }
                     }
-                    .fullScreenCover(isPresented: $isPresented, content: { CreatedTrainingDayView() })
-                    .cornerRadius(15, corners: .allCorners)
                 }
+                .padding(.bottom, 70)
             }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))
-        .edgesIgnoringSafeArea(.all)
+        
+        
     }
 }
 

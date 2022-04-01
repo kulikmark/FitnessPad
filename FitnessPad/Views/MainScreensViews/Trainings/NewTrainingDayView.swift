@@ -22,51 +22,49 @@ struct NewTrainingDayView: View {
         }()
         
         ScrollView(showsIndicators: false) {
-            ZStack {
-                VStack(spacing:45) {
+          
+                VStack(spacing: 50) {
+                    VStack(spacing: 20) {
                     Text("Choose your training date")
-                        .font(.system(size: 33))
+                        .font(.system(size: 27))
                         .fontWeight(.medium)
                         .foregroundColor(.white)
-                        .padding(.top, 30)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(.top, 20)
                     Group {
                         DatePicker("", selection: $viewModel.chosenDate, in: dateRange, displayedComponents: .date)
                             .datePickerStyle(GraphicalDatePickerStyle())
                             .colorInvert()
                             .accentColor(.black)
-                            .frame(width: 380, height: 380)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .padding()
                     }
                     .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1), in: RoundedRectangle(cornerRadius: 20))
-                    
-                    //                    VStack {
-                    //                        Text("\(viewModel.chosenDate)")
-                    //                            .font(.system(size: 33))
-                    //                            .fontWeight(.medium)
-                    //                            .foregroundColor(.white)
-                    //                    }
-                    
-                    HStack(spacing: 50) {
-                        Text("Choose your exercise")
-                            .font(.system(size: 23)).foregroundColor(.white)
-                        
-                        Button {
-                            self.isPresented.toggle()
-                            
-                        } label: {
-                            Image("plus")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 70, height: 70)
-                                .foregroundColor(.white)
-                        }
-                        .fullScreenCover(isPresented: $isPresented, content: { ExercisesView() })
                     }
-                    .padding()
+                    
+                  
+                    
+                    VStack {
+                        HStack(spacing: 30) {
+                            Text("Choose your exercise")
+                                .font(.system(size: 23)).foregroundColor(.white)
+                            Button {
+                                self.isPresented.toggle()
+                                
+                            } label: {
+                                Image("plus")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .foregroundColor(.white)
+                                    .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60)
+                            }
+                            .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(selectedExercise: "") })
+                        }
+                    }
+                    
                 }
-            }
         }
-        .frame(maxWidth: .infinity,maxHeight: .infinity)
+//        .frame(maxWidth: .infinity,maxHeight: .infinity)
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))
         
     }

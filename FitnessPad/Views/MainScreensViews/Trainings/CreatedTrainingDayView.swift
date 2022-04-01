@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreatedTrainingDayView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
-    
+    @Binding var selectedExercise: String
     @State var text1 = ""
     @State var text2 = ""
     
@@ -22,39 +22,33 @@ struct CreatedTrainingDayView: View {
     var body: some View {
         
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 10) {
                 Text("New Training")
                     .font(.system(size: 43))
                     .fontWeight(.medium)
                     .foregroundColor(.white)
-                    .padding(.top, 50)
                 
                 Text("\(viewModel.chosenDate, formatter: dateFormatter)")
                     .font(.system(size: 27))
                     .fontWeight(.regular)
                     .foregroundColor(.white)
-                    .padding(.top, -5)
                     .padding(.bottom, 20)
-                
-                ForEach(viewModel.exercises) { exercise in
-                    Button {
-                        
-                    } label: {
-                        Text("")
-                            .font(.system(size: 27))
-                            .fontWeight(.regular)
-                            .foregroundColor(.white)
-                            .frame(width: 380, height: 60, alignment: .leading)
-                            .padding(.leading, 20)
-                            .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
-                    }
-                    .cornerRadius(15, corners: .allCorners)
-                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 20)
             
-            
+            VStack {
+                Text(self.selectedExercise)
+                    .font(.system(size: 27))
+                    .fontWeight(.regular)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, minHeight: 60, maxHeight: 60, alignment: .leading)
+                    .padding(.leading, 20)
+                    .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
+                    
+            }
+            .cornerRadius(15, corners: .allCorners)
+            .padding(.horizontal, 20)
             
             VStack (spacing: 30) {
                 HStack(spacing: 30) {
@@ -62,23 +56,25 @@ struct CreatedTrainingDayView: View {
                         .font(.system(size: 27))
                         .fontWeight(.medium)
                         .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
                     
                     TextField("Weight", text: $text1)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.center)
-                        .frame(width: 125, height: 70)
-                        .font(.system(size: 27))
+                        .frame(minWidth: 100, maxWidth: .infinity, minHeight: 70, maxHeight: 70)
+                        .font(.system(size: 23))
                         .background()
                         .cornerRadius(15, corners: .allCorners)
                     
                     TextField("Reps", text: $text2)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.center)
-                        .frame(width: 125, height: 70, alignment: .leading)
-                        .font(.system(size: 27))
+                        .frame(minWidth: 100, maxWidth: .infinity, minHeight: 70, maxHeight: 70)
+                        .font(.system(size: 23))
                         .background()
                         .cornerRadius(15, corners: .allCorners)
                 }
+                .padding(.horizontal, 10)
                 
                 HStack(spacing: 50) {
                     Text("Add another set")
@@ -89,15 +85,14 @@ struct CreatedTrainingDayView: View {
                     } label: {
                         Image("plus")
                             .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 70, height: 70)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60 )
                             .foregroundColor(.white)
                     }
                 }
                 .padding()
                 
-                HStack(spacing: 50) {
-                    
+                HStack {
                     Button {
                         
                     } label: {
@@ -105,14 +100,12 @@ struct CreatedTrainingDayView: View {
                             .font(.system(size: 27))
                             .fontWeight(.regular)
                             .foregroundColor(.white)
-                            .frame(width: 300, height: 60, alignment: .center)
-                            .padding(.leading, 20)
+                            .frame(minWidth: 100, maxWidth: .infinity, minHeight: 60, maxHeight: 60)
                             .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
                     }
                 }
                 .cornerRadius(15, corners: .allCorners)
-                
-                .padding()
+                .padding(.horizontal, 50)
             }
             .padding(.top, 30)
         }
@@ -121,13 +114,13 @@ struct CreatedTrainingDayView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))
-        .edgesIgnoringSafeArea(.all)
     }
 }
 
 struct CreatedTrainingDayView_Previews: PreviewProvider {
+   
     static var previews: some View {
-        CreatedTrainingDayView()
+        CreatedTrainingDayView(selectedExercise: .constant(""))
             .environmentObject(TrainingsViewModel())
     }
 }
