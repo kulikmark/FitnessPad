@@ -10,8 +10,6 @@ import SwiftUI
 struct TrainingDay: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
     
-//    @State var date = Date()
-    
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMMM yyyy"

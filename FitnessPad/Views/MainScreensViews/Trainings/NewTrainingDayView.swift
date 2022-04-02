@@ -58,7 +58,7 @@ struct NewTrainingDayView: View {
                                     .foregroundColor(.white)
                                     .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60)
                             }
-                            .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(selectedExercise: "") })
+                            .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(viewModel: _viewModel) })
                         }
                     }
                     

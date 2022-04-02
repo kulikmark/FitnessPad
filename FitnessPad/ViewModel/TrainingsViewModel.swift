@@ -15,7 +15,7 @@ struct Exercise: Identifiable {
 
 class TrainingsViewModel: ObservableObject {
     @Published var chosenDate: Date = Date()
-    @Published var chosenExercise: String = ""
+    @Published var chosenExercise = ""
     
     @Published var exercises: [Exercise] = []
     init() {

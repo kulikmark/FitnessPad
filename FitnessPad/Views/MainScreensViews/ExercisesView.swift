@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ExercisesView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
-    @State var selectedExercise = ""
+//    @State var selectedExercise = ""
     @State var isPresented = false
     let gridForm = [GridItem(.flexible()), GridItem(.flexible())]
     
@@ -28,7 +28,7 @@ struct ExercisesView: View {
                         LazyVGrid (columns: gridForm) {
                             ForEach(viewModel.exercises, id: \.id) { item in
                                 Button {
-                                    self.selectedExercise = item.exerciseName
+                                    self.viewModel.chosenExercise = item.exerciseName
                                     self.isPresented.toggle()
                                 } label: {
                                     VStack {
@@ -51,7 +51,7 @@ struct ExercisesView: View {
                                     .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
                                     
                                 }
-                                .fullScreenCover(isPresented: $isPresented, content: { CreatedTrainingDayView(selectedExercise: $selectedExercise) })
+                                .fullScreenCover(isPresented: $isPresented, content: { CreatedTrainingDayView(chosenExercise: $viewModel.chosenExercise) })
                                 .cornerRadius(15, corners: .allCorners)
                                 .padding(.horizontal, 10)
                             }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreatedTrainingDayView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
-    @Binding var selectedExercise: String
+    @Binding var chosenExercise: String
     @State var text1 = ""
     @State var text2 = ""
     
@@ -38,7 +38,7 @@ struct CreatedTrainingDayView: View {
             .padding(.leading, 20)
             
             VStack {
-                Text(self.selectedExercise)
+                Text(self.chosenExercise)
                     .font(.system(size: 27))
                     .fontWeight(.regular)
                     .foregroundColor(.white)
@@ -120,7 +120,7 @@ struct CreatedTrainingDayView: View {
 struct CreatedTrainingDayView_Previews: PreviewProvider {
    
     static var previews: some View {
-        CreatedTrainingDayView(selectedExercise: .constant(""))
+        CreatedTrainingDayView(chosenExercise: .constant(""))
             .environmentObject(TrainingsViewModel())
     }
 }
