@@ -12,7 +12,7 @@ struct ChosenExerciseView: View {
     
     var body: some View {
         VStack {
-            Text("\(viewModel.chosenExercise)")
+            Text("\(viewModel.exercisesArray[0].exerciseName)")
                 .font(.system(size: 27))
                 .fontWeight(.regular)
                 .foregroundColor(.white)

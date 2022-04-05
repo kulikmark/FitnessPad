@@ -39,9 +39,16 @@ struct CreatedTrainingDayView: View {
             .padding(.leading, 20)
             
             //MARK: Adding exercise here
-            ForEach (viewModel.exercisesArray) { exercise in
+            
+            ForEach (viewModel.exercisesArray) { item in
                 ChosenExerciseView()
+                Text(viewModel.exercisesArray.description)
             }
+            
+//            VStack {
+//                Text(viewModel.exercisesArray.description)
+//            }
+            
             
             VStack (spacing: 30) {
                 HStack(spacing: 30) {
@@ -137,7 +144,7 @@ struct CreatedTrainingDayView: View {
 }
 
 struct CreatedTrainingDayView_Previews: PreviewProvider {
-   
+
     static var previews: some View {
         CreatedTrainingDayView(chosenExercise: .constant(""))
             .environmentObject(TrainingsViewModel())
