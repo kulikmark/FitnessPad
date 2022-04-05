@@ -91,8 +91,10 @@ struct CreatedTrainingDayView: View {
                 Spacer()
                 
                 //MARK: Adding exercise here
+                VStack {
                 ForEach (viewModel.exercisesArray) { item in
                     ChosenExerciseView(exerciseName: item.exerciseName)
+                }
                 }
                 
                 HStack(spacing: 30) {
