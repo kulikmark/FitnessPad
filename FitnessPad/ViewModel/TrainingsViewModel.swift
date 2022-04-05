@@ -10,6 +10,7 @@ import SwiftUI
 class TrainingsViewModel: ObservableObject {
     @Published var chosenDate: Date = Date()
     @Published var chosenExercise = ""
+    @Published var counter = 0
 
     @Published var exercisesArray: [Exercise] = []
     

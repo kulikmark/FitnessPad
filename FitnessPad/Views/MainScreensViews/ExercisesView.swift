@@ -31,6 +31,7 @@ struct ExercisesView: View {
                                     self.viewModel.chosenExercise = item.exerciseName
                                     self.isPresented.toggle()
                                     viewModel.addExercise(chosenExercise: .init(exerciseName: viewModel.chosenExercise, exerciseImage: ""))
+                                    
                                 } label: {
                                     VStack {
                                         Image(item.exerciseImage)

@@ -42,14 +42,12 @@ struct CreatedTrainingDayView: View {
             
             ForEach (viewModel.exercisesArray) { item in
                 ChosenExerciseView()
+               
                 Text(viewModel.exercisesArray.description)
             }
             
-//            VStack {
-//                Text(viewModel.exercisesArray.description)
-//            }
-            
-            
+           
+
             VStack (spacing: 30) {
                 HStack(spacing: 30) {
                     Text("Set 1")
