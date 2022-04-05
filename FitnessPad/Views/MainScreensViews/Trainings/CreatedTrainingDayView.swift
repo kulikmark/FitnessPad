@@ -41,9 +41,7 @@ struct CreatedTrainingDayView: View {
             //MARK: Adding exercise here
             
             ForEach (viewModel.exercisesArray) { item in
-                ChosenExerciseView()
-               
-                Text(viewModel.exercisesArray.description)
+                ChosenExerciseView(exerciseName: item.exerciseName)
             }
             
            
@@ -92,10 +90,10 @@ struct CreatedTrainingDayView: View {
                 
                 Spacer()
                 
-//                //MARK: Adding exercise here
-//                ForEach (viewModel.exercisesArray) { exercise in
-//                    ChosenExerciseView()
-//                }
+                //MARK: Adding exercise here
+                ForEach (viewModel.exercisesArray) { item in
+                    ChosenExerciseView(exerciseName: item.exerciseName)
+                }
                 
                 HStack(spacing: 30) {
                     Text("Add another exercise")

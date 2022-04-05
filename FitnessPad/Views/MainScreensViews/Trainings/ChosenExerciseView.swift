@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ChosenExerciseView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
+    @State var exerciseName: String
     
     var body: some View {
         VStack {
-            Text(viewModel.exercisesArray[viewModel.counter].exerciseName)
+            Text("\(self.exerciseName)")
                 .font(.system(size: 27))
                 .fontWeight(.regular)
                 .foregroundColor(.white)
@@ -28,7 +29,7 @@ struct ChosenExerciseView: View {
 
 struct ChosenExerciseView_Previews: PreviewProvider {
     static var previews: some View {
-        ChosenExerciseView()
+        ChosenExerciseView(exerciseName: "")
             .environmentObject(TrainingsViewModel())
     }
 }
