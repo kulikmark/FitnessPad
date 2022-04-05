@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var isPresented = false
+    @State private var isPresented = false
     
     var body: some View {
         
@@ -19,7 +19,6 @@ struct HomeView: View {
                     .font(.system(size: 43))
                     .fontWeight(.medium)
                     .foregroundColor(.white)
-//                    .padding(.top, 20)
                     .padding(.bottom, 50)
                     .padding(.leading, 20)
                 
@@ -33,14 +32,12 @@ struct HomeView: View {
                     }
                 }
             }
-//            .padding(.bottom, 100)
-            
             
             VStack {
                 HStack(spacing: 50) {
                         Text("Add your training day")
                             .font(.system(size: 23)).foregroundColor(.white)
-                        
+
                         Button(action: {self.isPresented.toggle()}) {
                             Image("plus")
                                 .resizable()
@@ -54,8 +51,6 @@ struct HomeView: View {
             .frame(maxWidth: .infinity)
             .padding(.top, 50)
             .padding(.bottom, 120)
-//            Spacer()
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))

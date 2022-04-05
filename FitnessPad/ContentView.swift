@@ -19,7 +19,7 @@ struct ContentView: View {
             case .trainings:
                 TrainingsView()
             case .exercises:
-                ExercisesView()
+                ExercisesView(exercises: Exercise.exercises)
             case .progress:
                 ProgressView()
             }

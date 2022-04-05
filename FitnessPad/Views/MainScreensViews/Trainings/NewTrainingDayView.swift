@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewTrainingDayView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
-    @State var isPresented = false
+    @State private var isPresented = false
     var body: some View {
         
         let dateRange: ClosedRange<Date> = {
@@ -58,13 +58,12 @@ struct NewTrainingDayView: View {
                                     .foregroundColor(.white)
                                     .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60)
                             }
-                            .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(viewModel: _viewModel) })
+                            .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(exercises: Exercise.exercises) })
                         }
                     }
                     
                 }
         }
-//        .frame(maxWidth: .infinity,maxHeight: .infinity)
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))
         
     }

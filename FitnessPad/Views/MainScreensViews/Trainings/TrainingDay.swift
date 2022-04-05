@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TrainingDay: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
-    
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMMM yyyy"
@@ -25,7 +24,7 @@ struct TrainingDay: View {
                 .foregroundColor(.white)
                 .padding(.leading)
             
-            Text("Pull-Ups, Push-Ups, Pike Push-Ups, Squat")
+            Text("")
                 .font(.system(size: 27))
                 .fontWeight(.regular)
                 .foregroundColor(.white)

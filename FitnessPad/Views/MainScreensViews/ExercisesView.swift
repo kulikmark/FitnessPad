@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ExercisesView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
-//    @State var selectedExercise = ""
-    @State var isPresented = false
+    @State private var isPresented = false
+    var exercises: [Exercise]
     let gridForm = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
@@ -26,10 +26,11 @@ struct ExercisesView: View {
                 VStack {
                     ScrollView(showsIndicators: false) {
                         LazyVGrid (columns: gridForm) {
-                            ForEach(viewModel.exercises, id: \.id) { item in
+                            ForEach(exercises, id: \.id) { item in
                                 Button {
                                     self.viewModel.chosenExercise = item.exerciseName
                                     self.isPresented.toggle()
+                                    viewModel.addExercise(chosenExercise: .init(exerciseName: viewModel.chosenExercise, exerciseImage: ""))
                                 } label: {
                                     VStack {
                                         Image(item.exerciseImage)
@@ -44,8 +45,6 @@ struct ExercisesView: View {
                                                 .fontWeight(.medium)
                                                 .foregroundColor(.white)
                                                 .padding(.vertical, 10)
-    //                                            .frame(minHeight: 100, maxHeight: 100, alignment: .top)
-//                                                .padding(.top, 10)
                                         }
                                     }
                                     .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
@@ -68,7 +67,7 @@ struct ExercisesView: View {
 
 struct ExercisesView_Previews: PreviewProvider {
     static var previews: some View {
-        ExercisesView()
+        ExercisesView(exercises: Exercise.exercises)
             .environmentObject(TrainingsViewModel())
     }
 }

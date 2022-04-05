@@ -9,9 +9,10 @@ import SwiftUI
 
 struct CreatedTrainingDayView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
+    @State private var isPresented = false
     @Binding var chosenExercise: String
-    @State var text1 = ""
-    @State var text2 = ""
+    @State private var text1: String = ""
+    @State private var text2: String = ""
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -37,18 +38,10 @@ struct CreatedTrainingDayView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 20)
             
-            VStack {
-                Text(self.chosenExercise)
-                    .font(.system(size: 27))
-                    .fontWeight(.regular)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, minHeight: 60, maxHeight: 60, alignment: .leading)
-                    .padding(.leading, 20)
-                    .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
-                    
+            //MARK: Adding exercise here
+            ForEach (viewModel.exercisesArray) { exercise in
+                ChosenExerciseView()
             }
-            .cornerRadius(15, corners: .allCorners)
-            .padding(.horizontal, 10)
             
             VStack (spacing: 30) {
                 HStack(spacing: 30) {
@@ -91,6 +84,32 @@ struct CreatedTrainingDayView: View {
                     }
                 }
                 .padding()
+                
+                Spacer()
+                
+//                //MARK: Adding exercise here
+//                ForEach (viewModel.exercisesArray) { exercise in
+//                    ChosenExerciseView()
+//                }
+                
+                HStack(spacing: 30) {
+                    Text("Add another exercise")
+                        .font(.system(size: 23)).foregroundColor(.white)
+                    Button {
+                        self.isPresented.toggle()
+                        
+                    } label: {
+                        Image("plus")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.white)
+                            .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60)
+                    }
+                    .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(exercises: Exercise.exercises) })
+                }
+                .padding()
+                
+                Spacer()
                 
                 HStack {
                     Button {

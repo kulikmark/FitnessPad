@@ -9,8 +9,10 @@ import SwiftUI
 
 @main
 struct FitnessPadApp: App {
-    let persistenceController = PersistenceController.shared
+//    let persistenceController = PersistenceController.shared
 
+    @EnvironmentObject var viewModel: TrainingsViewModel
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
