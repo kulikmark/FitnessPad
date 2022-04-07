@@ -10,6 +10,9 @@ import SwiftUI
 struct ExercisesView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
     @State private var isPresented = false
+    @State var set = 1
+    @State var weight: String = ""
+    @State var reps: String = ""
     var exercises: [Exercise]
     let gridForm = [GridItem(.flexible()), GridItem(.flexible())]
     

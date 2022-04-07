@@ -11,8 +11,6 @@ struct CreatedTrainingDayView: View {
     @EnvironmentObject var viewModel: TrainingsViewModel
     @State private var isPresented = false
     @Binding var chosenExercise: String
-    @State private var text1: String = ""
-    @State private var text2: String = ""
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -39,63 +37,14 @@ struct CreatedTrainingDayView: View {
             .padding(.leading, 20)
             
             //MARK: Adding exercise here
-            
-            ForEach (viewModel.exercisesArray) { item in
-                ChosenExerciseView(exerciseName: item.exerciseName)
-            }
-            
-           
-
-            VStack (spacing: 30) {
-                HStack(spacing: 30) {
-                    Text("Set 1")
-                        .font(.system(size: 27))
-                        .fontWeight(.medium)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                    
-                    TextField("Weight", text: $text1)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.center)
-                        .frame(minWidth: 90, maxWidth: .infinity, minHeight: 70, maxHeight: 70)
-                        .font(.system(size: 23))
-                        .background()
-                        .cornerRadius(15, corners: .allCorners)
-                    
-                    TextField("Reps", text: $text2)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.center)
-                        .frame(minWidth: 90, maxWidth: .infinity, minHeight: 70, maxHeight: 70)
-                        .font(.system(size: 23))
-                        .background()
-                        .cornerRadius(15, corners: .allCorners)
-                }
-                .padding(.horizontal, 10)
-                
-                HStack(spacing: 50) {
-                    Text("Add another set")
-                        .font(.system(size: 23)).foregroundColor(.white)
-                    
-                    Button {
-                        
-                    } label: {
-                        Image("plus")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60 )
-                            .foregroundColor(.white)
-                    }
-                }
-                .padding()
-                
-                Spacer()
-                
-                //MARK: Adding exercise here
-                VStack {
+            VStack {
                 ForEach (viewModel.exercisesArray) { item in
                     ChosenExerciseView(exerciseName: item.exerciseName)
                 }
-                }
+            }
+            
+            
+            VStack (spacing: 30) {
                 
                 HStack(spacing: 30) {
                     Text("Add another exercise")
@@ -130,6 +79,7 @@ struct CreatedTrainingDayView: View {
                 }
                 .cornerRadius(15, corners: .allCorners)
                 .padding(.horizontal, 50)
+                
             }
             .padding(.top, 30)
         }
@@ -142,7 +92,7 @@ struct CreatedTrainingDayView: View {
 }
 
 struct CreatedTrainingDayView_Previews: PreviewProvider {
-
+    
     static var previews: some View {
         CreatedTrainingDayView(chosenExercise: .constant(""))
             .environmentObject(TrainingsViewModel())

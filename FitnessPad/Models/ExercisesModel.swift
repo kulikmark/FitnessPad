@@ -26,4 +26,7 @@ struct Exercise: Identifiable {
     var id = UUID()
     var exerciseName: String
     var exerciseImage: String
+//    var set: Int
+//    var weight: String
+//    var reps: String
 }
