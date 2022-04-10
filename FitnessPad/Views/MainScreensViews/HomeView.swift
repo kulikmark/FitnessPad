@@ -45,7 +45,7 @@ struct HomeView: View {
                                 .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60 )
                                 .foregroundColor(.white)
                         }
-                        .fullScreenCover(isPresented: $isPresented, content: { NewTrainingDayView() })
+                        .fullScreenCover(isPresented: $isPresented, content: { NewTrainingDayView(viewModel: TrainingsViewModel()) })
                 }
             }
             .frame(maxWidth: .infinity)

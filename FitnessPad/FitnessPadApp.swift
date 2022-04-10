@@ -9,14 +9,10 @@ import SwiftUI
 
 @main
 struct FitnessPadApp: App {
-//    let persistenceController = PersistenceController.shared
-
-    @EnvironmentObject var viewModel: TrainingsViewModel
-    
+//    let persistenceController = PersistenceController.shared    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(TrainingsViewModel())
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

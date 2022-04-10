@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @AppStorage("selectedTab") var selectedTab: Tab = .home
+    let viewModel = TrainingsViewModel()
     
     var body: some View {
         ZStack {
@@ -17,9 +18,9 @@ struct ContentView: View {
             case .home:
                 HomeView()
             case .trainings:
-                TrainingsView()
+                TrainingsView(viewModel: viewModel)
             case .exercises:
-                ExercisesView(exercises: [Exercise.init(with: .pullups), Exercise.init(with: .benchpress), Exercise.init(with: .bicepcurls), Exercise.init(with: .dumbbellrow), Exercise.init(with: .hummercurls), Exercise.init(with: .pikepushups), Exercise.init(with: .pistolsquats), Exercise.init(with: .pushups), Exercise.init(with: .shoulderpress), Exercise.init(with: .squat)])
+                ExercisesView(viewModel: ExercisesViewModel(), trainingsViewModel: viewModel)
             case .progress:
                 ProgressView()
             }

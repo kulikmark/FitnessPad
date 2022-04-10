@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TrainingsView: View {
-    @EnvironmentObject var viewModel: TrainingsViewModel
+    @ObservedObject var viewModel: TrainingsViewModel
     
     var body: some View {
         
@@ -22,7 +22,7 @@ struct TrainingsView: View {
                         .padding(.bottom, 20)
                         .padding(.leading, 20)
 
-                        TrainingDay().environmentObject(viewModel)
+                    TrainingDay(viewModel: viewModel)
                 }
             }
         }
@@ -32,7 +32,7 @@ struct TrainingsView: View {
 
 struct TrainingsView_Previews: PreviewProvider {
     static var previews: some View {
-        TrainingsView()
+        TrainingsView(viewModel: TrainingsViewModel())
             .environmentObject(TrainingsViewModel())
     }
 }

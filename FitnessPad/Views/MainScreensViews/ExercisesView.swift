@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct ExercisesView: View {
-    @EnvironmentObject var viewModel: TrainingsViewModel
+    @ObservedObject var viewModel: ExercisesViewModel
+    @ObservedObject var trainingsViewModel: TrainingsViewModel
     @State private var isPresented = false
-    @State var set = 1
-    @State var weight: String = ""
-    @State var reps: String = ""
-    var exercises: [Exercise]
     let gridForm = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
@@ -29,11 +26,10 @@ struct ExercisesView: View {
                 VStack {
                     ScrollView(showsIndicators: false) {
                         LazyVGrid (columns: gridForm) {
-                            ForEach(exercises, id: \.id) { item in
+                            ForEach(viewModel.exercisesArray, id: \.id) { item in
                                 Button {
-//                                    self.viewModel.chosenExercise = item.exerciseName
                                     self.isPresented.toggle()
-//                                    viewModel.addExercise(chosenExerciseType: .)
+                                    trainingsViewModel.addExercise(chosenExerciseType: item.type)
                                 } label: {
                                     VStack {
                                         Image(item.exerciseImage)
@@ -54,8 +50,7 @@ struct ExercisesView: View {
                                     
                                 }
                                 .fullScreenCover(isPresented: $isPresented, content: {
-                                    // Cannot Understand what to add here...
-                                    CreatedTrainingDayView(chosenExerciseType: ExerciseType) })
+                                    CreatedTrainingDayView(viewModel: trainingsViewModel, chosenExerciseType: item.type)})
                                 .cornerRadius(15, corners: .allCorners)
                                 .padding(.horizontal, 10)
                             }
@@ -72,6 +67,6 @@ struct ExercisesView: View {
 
 struct ExercisesView_Previews: PreviewProvider {
     static var previews: some View {
-        ExercisesView(exercises: [Exercise.init(with: .pullups), Exercise.init(with: .benchpress), Exercise.init(with: .bicepcurls), Exercise.init(with: .dumbbellrow), Exercise.init(with: .hummercurls), Exercise.init(with: .pikepushups), Exercise.init(with: .pistolsquats), Exercise.init(with: .pushups), Exercise.init(with: .shoulderpress), Exercise.init(with: .squat)])
+        ExercisesView(viewModel: ExercisesViewModel(), trainingsViewModel: TrainingsViewModel())
     }
 }

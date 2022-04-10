@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct CreatedTrainingDayView: View {
-    @EnvironmentObject var viewModel: TrainingsViewModel
+    @ObservedObject var viewModel: TrainingsViewModel
     @State private var isPresented = false
-    @Binding var chosenExercise: String
+    var chosenExerciseType: ExerciseType
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -38,8 +38,7 @@ struct CreatedTrainingDayView: View {
             
             //MARK: Adding exercise here
             VStack {
-                ForEach (viewModel.exercisesArray) { item in
-                    ChosenExerciseView(exerciseName: item.exerciseName)
+                ForEach ($viewModel.exercisesArray) { $item in ChosenExerciseView(exercise: $item)
                 }
             }
             
@@ -59,7 +58,9 @@ struct CreatedTrainingDayView: View {
                             .foregroundColor(.white)
                             .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60)
                     }
-                    .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(exercises: [Exercise.init(with: .pullups), Exercise.init(with: .benchpress), Exercise.init(with: .bicepcurls), Exercise.init(with: .dumbbellrow), Exercise.init(with: .hummercurls), Exercise.init(with: .pikepushups), Exercise.init(with: .pistolsquats), Exercise.init(with: .pushups), Exercise.init(with: .shoulderpress), Exercise.init(with: .squat)]) })
+                    .fullScreenCover(isPresented: $isPresented, content: {
+                        ExercisesView(viewModel: ExercisesViewModel(), trainingsViewModel: viewModel)
+                    })
                 }
                 .padding()
                 
@@ -92,9 +93,8 @@ struct CreatedTrainingDayView: View {
 }
 
 struct CreatedTrainingDayView_Previews: PreviewProvider {
-    
     static var previews: some View {
-        CreatedTrainingDayView(chosenExercise: .constant(""))
+        CreatedTrainingDayView(viewModel: TrainingsViewModel(), chosenExerciseType: .pullups)
     }
 }
 

@@ -7,8 +7,6 @@
 
 import Foundation
 
-var setsArray = [ExerciseSet]()
-
 enum ExerciseType: String, CaseIterable  {
     
     case pullups = "Pull-Ups"
@@ -37,19 +35,21 @@ struct Exercise: Identifiable {
 
 static let exercises: [Exercise] = [
     Exercise(with: .pullups),
-    Exercise(with: .squat),
+    Exercise(with: .dumbbellrow),
     Exercise(with: .shoulderpress),
+    Exercise(with: .pikepushups),
     Exercise(with: .pushups),
+    Exercise(with: .benchpress),
+    Exercise(with: .squat),
     Exercise(with: .pistolsquats),
     Exercise(with: .hummercurls),
-    Exercise(with: .pikepushups),
-    Exercise(with: .bicepcurls),
-    Exercise(with: .benchpress),
-    Exercise(with: .dumbbellrow)
+    Exercise(with: .bicepcurls)
     ]
 }
 
-struct ExerciseSet {
+struct ExerciseSet: Identifiable {
+    var id = UUID()
+    var count: String = "1"
     var weight: String
     var reps: String
 }

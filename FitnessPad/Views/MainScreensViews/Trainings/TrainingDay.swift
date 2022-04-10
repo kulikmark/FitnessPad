@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TrainingDay: View {
-    @EnvironmentObject var viewModel: TrainingsViewModel
+    @ObservedObject var viewModel: TrainingsViewModel
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMMM yyyy"
@@ -42,7 +42,6 @@ struct TrainingDay: View {
 struct TrainingDay_Previews: PreviewProvider {
    
     static var previews: some View {
-        TrainingDay()
-            .environmentObject(TrainingsViewModel())
+        TrainingDay(viewModel: TrainingsViewModel())
     }
 }

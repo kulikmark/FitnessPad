@@ -8,18 +8,13 @@
 import SwiftUI
 
 struct ChosenExerciseView: View {
-    @EnvironmentObject var viewModel: TrainingsViewModel
     @State private var isPresented = false
-    @State var exerciseName: String
-    @State var set = 1
-    @State var weight: String = ""
-    @State var reps: String = ""
-    @State var setCounter: Int = 0
+    @Binding var exercise: Exercise
     
     var body: some View {
         VStack {
         VStack {
-            Text("\(self.exerciseName)")
+            Text("\(exercise.exerciseName)")
                 .font(.system(size: 27))
                 .fontWeight(.regular)
                 .foregroundColor(.white)
@@ -31,37 +26,39 @@ struct ChosenExerciseView: View {
         .cornerRadius(15, corners: .allCorners)
         .padding(.horizontal, 10)
         
-            HStack(spacing: 30) {
-                Text("Set \(self.set)")
-                    .font(.system(size: 27))
-                    .fontWeight(.medium)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                
-                TextField("Weight", text: self.$weight)
-                    .keyboardType(.decimalPad)
-                    .multilineTextAlignment(.center)
-                    .frame(minWidth: 90, maxWidth: .infinity, minHeight: 60, maxHeight: 60)
-                    .font(.system(size: 23))
-                    .background()
-                    .cornerRadius(15, corners: .allCorners)
-                
-                TextField("Reps", text: self.$reps)
-                    .keyboardType(.decimalPad)
-                    .multilineTextAlignment(.center)
-                    .frame(minWidth: 90, maxWidth: .infinity, minHeight: 60, maxHeight: 60)
-                    .font(.system(size: 23))
-                    .background()
-                    .cornerRadius(15, corners: .allCorners)
-            }
-            .padding(.horizontal, 10)
+            ForEach ($exercise.exerciseSets) { $item in
+                        HStack(spacing: 30) {
+                            Text("Set \(item.count)")
+                                .font(.system(size: 27))
+                                .fontWeight(.medium)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                            
+                            TextField("Weight", text: $item.weight)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.center)
+                                .frame(minWidth: 90, maxWidth: .infinity, minHeight: 60, maxHeight: 60)
+                                .font(.system(size: 23))
+                                .background()
+                                .cornerRadius(15, corners: .allCorners)
+                            
+                            TextField("Reps", text: $item.reps)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.center)
+                                .frame(minWidth: 90, maxWidth: .infinity, minHeight: 60, maxHeight: 60)
+                                .font(.system(size: 23))
+                                .background()
+                                .cornerRadius(15, corners: .allCorners)
+                        }
+                        .padding(.horizontal, 10)
+                        }
             
             HStack(spacing: 30) {
                 Text("Add another set")
                     .font(.system(size: 14)).foregroundColor(.white)
                 
                 Button {
-
+                    addSet()
                 } label: {
                     Image("plus")
                         .resizable()
@@ -74,12 +71,16 @@ struct ChosenExerciseView: View {
             .padding()
         }
     }
+    
+    func addSet() {
+            let count = exercise.exerciseSets.count
+            exercise.exerciseSets.append(ExerciseSet(count:String(count+1), weight: "", reps: ""))
+        }
 }
 
 struct ChosenExerciseView_Previews: PreviewProvider {
     static var previews: some View {
-        ChosenExerciseView(exerciseName: "")
-            .environmentObject(TrainingsViewModel())
+        ChosenExerciseView(exercise: .constant(Exercise(with: .pullups)))
     }
 }
 

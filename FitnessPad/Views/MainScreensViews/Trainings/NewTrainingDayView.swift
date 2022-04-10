@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewTrainingDayView: View {
-    @EnvironmentObject var viewModel: TrainingsViewModel
+    @ObservedObject var viewModel: TrainingsViewModel
     @State private var isPresented = false
     var body: some View {
         
@@ -22,9 +22,9 @@ struct NewTrainingDayView: View {
         }()
         
         ScrollView(showsIndicators: false) {
-          
-                VStack(spacing: 50) {
-                    VStack(spacing: 20) {
+            
+            VStack(spacing: 50) {
+                VStack(spacing: 20) {
                     Text("Choose your training date")
                         .font(.system(size: 27))
                         .fontWeight(.medium)
@@ -40,29 +40,30 @@ struct NewTrainingDayView: View {
                             .padding()
                     }
                     .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1), in: RoundedRectangle(cornerRadius: 20))
-                    }
-                    
-                  
-                    
-                    VStack {
-                        HStack(spacing: 30) {
-                            Text("Choose your exercise")
-                                .font(.system(size: 23)).foregroundColor(.white)
-                            Button {
-                                self.isPresented.toggle()
-                                
-                            } label: {
-                                Image("plus")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.white)
-                                    .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60)
-                            }
-                            .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(exercises: [Exercise.init(with: .pullups), Exercise.init(with: .benchpress), Exercise.init(with: .bicepcurls), Exercise.init(with: .dumbbellrow), Exercise.init(with: .hummercurls), Exercise.init(with: .pikepushups), Exercise.init(with: .pistolsquats), Exercise.init(with: .pushups), Exercise.init(with: .shoulderpress), Exercise.init(with: .squat)]) })
-                        }
-                    }
-                    
                 }
+                
+                
+                
+                VStack {
+                    HStack(spacing: 30) {
+                        Text("Choose your exercise")
+                            .font(.system(size: 23)).foregroundColor(.white)
+                        Button {
+                            self.isPresented.toggle()
+                            
+                        } label: {
+                            Image("plus")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.white)
+                                .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60)
+                        }
+                        .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(viewModel: ExercisesViewModel(), trainingsViewModel: viewModel)
+                        })
+                    }
+                }
+                
+            }
         }
         .background(Color(red: 0, green: 0.397, blue: 0.712, opacity: 1))
         
@@ -71,7 +72,6 @@ struct NewTrainingDayView: View {
 
 struct NewTrainingDayView_Previews: PreviewProvider {
     static var previews: some View {
-        NewTrainingDayView()
-            .environmentObject(TrainingsViewModel())
+        NewTrainingDayView(viewModel: TrainingsViewModel())
     }
 }
