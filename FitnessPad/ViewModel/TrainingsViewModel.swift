@@ -9,13 +9,18 @@ import SwiftUI
 
 class TrainingsViewModel: ObservableObject {
     @Published var chosenDate: Date = Date()
-    @Published var chosenExercise = ""
+    
+    // !Renamed!
+    @Published var chosenExerciseType: ExerciseType
 
     @Published var exercisesArray: [Exercise] = []
     
-    func addExercise(chosenExercise: Exercise) {
-        exercisesArray.append(chosenExercise)
+    func addExercise(chosenExerciseType: ExerciseType) {
+        let exercise = Exercise.init(with: chosenExerciseType)
+        setsArray.append(ExerciseSet(weight: "", reps: ""))
+        exercisesArray.append(exercise)
     }
 }
+
 
 

@@ -31,9 +31,9 @@ struct ExercisesView: View {
                         LazyVGrid (columns: gridForm) {
                             ForEach(exercises, id: \.id) { item in
                                 Button {
-                                    self.viewModel.chosenExercise = item.exerciseName
+//                                    self.viewModel.chosenExercise = item.exerciseName
                                     self.isPresented.toggle()
-                                    viewModel.addExercise(chosenExercise: .init(exerciseName: viewModel.chosenExercise, exerciseImage: ""))
+//                                    viewModel.addExercise(chosenExerciseType: .)
                                 } label: {
                                     VStack {
                                         Image(item.exerciseImage)
@@ -53,7 +53,9 @@ struct ExercisesView: View {
                                     .background(Color(red: 0, green: 0.32, blue: 0.575, opacity: 1))
                                     
                                 }
-                                .fullScreenCover(isPresented: $isPresented, content: { CreatedTrainingDayView(chosenExercise: $viewModel.chosenExercise) })
+                                .fullScreenCover(isPresented: $isPresented, content: {
+                                    // Cannot Understand what to add here...
+                                    CreatedTrainingDayView(chosenExerciseType: ExerciseType) })
                                 .cornerRadius(15, corners: .allCorners)
                                 .padding(.horizontal, 10)
                             }
@@ -70,7 +72,6 @@ struct ExercisesView: View {
 
 struct ExercisesView_Previews: PreviewProvider {
     static var previews: some View {
-        ExercisesView(exercises: Exercise.exercises)
-            .environmentObject(TrainingsViewModel())
+        ExercisesView(exercises: [Exercise.init(with: .pullups), Exercise.init(with: .benchpress), Exercise.init(with: .bicepcurls), Exercise.init(with: .dumbbellrow), Exercise.init(with: .hummercurls), Exercise.init(with: .pikepushups), Exercise.init(with: .pistolsquats), Exercise.init(with: .pushups), Exercise.init(with: .shoulderpress), Exercise.init(with: .squat)])
     }
 }

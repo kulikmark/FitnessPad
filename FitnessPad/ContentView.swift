@@ -19,7 +19,7 @@ struct ContentView: View {
             case .trainings:
                 TrainingsView()
             case .exercises:
-                ExercisesView(exercises: Exercise.exercises)
+                ExercisesView(exercises: [Exercise.init(with: .pullups), Exercise.init(with: .benchpress), Exercise.init(with: .bicepcurls), Exercise.init(with: .dumbbellrow), Exercise.init(with: .hummercurls), Exercise.init(with: .pikepushups), Exercise.init(with: .pistolsquats), Exercise.init(with: .pushups), Exercise.init(with: .shoulderpress), Exercise.init(with: .squat)])
             case .progress:
                 ProgressView()
             }

@@ -58,7 +58,7 @@ struct NewTrainingDayView: View {
                                     .foregroundColor(.white)
                                     .frame(minWidth: 30, maxWidth: 60, minHeight: 30, maxHeight: 60)
                             }
-                            .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(exercises: Exercise.exercises) })
+                            .fullScreenCover(isPresented: $isPresented, content: { ExercisesView(exercises: [Exercise.init(with: .pullups), Exercise.init(with: .benchpress), Exercise.init(with: .bicepcurls), Exercise.init(with: .dumbbellrow), Exercise.init(with: .hummercurls), Exercise.init(with: .pikepushups), Exercise.init(with: .pistolsquats), Exercise.init(with: .pushups), Exercise.init(with: .shoulderpress), Exercise.init(with: .squat)]) })
                         }
                     }
                     
