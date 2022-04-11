@@ -18,7 +18,7 @@ struct ContentView: View {
             case .home:
                 HomeView()
             case .trainings:
-                TrainingsView(viewModel: viewModel)
+                TrainingsListView(viewModel: viewModel)
             case .exercises:
                 ExercisesView(viewModel: ExercisesViewModel(), trainingsViewModel: viewModel)
             case .progress:

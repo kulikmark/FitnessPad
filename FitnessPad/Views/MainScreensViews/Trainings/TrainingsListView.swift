@@ -1,13 +1,13 @@
 //
-//  TrainingsView.swift
+//  TrainingsListView.swift
 //  FitnessPad
 //
-//  Created by Марк Кулик on 22.03.2022.
+//  Created by Марк Кулик on 11.04.2022.
 //
 
 import SwiftUI
 
-struct TrainingsView: View {
+struct TrainingsListView: View {
     @ObservedObject var viewModel: TrainingsViewModel
     
     var body: some View {
@@ -30,9 +30,9 @@ struct TrainingsView: View {
     }
 }
 
-struct TrainingsView_Previews: PreviewProvider {
+struct TrainingsListView_Previews: PreviewProvider {
     static var previews: some View {
-        TrainingsView(viewModel: TrainingsViewModel())
+        TrainingsListView(viewModel: TrainingsViewModel())
             .environmentObject(TrainingsViewModel())
     }
 }

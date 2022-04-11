@@ -32,18 +32,18 @@ struct Exercise: Identifiable {
         exerciseName = type.rawValue
         exerciseImage = type.rawValue
     }
-
-static let exercises: [Exercise] = [
-    Exercise(with: .pullups),
-    Exercise(with: .dumbbellrow),
-    Exercise(with: .shoulderpress),
-    Exercise(with: .pikepushups),
-    Exercise(with: .pushups),
-    Exercise(with: .benchpress),
-    Exercise(with: .squat),
-    Exercise(with: .pistolsquats),
-    Exercise(with: .hummercurls),
-    Exercise(with: .bicepcurls)
+    
+    static let exercises: [Exercise] = [
+        Exercise(with: .pullups),
+        Exercise(with: .dumbbellrow),
+        Exercise(with: .shoulderpress),
+        Exercise(with: .pikepushups),
+        Exercise(with: .pushups),
+        Exercise(with: .benchpress),
+        Exercise(with: .squat),
+        Exercise(with: .pistolsquats),
+        Exercise(with: .hummercurls),
+        Exercise(with: .bicepcurls)
     ]
 }
 
@@ -53,20 +53,3 @@ struct ExerciseSet: Identifiable {
     var weight: String
     var reps: String
 }
-
-
-
-//extension Exercise {
-//var exercises: [Exercise] = [
-//        Exercise(exerciseName: "Pull-Ups", exerciseImage: "Pull-Ups"),
-//        Exercise(exerciseName: "Dumbbell Row", exerciseImage: "Dumbbell Row"),
-//        Exercise(exerciseName: "Push-Ups", exerciseImage: "Push-Ups"),
-//        Exercise(exerciseName: "Bench Press", exerciseImage: "Bench Press"),
-//        Exercise(exerciseName: "Pike Push-Ups", exerciseImage: "Pike Push-Ups"),
-//        Exercise(exerciseName: "Shoulder Press", exerciseImage: "Shoulder Press"),
-//        Exercise(exerciseName: "Squat", exerciseImage: "Squat"),
-//        Exercise(exerciseName: "Pistol Squats", exerciseImage: "Pistol Squats"),
-//        Exercise(exerciseName: "Hammer Curls", exerciseImage: "Hammer Curls"),
-//        Exercise(exerciseName: "Bicep Curls", exerciseImage: "Bicep Curls")
-//    ]
-//}
