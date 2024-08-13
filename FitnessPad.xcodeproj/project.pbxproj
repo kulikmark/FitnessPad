@@ -1,0 +1,562 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6D0655602C58F7B20015CB6B /* FitnessPad.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D06555E2C58F7B20015CB6B /* FitnessPad.xcdatamodeld */; };
+		6D26F10E27EF6909002D5F4F /* WorkoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D26F10D27EF6909002D5F4F /* WorkoutViewModel.swift */; };
+		6D37D0EC2C62C05B004AB4DD /* BodyWeightInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D0EB2C62C05B004AB4DD /* BodyWeightInputView.swift */; };
+		6D37D0F02C62CE32004AB4DD /* WeightRepsInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D0EF2C62CE32004AB4DD /* WeightRepsInputView.swift */; };
+		6D37D0FA2C638FD5004AB4DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DAEA1A527E5EA0F0001EDF7 /* Assets.xcassets */; };
+		6D37D0FC2C639AEC004AB4DD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D0FB2C639AEC004AB4DD /* ImagePicker.swift */; };
+		6D37D0FE2C652776004AB4DD /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D0FD2C652776004AB4DD /* AddExerciseView.swift */; };
+		6D37D1002C6527A6004AB4DD /* EditExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D0FF2C6527A6004AB4DD /* EditExerciseView.swift */; };
+		6D37D1022C677D3F004AB4DD /* CustomSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D1012C677D3F004AB4DD /* CustomSegmentedPicker.swift */; };
+		6D37D1042C6780AF004AB4DD /* GoalSelectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D1032C6780AF004AB4DD /* GoalSelectionSheet.swift */; };
+		6D37D1062C67DEB2004AB4DD /* ProgressUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D1052C67DEB2004AB4DD /* ProgressUtils.swift */; };
+		6D536B6F2C681B8C00835D3C /* HomeScreenProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B6E2C681B8C00835D3C /* HomeScreenProgressView.swift */; };
+		6D536B712C68247D00835D3C /* AddTrainingDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B702C68247C00835D3C /* AddTrainingDayView.swift */; };
+		6D536B732C68258100835D3C /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B722C68258100835D3C /* CustomDatePicker.swift */; };
+		6D536B752C6961B800835D3C /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B742C6961B800835D3C /* BackButton.swift */; };
+		6D538FEC2C610D9F00478628 /* WorkoutDaysListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D538FEB2C610D9F00478628 /* WorkoutDaysListView.swift */; };
+		6D538FEE2C610DD300478628 /* WorkoutDaysHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D538FED2C610DD300478628 /* WorkoutDaysHeaderView.swift */; };
+		6D538FF02C611B5D00478628 /* DeleteHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D538FEF2C611B5D00478628 /* DeleteHintView.swift */; };
+		6D567C5B27EA15290039FCAD /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D567C5A27EA15290039FCAD /* TabBarView.swift */; };
+		6D8DED5627EA250700A1B6B9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8DED5527EA250700A1B6B9 /* HomeView.swift */; };
+		6D8DED5827EA257A00A1B6B9 /* TabBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8DED5727EA257A00A1B6B9 /* TabBarModel.swift */; };
+		6DADFDB727FC711900A122E0 /* ExercisesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DADFDB627FC711900A122E0 /* ExercisesModel.swift */; };
+		6DADFDD8280390D000A122E0 /* ChosenExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DADFDD7280390D000A122E0 /* ChosenExerciseViewModel.swift */; };
+		6DADFDDC28044BE100A122E0 /* WorkoutDaysList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DADFDDB28044BE100A122E0 /* WorkoutDaysList.swift */; };
+		6DAEA1A227E5EA0D0001EDF7 /* FitnessPadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAEA1A127E5EA0D0001EDF7 /* FitnessPadApp.swift */; };
+		6DAEA1A427E5EA0D0001EDF7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAEA1A327E5EA0D0001EDF7 /* ContentView.swift */; };
+		6DAEA1AB27E5EA0F0001EDF7 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAEA1AA27E5EA0F0001EDF7 /* Persistence.swift */; };
+		6DBAF97227E7E04E005B8EE4 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97127E7E04E005B8EE4 /* RoundedCorners.swift */; };
+		6DBAF97827E9288C005B8EE4 /* ExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97727E9288C005B8EE4 /* ExercisesView.swift */; };
+		6DBAF97A27E9289C005B8EE4 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97927E9289C005B8EE4 /* ProgressView.swift */; };
+		6DCEDD4D27EBA336007B8AB5 /* WorkoutDayDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCEDD4C27EBA335007B8AB5 /* WorkoutDayDatePicker.swift */; };
+		6DE2A56527F22846002008FE /* WorkoutDayDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE2A56427F22846002008FE /* WorkoutDayDetails.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		6D06555F2C58F7B20015CB6B /* FitnessPad.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FitnessPad.xcdatamodel; sourceTree = "<group>"; };
+		6D06558D2C5D90D30015CB6B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		6D26F10D27EF6909002D5F4F /* WorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutViewModel.swift; sourceTree = "<group>"; };
+		6D37D0EB2C62C05B004AB4DD /* BodyWeightInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyWeightInputView.swift; sourceTree = "<group>"; };
+		6D37D0EF2C62CE32004AB4DD /* WeightRepsInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightRepsInputView.swift; sourceTree = "<group>"; };
+		6D37D0F52C638C03004AB4DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6D37D0FB2C639AEC004AB4DD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		6D37D0FD2C652776004AB4DD /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
+		6D37D0FF2C6527A6004AB4DD /* EditExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExerciseView.swift; sourceTree = "<group>"; };
+		6D37D1012C677D3F004AB4DD /* CustomSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedPicker.swift; sourceTree = "<group>"; };
+		6D37D1032C6780AF004AB4DD /* GoalSelectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalSelectionSheet.swift; sourceTree = "<group>"; };
+		6D37D1052C67DEB2004AB4DD /* ProgressUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressUtils.swift; sourceTree = "<group>"; };
+		6D536B6E2C681B8C00835D3C /* HomeScreenProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenProgressView.swift; sourceTree = "<group>"; };
+		6D536B702C68247C00835D3C /* AddTrainingDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrainingDayView.swift; sourceTree = "<group>"; };
+		6D536B722C68258100835D3C /* CustomDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
+		6D536B742C6961B800835D3C /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
+		6D538FEB2C610D9F00478628 /* WorkoutDaysListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDaysListView.swift; sourceTree = "<group>"; };
+		6D538FED2C610DD300478628 /* WorkoutDaysHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDaysHeaderView.swift; sourceTree = "<group>"; };
+		6D538FEF2C611B5D00478628 /* DeleteHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteHintView.swift; sourceTree = "<group>"; };
+		6D567C5A27EA15290039FCAD /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		6D8DED5527EA250700A1B6B9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		6D8DED5727EA257A00A1B6B9 /* TabBarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarModel.swift; sourceTree = "<group>"; };
+		6DADFDB627FC711900A122E0 /* ExercisesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesModel.swift; sourceTree = "<group>"; };
+		6DADFDD7280390D000A122E0 /* ChosenExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChosenExerciseViewModel.swift; sourceTree = "<group>"; };
+		6DADFDDB28044BE100A122E0 /* WorkoutDaysList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDaysList.swift; sourceTree = "<group>"; };
+		6DAEA19E27E5EA0D0001EDF7 /* FitnessPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessPad.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DAEA1A127E5EA0D0001EDF7 /* FitnessPadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessPadApp.swift; sourceTree = "<group>"; };
+		6DAEA1A327E5EA0D0001EDF7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6DAEA1A527E5EA0F0001EDF7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6DAEA1A827E5EA0F0001EDF7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6DAEA1AA27E5EA0F0001EDF7 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		6DBAF97127E7E04E005B8EE4 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
+		6DBAF97727E9288C005B8EE4 /* ExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesView.swift; sourceTree = "<group>"; };
+		6DBAF97927E9289C005B8EE4 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		6DCEDD4C27EBA335007B8AB5 /* WorkoutDayDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayDatePicker.swift; sourceTree = "<group>"; };
+		6DE2A56427F22846002008FE /* WorkoutDayDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayDetails.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6DAEA19B27E5EA0D0001EDF7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6D06558C2C5D90D30015CB6B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6D06558D2C5D90D30015CB6B /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6D26F10C27EF68CF002D5F4F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6D26F10D27EF6909002D5F4F /* WorkoutViewModel.swift */,
+				6DADFDD7280390D000A122E0 /* ChosenExerciseViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		6D37D0EA2C62C03D004AB4DD /* WorkoutDayDetails */ = {
+			isa = PBXGroup;
+			children = (
+				6DE2A56427F22846002008FE /* WorkoutDayDetails.swift */,
+				6D37D0EB2C62C05B004AB4DD /* BodyWeightInputView.swift */,
+				6D37D0EF2C62CE32004AB4DD /* WeightRepsInputView.swift */,
+			);
+			path = WorkoutDayDetails;
+			sourceTree = "<group>";
+		};
+		6D37D0F32C63810A004AB4DD /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				6DBAF97927E9289C005B8EE4 /* ProgressView.swift */,
+				6D37D1052C67DEB2004AB4DD /* ProgressUtils.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
+		6D37D0F42C6381EC004AB4DD /* HomeScreen + dayDatePicker */ = {
+			isa = PBXGroup;
+			children = (
+				6D8DED5527EA250700A1B6B9 /* HomeView.swift */,
+				6D536B702C68247C00835D3C /* AddTrainingDayView.swift */,
+				6D536B722C68258100835D3C /* CustomDatePicker.swift */,
+				6DCEDD4C27EBA335007B8AB5 /* WorkoutDayDatePicker.swift */,
+				6D37D1032C6780AF004AB4DD /* GoalSelectionSheet.swift */,
+				6D536B6E2C681B8C00835D3C /* HomeScreenProgressView.swift */,
+			);
+			path = "HomeScreen + dayDatePicker";
+			sourceTree = "<group>";
+		};
+		6D538FEA2C610D1000478628 /* WorkoutDaysList */ = {
+			isa = PBXGroup;
+			children = (
+				6DADFDDB28044BE100A122E0 /* WorkoutDaysList.swift */,
+				6D538FED2C610DD300478628 /* WorkoutDaysHeaderView.swift */,
+				6D538FEB2C610D9F00478628 /* WorkoutDaysListView.swift */,
+				6D538FEF2C611B5D00478628 /* DeleteHintView.swift */,
+			);
+			path = WorkoutDaysList;
+			sourceTree = "<group>";
+		};
+		6DAEA19527E5EA0D0001EDF7 = {
+			isa = PBXGroup;
+			children = (
+				6D37D0F52C638C03004AB4DD /* Info.plist */,
+				6D06555E2C58F7B20015CB6B /* FitnessPad.xcdatamodeld */,
+				6DAEA1A027E5EA0D0001EDF7 /* FitnessPad */,
+				6DAEA19F27E5EA0D0001EDF7 /* Products */,
+				6D06558C2C5D90D30015CB6B /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		6DAEA19F27E5EA0D0001EDF7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6DAEA19E27E5EA0D0001EDF7 /* FitnessPad.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6DAEA1A027E5EA0D0001EDF7 /* FitnessPad */ = {
+			isa = PBXGroup;
+			children = (
+				6DAEA1A127E5EA0D0001EDF7 /* FitnessPadApp.swift */,
+				6DAEA1A327E5EA0D0001EDF7 /* ContentView.swift */,
+				6DAEA1AA27E5EA0F0001EDF7 /* Persistence.swift */,
+				6DF3A4D527EDDB96005260D0 /* TabBar */,
+				6D26F10C27EF68CF002D5F4F /* ViewModel */,
+				6DAEA1B427E5F3EB0001EDF7 /* Views */,
+				6DBAF97027E7E014005B8EE4 /* Extensions */,
+				6DAEA1A527E5EA0F0001EDF7 /* Assets.xcassets */,
+				6DAEA1A727E5EA0F0001EDF7 /* Preview Content */,
+			);
+			path = FitnessPad;
+			sourceTree = "<group>";
+		};
+		6DAEA1A727E5EA0F0001EDF7 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				6DAEA1A827E5EA0F0001EDF7 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6DAEA1B427E5F3EB0001EDF7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6D37D0F42C6381EC004AB4DD /* HomeScreen + dayDatePicker */,
+				6D538FEA2C610D1000478628 /* WorkoutDaysList */,
+				6D37D0EA2C62C03D004AB4DD /* WorkoutDayDetails */,
+				6DF3A4D127EDD2B9005260D0 /* Exercises */,
+				6D37D0F32C63810A004AB4DD /* Progress */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6DBAF97027E7E014005B8EE4 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6DBAF97127E7E04E005B8EE4 /* RoundedCorners.swift */,
+				6D37D1012C677D3F004AB4DD /* CustomSegmentedPicker.swift */,
+				6D536B742C6961B800835D3C /* BackButton.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6DF3A4D127EDD2B9005260D0 /* Exercises */ = {
+			isa = PBXGroup;
+			children = (
+				6DADFDB627FC711900A122E0 /* ExercisesModel.swift */,
+				6DBAF97727E9288C005B8EE4 /* ExercisesView.swift */,
+				6D37D0FD2C652776004AB4DD /* AddExerciseView.swift */,
+				6D37D0FF2C6527A6004AB4DD /* EditExerciseView.swift */,
+				6D37D0FB2C639AEC004AB4DD /* ImagePicker.swift */,
+			);
+			path = Exercises;
+			sourceTree = "<group>";
+		};
+		6DF3A4D527EDDB96005260D0 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				6D8DED5727EA257A00A1B6B9 /* TabBarModel.swift */,
+				6D567C5A27EA15290039FCAD /* TabBarView.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6DAEA19D27E5EA0D0001EDF7 /* FitnessPad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6DAEA1B127E5EA0F0001EDF7 /* Build configuration list for PBXNativeTarget "FitnessPad" */;
+			buildPhases = (
+				6DAEA19A27E5EA0D0001EDF7 /* Sources */,
+				6DAEA19B27E5EA0D0001EDF7 /* Frameworks */,
+				6D37D0F82C638FB1004AB4DD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FitnessPad;
+			productName = FitnessPad;
+			productReference = 6DAEA19E27E5EA0D0001EDF7 /* FitnessPad.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6DAEA19627E5EA0D0001EDF7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					6DAEA19D27E5EA0D0001EDF7 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 6DAEA19927E5EA0D0001EDF7 /* Build configuration list for PBXProject "FitnessPad" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6DAEA19527E5EA0D0001EDF7;
+			productRefGroup = 6DAEA19F27E5EA0D0001EDF7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6DAEA19D27E5EA0D0001EDF7 /* FitnessPad */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6D37D0F82C638FB1004AB4DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D37D0FA2C638FD5004AB4DD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6DAEA19A27E5EA0D0001EDF7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D536B752C6961B800835D3C /* BackButton.swift in Sources */,
+				6DADFDDC28044BE100A122E0 /* WorkoutDaysList.swift in Sources */,
+				6D37D1022C677D3F004AB4DD /* CustomSegmentedPicker.swift in Sources */,
+				6D8DED5827EA257A00A1B6B9 /* TabBarModel.swift in Sources */,
+				6D37D0F02C62CE32004AB4DD /* WeightRepsInputView.swift in Sources */,
+				6DBAF97827E9288C005B8EE4 /* ExercisesView.swift in Sources */,
+				6DCEDD4D27EBA336007B8AB5 /* WorkoutDayDatePicker.swift in Sources */,
+				6D567C5B27EA15290039FCAD /* TabBarView.swift in Sources */,
+				6DADFDD8280390D000A122E0 /* ChosenExerciseViewModel.swift in Sources */,
+				6D37D0FC2C639AEC004AB4DD /* ImagePicker.swift in Sources */,
+				6D37D0FE2C652776004AB4DD /* AddExerciseView.swift in Sources */,
+				6D8DED5627EA250700A1B6B9 /* HomeView.swift in Sources */,
+				6D37D1002C6527A6004AB4DD /* EditExerciseView.swift in Sources */,
+				6DADFDB727FC711900A122E0 /* ExercisesModel.swift in Sources */,
+				6DE2A56527F22846002008FE /* WorkoutDayDetails.swift in Sources */,
+				6D538FEC2C610D9F00478628 /* WorkoutDaysListView.swift in Sources */,
+				6D37D1042C6780AF004AB4DD /* GoalSelectionSheet.swift in Sources */,
+				6D0655602C58F7B20015CB6B /* FitnessPad.xcdatamodeld in Sources */,
+				6DAEA1AB27E5EA0F0001EDF7 /* Persistence.swift in Sources */,
+				6DAEA1A427E5EA0D0001EDF7 /* ContentView.swift in Sources */,
+				6D536B712C68247D00835D3C /* AddTrainingDayView.swift in Sources */,
+				6D536B732C68258100835D3C /* CustomDatePicker.swift in Sources */,
+				6D37D0EC2C62C05B004AB4DD /* BodyWeightInputView.swift in Sources */,
+				6DBAF97A27E9289C005B8EE4 /* ProgressView.swift in Sources */,
+				6D538FEE2C610DD300478628 /* WorkoutDaysHeaderView.swift in Sources */,
+				6DBAF97227E7E04E005B8EE4 /* RoundedCorners.swift in Sources */,
+				6D26F10E27EF6909002D5F4F /* WorkoutViewModel.swift in Sources */,
+				6D536B6F2C681B8C00835D3C /* HomeScreenProgressView.swift in Sources */,
+				6D538FF02C611B5D00478628 /* DeleteHintView.swift in Sources */,
+				6D37D1062C67DEB2004AB4DD /* ProgressUtils.swift in Sources */,
+				6DAEA1A227E5EA0D0001EDF7 /* FitnessPadApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6DAEA1AF27E5EA0F0001EDF7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6DAEA1B027E5EA0F0001EDF7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6DAEA1B227E5EA0F0001EDF7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"FitnessPad/Preview Content\"";
+				DEVELOPMENT_TEAM = PJ4TAD8N5W;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/FitnessPad/Info.plist";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.markkulikalex.FitnessPad;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6DAEA1B327E5EA0F0001EDF7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"FitnessPad/Preview Content\"";
+				DEVELOPMENT_TEAM = PJ4TAD8N5W;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/FitnessPad/Info.plist";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.markkulikalex.FitnessPad;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6DAEA19927E5EA0D0001EDF7 /* Build configuration list for PBXProject "FitnessPad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6DAEA1AF27E5EA0F0001EDF7 /* Debug */,
+				6DAEA1B027E5EA0F0001EDF7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6DAEA1B127E5EA0F0001EDF7 /* Build configuration list for PBXNativeTarget "FitnessPad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6DAEA1B227E5EA0F0001EDF7 /* Debug */,
+				6DAEA1B327E5EA0F0001EDF7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		6D06555E2C58F7B20015CB6B /* FitnessPad.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6D06555F2C58F7B20015CB6B /* FitnessPad.xcdatamodel */,
+			);
+			currentVersion = 6D06555F2C58F7B20015CB6B /* FitnessPad.xcdatamodel */;
+			name = FitnessPad.xcdatamodeld;
+			path = "/Users/kulik_mark/Desktop/XCODE PROJECTS/FitnessPad/FitnessPad.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 6DAEA19627E5EA0D0001EDF7 /* Project object */;
+}

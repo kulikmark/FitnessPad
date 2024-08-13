@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ExerciseEntity" representedClassName="ExerciseEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="exerciseImage" optional="YES" attributeType="String"/>
+        <attribute name="exerciseName" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="sets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExerciseSetEntity" inverseName="exercise" inverseEntity="ExerciseSetEntity"/>
+        <relationship name="trainingDay" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrainingDayEntity" inverseName="exercises" inverseEntity="TrainingDayEntity"/>
+    </entity>
+    <entity name="ExerciseSetEntity" representedClassName="ExerciseSetEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="count" optional="YES" attributeType="String"/>
+        <attribute name="reps" optional="YES" attributeType="String"/>
+        <attribute name="weight" optional="YES" attributeType="String"/>
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExerciseEntity" inverseName="sets" inverseEntity="ExerciseEntity"/>
+    </entity>
+    <entity name="TrainingDayEntity" representedClassName=".TrainingDayEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="exercises" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExerciseEntity" inverseName="trainingDay" inverseEntity="ExerciseEntity"/>
+    </entity>
+</model>
