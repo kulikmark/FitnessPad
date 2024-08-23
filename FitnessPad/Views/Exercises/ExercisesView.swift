@@ -136,7 +136,7 @@ struct ExercisesView: View {
         }
         .alert(isPresented: $isShowingDeleteAlert) {
             Alert(
-                title: Text("are you sure??"),
+                title: Text("Are you sure?"),
                 message: Text("This action will delete the selected item. All data associated with it will be lost."),
                 primaryButton: .destructive(Text("Delete")) {
                     if let group = groupToDelete {
@@ -371,39 +371,116 @@ struct ExercisesView: View {
     }
     
     // MARK: - Add Exercise to Workout Day
+//    private func addExerciseToWorkoutDay(with exerciseItem: ExerciseItem) {
+//        guard let workoutDay = workoutDay else {
+//            print("Error: workoutDay is nil")
+//            return
+//        }
+//
+//        let existingExercises = workoutDay.exercisesArray
+//        let exerciseAlreadyExists = existingExercises.contains {
+//            $0.exerciseName == exerciseItem.exerciseName &&
+//            $0.exerciseCategory == exerciseItem.categoryName
+//        }
+//
+//        if !exerciseAlreadyExists {
+//            let newExercise = Exercise(context: viewModel.viewContext)
+//            newExercise.exerciseName = exerciseItem.exerciseName
+//            newExercise.exerciseImage = exerciseItem.toData()
+//            newExercise.exerciseCategory = exerciseItem.categoryName
+//            newExercise.isDefault = false // User-defined exercise
+//
+//            let newSet = ExerciseSet(context: viewModel.viewContext)
+//            newSet.count = 1
+//            newSet.weight = 0.0
+//            newSet.reps = 0
+//            newExercise.addToSets(newSet)
+//
+//            workoutDay.addToExercises(newExercise)
+//            viewModel.saveContext()
+//        } else {
+//            print("Exercise already exists, not adding.")
+//        }
+//
+//        isShowingExercisesView = false
+//    }
+    
     private func addExerciseToWorkoutDay(with exerciseItem: ExerciseItem) {
         guard let workoutDay = workoutDay else {
             print("Error: workoutDay is nil")
             return
         }
 
-        let existingExercises = workoutDay.exercisesArray
-        let exerciseAlreadyExists = existingExercises.contains {
-            $0.exerciseName == exerciseItem.exerciseName &&
-            $0.exerciseCategory == exerciseItem.categoryName
+        let context = viewModel.viewContext
+
+        // Найдите тренировочный день по дате
+        let fetchRequest: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "date == %@", workoutDay.date! as NSDate)
+        
+        let workoutDay: WorkoutDay
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let existingTrainingDay = results.first {
+                workoutDay = existingTrainingDay
+            } else {
+                // Создайте новый тренировочный день, если не найден
+                workoutDay = WorkoutDay(context: context)
+                workoutDay.date = workoutDay.date
+            }
+        } catch {
+            print("Failed to fetch or create TrainingDay: \(error)")
+            return
         }
 
-        if !exerciseAlreadyExists {
-            let newExercise = Exercise(context: viewModel.viewContext)
-            newExercise.exerciseName = exerciseItem.exerciseName
-            newExercise.exerciseImage = exerciseItem.toData()
-            newExercise.exerciseCategory = exerciseItem.categoryName
-            newExercise.isDefault = false // User-defined exercise
+        // Найдите или создайте упражнение
+        let exerciseFetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
+        exerciseFetchRequest.predicate = NSPredicate(format: "exerciseName == %@ AND exerciseCategory == %@", exerciseItem.exerciseName, exerciseItem.categoryName ?? "")
+        
+        let exercise: Exercise
+        do {
+            let results = try context.fetch(exerciseFetchRequest)
+            if let existingExercise = results.first {
+                exercise = existingExercise
+            } else {
+                // Создайте новое упражнение, если не найдено
+                exercise = Exercise(context: context)
+                exercise.exerciseName = exerciseItem.exerciseName
+                exercise.exerciseCategory = exerciseItem.categoryName
+                exercise.exerciseImage = exerciseItem.toData() // Предполагается, что у вас есть метод для конвертации изображения
+                exercise.isDefault = false // Пользовательское упражнение
+            }
+        } catch {
+            print("Failed to fetch or create Exercise: \(error)")
+            return
+        }
 
-            let newSet = ExerciseSet(context: viewModel.viewContext)
-            newSet.count = 1
-            newSet.weight = 0.0
-            newSet.reps = 0
-            newExercise.addToSets(newSet)
-
-            workoutDay.addToExercises(newExercise)
-            viewModel.saveContext()
-        } else {
-            print("Exercise already exists, not adding.")
+        // Проверьте, существует ли уже этот ExerciseSet для данного TrainingDay
+        let exerciseSetFetchRequest: NSFetchRequest<ExerciseSet> = ExerciseSet.fetchRequest()
+        exerciseSetFetchRequest.predicate = NSPredicate(format: "exercise == %@ AND trainingDay == %@", exercise, trainingDay)
+        
+        do {
+            let results = try context.fetch(exerciseSetFetchRequest)
+            if results.isEmpty {
+                // Создайте новый ExerciseSet
+                let exerciseSet = ExerciseSet(context: context)
+                exerciseSet.weight = 0.0 // Установите значение по умолчанию или передайте через параметры
+                exerciseSet.reps = 0 // Установите значение по умолчанию или передайте через параметры
+                exerciseSet.exercise = exercise
+                exerciseSet. = trainingDay
+                
+                try context.save()
+                print("Exercise added to workout day successfully.")
+            } else {
+                print("ExerciseSet for this Exercise and TrainingDay already exists.")
+            }
+        } catch {
+            print("Failed to fetch or save ExerciseSet: \(error)")
         }
 
         isShowingExercisesView = false
     }
+
+    
 }
 
 // MARK: - Previews
