@@ -405,6 +405,7 @@ struct ExercisesView: View {
 //        isShowingExercisesView = false
 //    }
     
+    // MARK: - Add Exercise to Workout Day
     private func addExerciseToWorkoutDay(with exerciseItem: ExerciseItem) {
         guard let workoutDay = workoutDay else {
             print("Error: workoutDay is nil")
@@ -412,73 +413,57 @@ struct ExercisesView: View {
         }
 
         let context = viewModel.viewContext
-
-        // Найдите тренировочный день по дате
-        let fetchRequest: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "date == %@", workoutDay.date! as NSDate)
         
-        let workoutDay: WorkoutDay
-        do {
-            let results = try context.fetch(fetchRequest)
-            if let existingTrainingDay = results.first {
-                workoutDay = existingTrainingDay
-            } else {
-                // Создайте новый тренировочный день, если не найден
-                workoutDay = WorkoutDay(context: context)
-                workoutDay.date = workoutDay.date
-            }
-        } catch {
-            print("Failed to fetch or create TrainingDay: \(error)")
-            return
-        }
-
-        // Найдите или создайте упражнение
-        let exerciseFetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
-        exerciseFetchRequest.predicate = NSPredicate(format: "exerciseName == %@ AND exerciseCategory == %@", exerciseItem.exerciseName, exerciseItem.categoryName ?? "")
+        // Fetch existing exercises in the core data store
+        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "exerciseName == %@ AND exerciseCategory == %@", exerciseItem.exerciseName, exerciseItem.categoryName ?? "")
+        fetchRequest.fetchLimit = 1
         
-        let exercise: Exercise
+        var exercise: Exercise?
+
         do {
-            let results = try context.fetch(exerciseFetchRequest)
-            if let existingExercise = results.first {
+            let existingExercises = try context.fetch(fetchRequest)
+            if let existingExercise = existingExercises.first {
                 exercise = existingExercise
             } else {
-                // Создайте новое упражнение, если не найдено
+                // Exercise doesn't exist, create a new one
                 exercise = Exercise(context: context)
-                exercise.exerciseName = exerciseItem.exerciseName
-                exercise.exerciseCategory = exerciseItem.categoryName
-                exercise.exerciseImage = exerciseItem.toData() // Предполагается, что у вас есть метод для конвертации изображения
-                exercise.isDefault = false // Пользовательское упражнение
-            }
-        } catch {
-            print("Failed to fetch or create Exercise: \(error)")
-            return
-        }
+                exercise?.exerciseName = exerciseItem.exerciseName
+                exercise?.exerciseImage = exerciseItem.toData()
+                exercise?.exerciseCategory = exerciseItem.categoryName
+                exercise?.isDefault = false // User-defined exercise
 
-        // Проверьте, существует ли уже этот ExerciseSet для данного TrainingDay
-        let exerciseSetFetchRequest: NSFetchRequest<ExerciseSet> = ExerciseSet.fetchRequest()
-        exerciseSetFetchRequest.predicate = NSPredicate(format: "exercise == %@ AND trainingDay == %@", exercise, trainingDay)
-        
-        do {
-            let results = try context.fetch(exerciseSetFetchRequest)
-            if results.isEmpty {
-                // Создайте новый ExerciseSet
-                let exerciseSet = ExerciseSet(context: context)
-                exerciseSet.weight = 0.0 // Установите значение по умолчанию или передайте через параметры
-                exerciseSet.reps = 0 // Установите значение по умолчанию или передайте через параметры
-                exerciseSet.exercise = exercise
-                exerciseSet. = trainingDay
-                
-                try context.save()
-                print("Exercise added to workout day successfully.")
-            } else {
-                print("ExerciseSet for this Exercise and TrainingDay already exists.")
+                // Add a new set to the exercise
+                let newSet = ExerciseSet(context: context)
+                newSet.count = 1
+                newSet.weight = 0.0
+                newSet.reps = 0
+                exercise?.addToSets(newSet)
             }
+            
+            // Check if the exercise is already in the workoutDay
+            let workoutDayExerciseFetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
+            workoutDayExerciseFetchRequest.predicate = NSPredicate(format: "ANY workouts == %@", workoutDay)
+            let existingWorkoutDayExercises = try context.fetch(workoutDayExerciseFetchRequest)
+            let workoutDayExerciseExists = existingWorkoutDayExercises.contains {
+                $0.exerciseName == exerciseItem.exerciseName &&
+                $0.exerciseCategory == exerciseItem.categoryName
+            }
+
+            if !workoutDayExerciseExists, let exerciseToAdd = exercise {
+                workoutDay.addToExercises(exerciseToAdd)
+                try context.save()
+            } else {
+                print("Exercise already exists in this workout day.")
+            }
+            
         } catch {
-            print("Failed to fetch or save ExerciseSet: \(error)")
+            print("Failed to fetch or save exercise: \(error)")
         }
 
         isShowingExercisesView = false
     }
+
 
     
 }
