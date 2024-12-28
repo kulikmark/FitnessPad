@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 import PhotosUI
 
 struct AddExerciseView: View {
@@ -95,26 +96,30 @@ struct AddExerciseView: View {
         
         // Сохраняем упражнение в Core Data
         let newExercise = Exercise(context: viewModel.viewContext)
-        newExercise.exerciseName = exerciseName
-        newExercise.exerciseCategory = selectedGroup
+      
+        newExercise.name = exerciseName
+        newExercise.category = selectedGroup
         if let imageData = exerciseImage?.jpegData(compressionQuality: 1.0) {
-            newExercise.exerciseImage = imageData
+            newExercise.image = imageData
         } else {
-            newExercise.exerciseImage = nil
+            newExercise.image = nil
         }
-        newExercise.isDefault = false // Устанавливаем флаг для пользовательского упражнения
+//        newExercise.isDefault = false // Устанавливаем флаг для пользовательского упражнения
         
         viewModel.saveContext()
         
         // Добавляем упражнение в соответствующую категорию в defaultExerciseGroups
         if let groupIndex = defaultExerciseGroups.firstIndex(where: { $0.name == selectedGroup }) {
-            let newExerciseItem = ExerciseItem(
+            let newExerciseItem = DefaultExerciseItem(
                 exerciseName: exerciseName,
                 exerciseImage: exerciseImage,
                 categoryName: selectedGroup
             )
             defaultExerciseGroups[groupIndex].exercises.append(newExerciseItem)
         }
+        
+        // Отладка: выводим все упражнения в Core Data
+           printAllExercisesInCoreData()
         
         presentationMode.wrappedValue.dismiss()
     }
@@ -123,4 +128,19 @@ struct AddExerciseView: View {
     private var allExerciseGroups: [ExerciseGroup] {
         defaultExerciseGroups
     }
+    
+    private func printAllExercisesInCoreData() {
+        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
+        
+        do {
+            let exercises = try viewModel.viewContext.fetch(fetchRequest)
+            print("Упражнения в Core Data:")
+            for exercise in exercises {
+                print("Name: \(exercise.name ?? "No Name"), Category: \(exercise.category ?? "No Category")")
+            }
+        } catch {
+            print("Ошибка при получении упражнений из Core Data: \(error)")
+        }
+    }
+
 }

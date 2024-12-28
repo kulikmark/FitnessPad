@@ -18,46 +18,37 @@ struct FitnessPadApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .onAppear {
                     // Предварительная загрузка данных при запуске приложения
-                    preloadDefaultExercises()
+                    initializeDefaultExercises(container: persistenceController.container)
                 }
         }
     }
-    
-    private func preloadDefaultExercises() {
-        let viewContext = persistenceController.container.viewContext
-        
-        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
+
+    func initializeDefaultExercises(container: NSPersistentContainer) {
+        let context = container.viewContext
+        let fetchRequest: NSFetchRequest<DefaultExercise> = DefaultExercise.fetchRequest()
+
         do {
-            let existingExercises = try viewContext.fetch(fetchRequest)
-            
-            // Проверяем, есть ли уже упражнения в базе данных
+            let existingExercises = try context.fetch(fetchRequest)
             if existingExercises.isEmpty {
                 for group in defaultExerciseGroups {
-                    for item in group.exercises {
-                        let exercise = Exercise(context: viewContext)
-                        exercise.exerciseName = item.exerciseName
-                        exercise.exerciseImage = item.toData()
-                        exercise.exerciseCategory = item.categoryName
-                        exercise.isDefault = true  // Устанавливаем флаг isDefault для предустановленных упражнений
+                    for exercise in group.exercises {
+                        let defaultExercise = DefaultExercise(context: context)
+                        defaultExercise.name = exercise.exerciseName
+                        defaultExercise.category = exercise.categoryName
                         
-                        // Добавляем пустые наборы упражнений, если необходимо
-                        let newSet = ExerciseSet(context: viewContext)
-                        newSet.count = 1
-                        newSet.weight = 0.0
-                        newSet.reps = 0
-                        exercise.addToSets(newSet)
-
-                        // Отладочное сообщение
-                        print("Created default exercise: \(exercise.exerciseName ?? "") with isDefault: \(exercise.isDefault)")
+                        // Преобразуем UIImage в Data для хранения в Core Data
+                        if let image = exercise.exerciseImage, let imageData = image.pngData() {
+                            defaultExercise.image = imageData
+                        }
                     }
                 }
-                try viewContext.save()
-                print("Saved default exercises.")
-            } else {
-                print("Default exercises already exist.")
+                try context.save()
             }
         } catch {
-            print("Failed to fetch or save default exercises: \(error)")
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
     }
+
+
 }

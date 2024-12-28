@@ -149,7 +149,7 @@ struct HomeView: View {
                     
                     // Секция с добавлением тренировочного дня
                     
-                    AddTrainingDayView(viewModel: viewModel, selectedDate: $selectedDate, workoutDay: $workoutDay, selectedTab: $selectedTab)
+//                    AddTrainingDayView(viewModel: viewModel, selectedDate: $selectedDate, workoutDay: $workoutDay, selectedTab: $selectedTab)
                     
                     // Секция со статистикой прогресса упражнений
                     VStack(alignment: .leading) {
@@ -272,17 +272,17 @@ struct homeScreenImage: View {
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        let context = PersistenceController.preview.container.viewContext
-        let viewModel = WorkoutViewModel()
-        @State var selectedTab: Tab = .workoutDays
-        @State var selectedDate = Date()
-        
-        return HomeView(
-            viewModel: viewModel, workoutDay: .constant(nil),
-            selectedTab: $selectedTab, selectedDate: $selectedDate
-        )
-        .environment(\.managedObjectContext, context)
-    }
-}
+//struct HomeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let context = PersistenceController.preview.container.viewContext
+//        let viewModel = WorkoutViewModel()
+//        @State var selectedTab: Tab = .workoutDays
+//        @State var selectedDate = Date()
+//        
+//        return HomeView(
+//            viewModel: viewModel, workoutDay: .constant(nil),
+//            selectedTab: $selectedTab, selectedDate: $selectedDate
+//        )
+//        .environment(\.managedObjectContext, context)
+//    }
+//}

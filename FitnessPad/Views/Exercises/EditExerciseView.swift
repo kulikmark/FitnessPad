@@ -124,38 +124,38 @@ struct EditExerciseView: View {
     @State private var newGroupName = ""
     @State private var isImagePicked = false
     
-    var exerciseItem: ExerciseItem
+//    var exerciseItem: DeafaultExerciseItem
     var originalCategory: String
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Exercise.exerciseCategory, ascending: true)])
-    private var coreDataExercises: FetchedResults<Exercise>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DefaultExercise.category, ascending: true)])
+    private var coreDataExercises: FetchedResults<DefaultExercise>
 
-    init(viewModel: WorkoutViewModel, exerciseItem: ExerciseItem, originalCategory: String) {
-        self.viewModel = viewModel
-        self.exerciseItem = exerciseItem
-        self.originalCategory = originalCategory
-        _exerciseName = State(initialValue: exerciseItem.exerciseName)
-        _exerciseImage = State(initialValue: exerciseItem.exerciseImage)
-        _selectedGroup = State(initialValue: originalCategory)
-    }
+//    init(viewModel: WorkoutViewModel, exerciseItem: DeafaultExerciseItem, originalCategory: String) {
+//        self.viewModel = viewModel
+//        self.exerciseItem = exerciseItem
+//        self.originalCategory = originalCategory
+//        _exerciseName = State(initialValue: exerciseItem.exerciseName)
+//        _exerciseImage = State(initialValue: exerciseItem.exerciseImage)
+//        _selectedGroup = State(initialValue: originalCategory)
+//    }
 
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Exercise Details")) {
                     TextField("Exercise Name", text: $exerciseName)
-                        .disabled(exerciseItem.isDefault(in: viewModel.viewContext)) // Disable for default exercises
+//                        .disabled(exerciseItem.isDefault(in: viewModel.viewContext)) // Disable for default exercises
                     
-                    Picker("Exercise Category", selection: $selectedGroup) {
-                        ForEach(allExerciseGroups, id: \.self) { group in
-                            Text(group).tag(group as String?)
-                        }
-                    }
-                    .disabled(exerciseItem.isDefault(in: viewModel.viewContext)) // Disable for default exercises
+//                    Picker("Exercise Category", selection: $selectedGroup) {
+//                        ForEach(allExerciseGroups, id: \.self) { group in
+//                            Text(group).tag(group as String?)
+//                        }
+//                    }
+//                    .disabled(exerciseItem.isDefault(in: viewModel.viewContext)) // Disable for default exercises
                     
                     Button("Select Image") {
                         isShowingImagePicker = true
                     }
-                    .disabled(exerciseItem.isDefault(in: viewModel.viewContext)) // Disable for default exercises
+//                    .disabled(exerciseItem.isDefault(in: viewModel.viewContext)) // Disable for default exercises
                     
                     if let uiImage = exerciseImage {
                         Image(uiImage: uiImage)
@@ -168,32 +168,32 @@ struct EditExerciseView: View {
                     }
                 }
                 
-                if !exerciseItem.isDefault(in: viewModel.viewContext) {  // Hide Save button for default exercises
-                    Button(action: saveChanges) {
-                        Text("Save Changes")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color("ButtonColor"))
-                            .cornerRadius(10)
-                    }
-                } else {
-                    Text("Cannot edit default exercises")
-                        .foregroundColor(.red)
-                }
-            }
-            .navigationTitle("Edit Exercise")
-            .navigationBarItems(trailing: Button("Cancel") {
-                presentationMode.wrappedValue.dismiss()
-            })
-            .sheet(isPresented: $isShowingImagePicker) {
-                ImagePicker(selectedImage: $exerciseImage, isImagePicked: $isImagePicked)
+//                if !exerciseItem.isDefault(in: viewModel.viewContext) {  // Hide Save button for default exercises
+//                    Button(action: saveChanges) {
+//                        Text("Save Changes")
+//                            .font(.headline)
+//                            .foregroundColor(.white)
+//                            .padding()
+//                            .background(Color("ButtonColor"))
+//                            .cornerRadius(10)
+//                    }
+//                } else {
+//                    Text("Cannot edit default exercises")
+//                        .foregroundColor(.red)
+//                }
+//            }
+//            .navigationTitle("Edit Exercise")
+//            .navigationBarItems(trailing: Button("Cancel") {
+//                presentationMode.wrappedValue.dismiss()
+//            })
+//            .sheet(isPresented: $isShowingImagePicker) {
+//                ImagePicker(selectedImage: $exerciseImage, isImagePicked: $isImagePicked)
             }
         }
     }
 
     
-    private func addNewGroup(_ name: String) {
+     func addNewGroup(_ name: String) {
         // Add new category logic
         // ...
         selectedGroup = name
@@ -201,48 +201,48 @@ struct EditExerciseView: View {
         isCreatingNewGroup = false
     }
     
-    private var allExerciseGroups: [String] {
-        // Return combined list of default and user-created groups
-        let userGroups = Set(coreDataExercises.compactMap { $0.exerciseCategory })
-        let defaultGroupNames = Set(defaultExerciseGroups.map(\.name))
-        return Array(userGroups.union(defaultGroupNames)).sorted()
-    }
+//     var allExerciseGroups: [String] {
+//        // Return combined list of default and user-created groups
+//        let userGroups = Set(coreDataExercises.compactMap { $0.exerciseCategory })
+//        let defaultGroupNames = Set(defaultExerciseGroups.map(\.name))
+//        return Array(userGroups.union(defaultGroupNames)).sorted()
+//    }
     
-    private func saveChanges() {
-        guard !exerciseName.isEmpty, let selectedGroup = selectedGroup else {
-            print("Exercise name is empty or category is not selected")
-            return
-        }
-
-        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "exerciseName == %@ AND exerciseCategory == %@", exerciseItem.exerciseName, originalCategory)
-
-        do {
-            if let exerciseToUpdate = try viewModel.viewContext.fetch(fetchRequest).first {
-                // Update the existing exercise instead of creating a new one
-                exerciseToUpdate.exerciseName = exerciseName
-                exerciseToUpdate.exerciseCategory = selectedGroup
-
-                if let imageData = exerciseImage?.jpegData(compressionQuality: 1.0) {
-                    exerciseToUpdate.exerciseImage = imageData
-                }
-
-                try viewModel.viewContext.save()
-                print("Exercise updated successfully.")
-                
-                // Обновляем UI
-                DispatchQueue.main.async {
-                    // Если viewModel или другая часть вашего UI может обновиться, вызываем метод objectWillChange.send() для уведомления об изменениях
-                    self.viewModel.objectWillChange.send()
-                    // Также можно вручную перезагрузить данные, если это необходимо
-                }
-                
-            }
-        } catch {
-            print("Error updating exercise: \(error.localizedDescription)")
-        }
-
-        presentationMode.wrappedValue.dismiss()
-    }
+//     func saveChanges() {
+//        guard !exerciseName.isEmpty, let selectedGroup = selectedGroup else {
+//            print("Exercise name is empty or category is not selected")
+//            return
+//        }
+//
+//        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
+//        fetchRequest.predicate = NSPredicate(format: "exerciseName == %@ AND exerciseCategory == %@", exerciseItem.exerciseName, originalCategory)
+//
+//        do {
+//            if let exerciseToUpdate = try viewModel.viewContext.fetch(fetchRequest).first {
+//                // Update the existing exercise instead of creating a new one
+//                exerciseToUpdate.exerciseName = exerciseName
+//                exerciseToUpdate.exerciseCategory = selectedGroup
+//
+//                if let imageData = exerciseImage?.jpegData(compressionQuality: 1.0) {
+//                    exerciseToUpdate.exerciseImage = imageData
+//                }
+//
+//                try viewModel.viewContext.save()
+//                print("Exercise updated successfully.")
+//                
+//                // Обновляем UI
+//                DispatchQueue.main.async {
+//                    // Если viewModel или другая часть вашего UI может обновиться, вызываем метод objectWillChange.send() для уведомления об изменениях
+//                    self.viewModel.objectWillChange.send()
+//                    // Также можно вручную перезагрузить данные, если это необходимо
+//                }
+//                
+//            }
+//        } catch {
+//            print("Error updating exercise: \(error.localizedDescription)")
+//        }
+//
+//        presentationMode.wrappedValue.dismiss()
+//    }
 
 }

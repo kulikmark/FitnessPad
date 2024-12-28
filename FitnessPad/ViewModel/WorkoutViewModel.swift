@@ -5,141 +5,6 @@
 //  Created by Марк Кулик on 26.03.2022.
 //
 
-//import SwiftUI
-//import CoreData
-//
-//class WorkoutViewModel: ObservableObject {
-//    
-//    let viewContext = PersistenceController.shared.container.viewContext
-//    
-//    func saveContext() {
-//        do {
-//            try viewContext.save()
-//            print("Context successfully saved")
-//            objectWillChange.send() // Notify view about the changes
-//        } catch {
-//            print("Failed to save context: \(error)")
-//        }
-//    }
-//    
-//     func deleteExercise(_ exercise: Exercise) {
-//        viewContext.delete(exercise)
-//        do {
-//            try viewContext.save()
-//        } catch {
-//            // Handle the error
-//            print("Error saving context after deleting exercise: \(error)")
-//        }
-//    }
-//    
-//     func deleteSet(_ set: ExerciseSet) {
-//        viewContext.delete(set)
-//        do {
-//            try viewContext.save()
-//        } catch {
-//            // Handle the error
-//            print("Error saving context after deleting set: \(error)")
-//        }
-//    }
-//    
-//    func getExercise(for type: ExerciseType) -> Exercise? {
-//        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
-//        fetchRequest.predicate = NSPredicate(format: "type == %@", type.rawValue)
-//        
-//        do {
-//            let results = try viewContext.fetch(fetchRequest)
-//            return results.first
-//        } catch {
-//            print("Failed to fetch exercise: \(error)")
-//            return nil
-//        }
-//    }
-//
-//    func addExercise(workoutDay: WorkoutDay, chosenExerciseType: ExerciseType) {
-//        let workoutDay = workoutDay
-//        
-//        let newExercise = Exercise(context: viewContext)
-//        newExercise.type = chosenExerciseType.rawValue
-//        newExercise.exerciseName = ExerciseItem.exercises.first { $0.type == chosenExerciseType }?.exerciseName ?? "Unknown"
-//        
-//        workoutDay.addToExercises(newExercise)
-//        
-//        saveContext()
-//    }
-//}
-
-
-//import SwiftUI
-//import CoreData
-//
-//class WorkoutViewModel: ObservableObject {
-//    
-//    let viewContext = PersistenceController.shared.container.viewContext
-//    
-//    func saveContext() {
-//        do {
-//            try viewContext.save()
-//            print("Context successfully saved")
-//            objectWillChange.send() // Notify view about the changes
-//        } catch {
-//            print("Failed to save context: \(error)")
-//        }
-//    }
-//    
-//    func deleteExercise(_ exercise: Exercise) {
-//        viewContext.delete(exercise)
-//        do {
-//            try viewContext.save()
-//        } catch {
-//            // Handle the error
-//            print("Error saving context after deleting exercise: \(error)")
-//        }
-//    }
-//    
-//    func deleteSet(_ set: ExerciseSet) {
-//        viewContext.delete(set)
-//        do {
-//            try viewContext.save()
-//        } catch {
-//            // Handle the error
-//            print("Error saving context after deleting set: \(error)")
-//        }
-//    }
-//    
-//    func getExercise(for exerciseName: String) -> Exercise? {
-//        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
-//        fetchRequest.predicate = NSPredicate(format: "exerciseName == %@", exerciseName)
-//        
-//        do {
-//            let results = try viewContext.fetch(fetchRequest)
-//            return results.first
-//        } catch {
-//            print("Failed to fetch exercise: \(error)")
-//            return nil
-//        }
-//    }
-//
-//    func addExercise(workoutDay: WorkoutDay, chosenExercise: ExerciseItem) {
-//        let newExercise = Exercise(context: viewContext)
-//        newExercise.exerciseName = chosenExercise.exerciseName
-//        
-//        // Преобразуйте изображение в Data, если оно не в формате Data
-//        if let imageName = chosenExercise.exerciseImage as? String,
-//           let image = UIImage(named: imageName),
-//           let imageData = image.jpegData(compressionQuality: 1.0) {
-//            newExercise.exerciseImage = imageData
-//        } else {
-//            print("Image not found or invalid format")
-//        }
-//        
-//        workoutDay.addToExercises(newExercise)
-//        
-//        saveContext()
-//    }
-//
-//}
-
-
 import SwiftUI
 import CoreData
 
@@ -157,7 +22,7 @@ class WorkoutViewModel: ObservableObject {
             print("Failed to save context: \(error)")
         }
     }
-    
+
     func fetchWorkoutDays() {
            let fetchRequest: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
            let sortDescriptor = NSSortDescriptor(keyPath: \WorkoutDay.date, ascending: true)
@@ -169,6 +34,11 @@ class WorkoutViewModel: ObservableObject {
                print("Failed to fetch workout days: \(error.localizedDescription)")
            }
        }
+    
+    func workoutDay(for date: Date) -> WorkoutDay? {
+        return workoutDays.first { Calendar.current.isDate($0.date ?? Date(), inSameDayAs: date) }
+    }
+
     
     func fetchUserGoal() {
         let fetchRequest: NSFetchRequest<UserGoal> = UserGoal.fetchRequest()
@@ -211,6 +81,15 @@ class WorkoutViewModel: ObservableObject {
         }
     }
 
+    func addExerciseToWorkoutDay(_ exercise: Exercise, for workoutDay: WorkoutDay) {
+           workoutDay.addToExercises(exercise)
+           
+           do {
+               try viewContext.save()
+           } catch {
+               print("Failed to save context with error: \(error)")
+           }
+       }
     
     func deleteExercise(_ exercise: Exercise) {
         viewContext.delete(exercise)
@@ -229,34 +108,42 @@ class WorkoutViewModel: ObservableObject {
             print("Error saving context after deleting set: \(error)")
         }
     }
-    
-    func renameCategory(from oldName: String, to newName: String) {
-           let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
-           fetchRequest.predicate = NSPredicate(format: "exerciseCategory == %@", oldName)
-
-           do {
-               let exercises = try viewContext.fetch(fetchRequest)
-               for exercise in exercises {
-                   exercise.exerciseCategory = newName
-               }
-               saveContext()
-           } catch {
-               print("Failed to rename category: \(error.localizedDescription)")
-           }
-       }
-    
-    func deleteExercises(in categoryName: String) {
-        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "exerciseCategory == %@ AND exerciseCategory != %@", categoryName, "Default")
-        
-        do {
-            let exercisesToDelete = try viewContext.fetch(fetchRequest)
-            for exercise in exercisesToDelete {
-                viewContext.delete(exercise)
-            }
-            try viewContext.save()
-        } catch {
-            print("Error saving context after deleting exercises: \(error)")
-        }
-    }
 }
+
+
+//func renameCategory(from oldName: String, to newName: String) {
+//           let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
+//           fetchRequest.predicate = NSPredicate(format: "exerciseCategory == %@", oldName)
+//
+//           do {
+//               let exercises = try viewContext.fetch(fetchRequest)
+//               for exercise in exercises {
+//                   exercise.category = newName
+//               }
+//               saveContext()
+//           } catch {
+//               print("Failed to rename category: \(error.localizedDescription)")
+//           }
+//       }
+
+    
+//    func fetchOrCreateWorkoutDay(for date: Date) -> WorkoutDay {
+//        let fetchRequest: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
+//        fetchRequest.predicate = NSPredicate(format: "date == %@", date as NSDate)
+//
+//        do {
+//            if let existingWorkoutDay = try viewContext.fetch(fetchRequest).first {
+//                return existingWorkoutDay
+//            } else {
+//                let newWorkoutDay = WorkoutDay(context: viewContext)
+//                newWorkoutDay.date = date
+//                saveContext()
+//                return newWorkoutDay
+//            }
+//        } catch {
+//            print("Failed to fetch or create workout day: \(error)")
+//            let fallbackWorkoutDay = WorkoutDay(context: viewContext)
+//            fallbackWorkoutDay.date = date
+//            return fallbackWorkoutDay
+//        }
+//    }

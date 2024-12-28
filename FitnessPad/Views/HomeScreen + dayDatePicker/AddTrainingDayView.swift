@@ -92,7 +92,7 @@ struct AddTrainingDayView: View {
             .padding(.bottom, 40)
             .navigationDestination(isPresented: $isNavigationActive) {
                 // Передаем Binding<WorkoutDay?>
-                WorkoutDayDetails(viewModel: viewModel, workoutDay: $workoutDay, selectedTab: $selectedTab)
+                WorkoutDayDetailsView(viewModel: viewModel, workoutDay: $workoutDay)
             }
         }
         .background(Color("ViewColor"))
@@ -114,4 +114,5 @@ struct AddTrainingDayView: View {
             print("Failed to save workout day: \(error.localizedDescription)")
         }
     }
+
 }

@@ -20,7 +20,7 @@ struct ProgressUtils {
             for day in workoutDays {
                 if let exercises = day.exercises?.allObjects as? [Exercise] {
                     for exercise in exercises {
-                        if let name = exercise.exerciseName, let sets = exercise.sets?.allObjects as? [ExerciseSet], let date = day.date {
+                        if let name = exercise.name, let sets = exercise.sets?.allObjects as? [ExerciseSet], let date = day.date {
                             let maxSetWeight = sets.map { $0.weight }.max() ?? 0.0
                             
                             if exerciseDict[name] == nil {
