@@ -14,7 +14,7 @@ struct AddTrainingDayView: View {
 
     @Binding var selectedDate: Date
     @Binding var workoutDay: WorkoutDay?
-    @Binding var selectedTab: Tab
+//    @Binding var selectedTab: Tab
     
     @State private var isCalendarExpanded = false
     @State private var isNavigationActive = false

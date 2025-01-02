@@ -13,7 +13,7 @@ struct WorkoutDayDatePicker: View {
     @State private var date = Date()
     @Binding var newWorkoutDay: WorkoutDay?
     @State private var isNavigationActive = false
-    @Binding var selectedTab: Tab
+//    @Binding var selectedTab: Tab
 
     var body: some View {
         NavigationStack {
@@ -72,19 +72,19 @@ struct WorkoutDayDatePicker: View {
     }
 }
 
-struct WorkoutDayDatePicker_Previews: PreviewProvider {
-    static var previews: some View {
-        // Create a temporary binding for `selectedTab`
-        @State var selectedTab: Tab = .home // Or any default value you want
-
-        let context = PersistenceController.shared.container.viewContext
-        let viewModel = WorkoutViewModel()
-
-        WorkoutDayDatePicker(
-            viewModel: viewModel,
-            newWorkoutDay: .constant(nil),
-            selectedTab: $selectedTab
-        )
-        .environment(\.managedObjectContext, context)
-    }
-}
+//struct WorkoutDayDatePicker_Previews: PreviewProvider {
+//    static var previews: some View {
+//        // Create a temporary binding for `selectedTab`
+//        @State var selectedTab: Tab = .home // Or any default value you want
+//
+//        let context = PersistenceController.shared.container.viewContext
+//        let viewModel = WorkoutViewModel()
+//
+//        WorkoutDayDatePicker(
+//            viewModel: viewModel,
+//            newWorkoutDay: .constant(nil),
+//            selectedTab: $selectedTab
+//        )
+//        .environment(\.managedObjectContext, context)
+//    }
+//}

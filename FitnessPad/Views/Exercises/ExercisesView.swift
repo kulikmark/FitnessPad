@@ -279,9 +279,13 @@ struct ExercisesView: View {
     @ObservedObject var viewModel: WorkoutViewModel
     @State  var isEditing = false
     @State  var selectedExerciseItem: DefaultExerciseItem?
-    @State private var isShowingWorkoutDetailsView = false
+    @State private var isShowingSheet = false
     @State  var isPresentingEditExerciseView = false
     @Binding var workoutDay: WorkoutDay?
+    
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
+
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -296,16 +300,11 @@ struct ExercisesView: View {
         .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
        
         .navigationBarBackButtonHidden(true)
-        
-        if isShowingWorkoutDetailsView {
-            WorkoutDayDetailsView(viewModel: viewModel, workoutDay: $workoutDay)
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Exercise Already Added"),
+                  message: Text(alertMessage),
+                  dismissButton: .default(Text("OK")))
         }
-//        .toolbar {
-//            ToolbarItem(placement: .navigationBarLeading) {
-//                CustomBackButtonView()
-//            }
-//        }
-        
     }
 
     // MARK: - Header
@@ -363,8 +362,6 @@ struct ExercisesView: View {
      func exerciseButton(for item: DefaultExerciseItem) -> some View {
         Button {
                 addExerciseToWorkoutDay(for: item)
-            
-            isShowingWorkoutDetailsView = true
         } label: {
             VStack {
                 exerciseImage(for: item)
@@ -413,27 +410,18 @@ struct ExercisesView: View {
     }
 
     // MARK: - Helper Functions
-     func addExerciseToWorkoutDay(for item: DefaultExerciseItem) {
 
-        let context = PersistenceController.shared.container.viewContext
-
-        // Создаем новое упражнение для текущего дня тренировок
-        let newExercise = Exercise(context: context)
-        newExercise.name = item.exerciseName
-        newExercise.image = item.exerciseImage?.jpegData(compressionQuality: 0.8) // Сохранение изображения
-        newExercise.workoutDay = workoutDay
-
-        do {
-            // Сохраняем изменения в CoreData
-            try context.save()
-            print("Exercise \(item.exerciseName) successfully added to workout day.")
+    
+    private func addExerciseToWorkoutDay(for item: DefaultExerciseItem) {
+        if workoutDay?.exercisesArray.contains(where: { $0.name == item.exerciseName }) == true {
+            alertMessage = "Exercise '\(item.exerciseName)' is already added to the workout day."
+            showingAlert = true
+        } else {
+            // Добавляем упражнение в список, если оно еще не добавлено
+            viewModel.addExercise(item, workoutDay: workoutDay)
             
-            // Закрытие экрана с упражнениями после успешного добавления
-//                   presentationMode.wrappedValue.dismiss()
-           
-            
-        } catch {
-            print("Failed to save exercise: \(error.localizedDescription)")
+            // Закрываем экран только если упражнение добавлено успешно
+            presentationMode.wrappedValue.dismiss()
         }
     }
 

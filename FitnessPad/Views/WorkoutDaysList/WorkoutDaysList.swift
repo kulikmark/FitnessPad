@@ -15,9 +15,9 @@ struct WorkoutDaysList: View {
     
     @State var selectedMonth: Date = .currentMonth
     @State var selectedDate: Date = .now
-    //        var safeArea: EdgeInsets
+    @State private var scrollPosition: String?
     
-    var safeArea: EdgeInsets = EdgeInsets()
+    var safeArea: EdgeInsets
     
     var body: some View {
         
@@ -30,38 +30,40 @@ struct WorkoutDaysList: View {
             
             // Содержание
             ScrollView (.vertical) {
-                ZStack {
-                    VStack(spacing: 20) {
-                        CalendarView()
-                        //                               WorkoutDayDetailsView(viewModel: viewModel, workoutDay: $workoutDay)
-                        //                                   .frame(height: 650)
-                        
-                        if workoutDay == nil {
-                            emptyWorkoutDayView
-                        } else {
-                            WorkoutDayDetailsView(viewModel: viewModel, workoutDay: $workoutDay)
-                                .frame(height: 650)
-                        }
-                    }
-                }
-            }
-            .onAppear {
                 
-                // Добавляем проверку для выбранной даты
-                    if let existingWorkoutDay = viewModel.workoutDay(for: selectedDate) {
-                        workoutDay = existingWorkoutDay
+                VStack(spacing: 20) {
+                    CalendarView()
+                        .background {
+                            Divider()
+                                .opacity(0.1)
+                                .id("CONTENTVIEW")
+                        }
+                
+                
+              
+                    if let workoutDay = viewModel.workoutDay(for: selectedDate) {
+                        WorkoutDayDetailsView(viewModel: viewModel, workoutDay: Binding.constant(workoutDay))
+                            .frame(height: 630)
                     } else {
-                        workoutDay = nil
+                        emptyWorkoutDayView
                     }
+           
+            }
+                .scrollTargetLayout()
+            }
+            .scrollPosition(id: $scrollPosition, anchor: .top)
+            .scrollIndicators(.hidden)
+            .scrollTargetBehavior(CustomScrollBehaviour(maxHeight: maxHeight))
+            .onAppear {
+                guard scrollPosition == nil else { return }
+                scrollPosition = "CONTENTVIEW"
+                
+                selectedDate = Calendar.current.startOfDay(for: Date())
+            }
                 
             }
         }
-        
-        .scrollIndicators(.hidden)
-        .scrollTargetBehavior(CustomScrollBehaviour(maxHeight: maxHeight))
-        
-    }
-    
+
     var emptyWorkoutDayView: some View {
         VStack(spacing: 0) {
             Image("emptyWorkoutDay")
@@ -70,7 +72,7 @@ struct WorkoutDaysList: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 150)
             
-            Text("No workout days created yet.")
+            Text("You haven't created a workout day yet.")
                 .foregroundColor(.white)
                 .padding()
             
@@ -89,7 +91,7 @@ struct WorkoutDaysList: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        //           .frame(height: 700)
+                   .frame(height: 630)
         .background(Color("BackgroundColor"))
     }
     
@@ -100,6 +102,8 @@ struct WorkoutDaysList: View {
         
         // Сохраняем в CoreData
         viewModel.saveContext()
+        
+        viewModel.fetchWorkoutDays()
         
         // Обновляем workoutDay, чтобы отобразить экран деталей
         workoutDay = newWorkoutDay
@@ -114,6 +118,7 @@ struct WorkoutDaysList: View {
             
             let maxHeight = size.height - (calendarTitleViewHeight + weekDayLabelHeight + safeArea.top + 50  + topPadding + bottomPadding - 50)
             let progress = max(min((-minY / maxHeight), 1), 0)
+            
             
             VStack (alignment: .leading,spacing: 0, content: {
                 Text(currentMonth)
@@ -132,15 +137,24 @@ struct WorkoutDaysList: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .overlay(alignment: .topTrailing, content: {
                         HStack(spacing: 15) {
-                            Button("", systemImage: "arrow.trianglehead.counterclockwise.rotate.90") {
-                                resetToCurrentDate()
+                            HStack {
+                                let today = Date()
+                                Button("\(today, formatter: dayFormatter)", systemImage: "arrow.forward") {
+                                    resetToCurrentDate()
+                                }
+                                .contentShape(.rect)
+                                .padding(5)
+                                .background(Color("ButtonColor"))
+                                .cornerRadius(10)
+                                .padding(.trailing, 10)
                             }
-                            .contentShape(.rect)
+                            
                             Button("", systemImage: "chevron.left") {
                                 /// Update to prev month
                                 monthUpdate(false)
                             }
                             .contentShape(.rect)
+                            
                             Button("", systemImage: "chevron.right") {
                                 /// Update to next month
                                 monthUpdate(true)
@@ -149,7 +163,7 @@ struct WorkoutDaysList: View {
                         }
                         .font(.title3)
                         .foregroundStyle(.primary)
-                        .offset(x: progress * 150)
+                        .offset(x: progress * 200)
                     })
                     .frame(height: calendarTitleViewHeight)
                 
@@ -177,27 +191,29 @@ struct WorkoutDaysList: View {
                                     if Calendar.current.isDate(day.date, inSameDayAs: selectedDate) {
                                         // Выделенная дата - обводка
                                         Circle()
-                                            .strokeBorder(Color.white, lineWidth: 1)
+                                            .strokeBorder(Color.white, lineWidth: 2)
                                             .frame(width: 40, height: 40)
-                                            .offset(y: progress * -1)
-                                    } else if viewModel.workoutDay(for: day.date) != nil {
+//                                            .offset(y: progress * -1)
+                                    } else if let _ = viewModel.workoutDay(for: day.date) {
                                         // Даты с тренировками - круг
                                         Circle()
-                                            .fill(Color.white)
+                                            .fill(Color("ButtonColor"))
                                             .frame(width: 5, height: 5)
                                             .padding(.top, 30)
-                                            .offset(y: progress * -1)
-                                    }
+//                                            .offset(y: progress * -1)
+                                    } else if Calendar.current.isDate(day.date, inSameDayAs: Date()) && day.date != selectedDate {
+                                                       // Если сегодня, но не выбрана дата
+                                                       Circle()
+                                                           .fill(Color.white.opacity(0.1)) // Прозрачный круг для сегодня
+                                                           .frame(width: 40, height: 40)
+//                                                           .offset(y: progress * -1)
+                                                   }
+                                    
                                 }
                                 .contentShape(.rect)
                                 .onTapGesture {
                                     selectedDate = day.date
-                                    
-                                    if let existingWorkoutDay = viewModel.workoutDay(for: day.date) {
-                                        workoutDay = existingWorkoutDay
-                                    } else {
-                                        workoutDay = nil
-                                    }
+                                   
                                 }
                         }
                     })
@@ -220,7 +236,7 @@ struct WorkoutDaysList: View {
             //            .background(.red.gradient)
             .background(Color("ViewColor"))
             .cornerRadius(10)
-            
+            /// Sticking it to top
             .clipped()
             .contentShape(.rect)
             .offset(y: -minY)
@@ -241,6 +257,13 @@ struct WorkoutDaysList: View {
         formatter.dateFormat = format
         return formatter.string(from: selectedMonth)
     }
+    
+    private var dayFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d" // Формат для отображения только числа дня
+        return formatter
+    }
+
     
     /// Month increment / decrement
     func monthUpdate(_ increment: Bool = true) {
@@ -364,127 +387,24 @@ struct Day: Identifiable {
     
 }
 
+/// Custom Scroll Behaviour
 struct CustomScrollBehaviour: ScrollTargetBehavior {
     var maxHeight: CGFloat
     func updateTarget(_ target: inout ScrollTarget, context: TargetContext) {
         if target.rect.minY < maxHeight {
-            target.rect = .zero
+            if target.rect.minY > maxHeight / 2 {
+                target.rect.origin.y = maxHeight
+            } else {
+                target.rect = .zero
+            }
         }
     }
 }
 
-
 struct WorkoutDaysList_Previews: PreviewProvider {
     @State static var workoutDay: WorkoutDay? = nil
     static var previews: some View {
-        WorkoutDaysList(viewModel: WorkoutViewModel(), workoutDay: $workoutDay)
+        let safeArea = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0) // Пример значения
+        WorkoutDaysList(viewModel: WorkoutViewModel(), workoutDay: $workoutDay, safeArea: safeArea)
     }
 }
-
-
-// MARK: - ORIGINAL CODE
-
-//@ViewBuilder
-//func CalendarView() -> some View {
-//    GeometryReader {
-//        let size = $0.size
-//        let minY = $0.frame(in: .scrollView(axis: .vertical)).minY
-//
-//        let maxHeight = size.height - (calendarTitleViewHeight + weekDayLabelHeight + safeArea.top + 50  + topPadding + bottomPadding - 50)
-//        let progress = max(min((-minY / maxHeight), 1), 0)
-//
-//        VStack (alignment: .leading,spacing: 0, content: {
-//            Text(currentMonth)
-//                .font(.system(size: 35 - (10 * progress)))
-//                .offset(y: -50 * progress)
-//                .frame(maxHeight: .infinity, alignment: .bottom )
-//                .overlay(alignment: .topLeading, content: {
-//                    GeometryReader {
-//                        let size = $0.size
-//
-//                        Text(currentYear)
-//                            .font(.system(size: 25 - (10 * progress)))
-//                            .offset(x: (size.width + 5) * progress, y: progress * 3)
-//                    }
-//                })
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//                .overlay(alignment: .topTrailing, content: {
-//                    HStack(spacing: 15) {
-//                        Button("", systemImage: "chevron.left") {
-//                            /// Update to prev month
-//                            monthUpdate(false)
-//                        }
-//                        .contentShape(.rect)
-//                        Button("", systemImage: "chevron.right") {
-//                            /// Update to next month
-//                            monthUpdate(true)
-//                        }
-//                        .contentShape(.rect)
-//                    }
-//                    .font(.title3)
-//                    .foregroundStyle(.primary)
-//                    .offset(x: progress * 150)
-//                })
-//                .frame(height: calendarTitleViewHeight)
-//
-//            VStack(spacing: 0) {
-//                /// Weekdays
-//                HStack(spacing:0) {
-//                    ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { symbol in
-//                        Text(symbol.prefix(3))
-//                            .font(.caption)
-//                            .frame(maxWidth: .infinity)
-//                            .foregroundStyle(.secondary)
-//                    }
-//                }
-//                .frame(height: weekDayLabelHeight, alignment: .bottom)
-//
-//                /// Calendar Grid View
-//                LazyVGrid(columns: Array(repeating: GridItem(spacing:0), count: 7), spacing: 0, content: {
-//                    ForEach(selectedMonthDates) { day in
-//                        Text(day.shortSymbol)
-//                            .foregroundStyle(day.ignored ? .secondary : .primary)
-//                            .frame(maxWidth: . infinity)
-//                            .frame(height: 50)
-//                            .overlay(alignment: .bottom, content: {
-//                                Circle()
-//                                    .fill(.white)
-//                                    .frame(width: 5, height: 5)
-//                                    .opacity(Calendar.current.isDate(day.date, inSameDayAs: selectedDate) ? 1 : 0)
-//                                    .offset(y: progress * -1)
-//                            })
-//                            .contentShape(.rect)
-//                            .onTapGesture {
-//                                selectedDate = day.date
-//                            }
-//                    }
-//                })
-//                .frame(height: calendarGridHeight - ((calendarGridHeight - 50) * progress), alignment: .top)
-//                .offset(y: (monthProgress * -50) * progress)
-//                .contentShape(.rect)
-//                .clipped()
-//            }
-//            .offset(y: progress * -50)
-//
-//        })
-//        .foregroundStyle(.white)
-//        .padding(.horizontal, horizontalPadding)
-//        .padding(.top, topPadding)
-//        .padding(.top, safeArea.top)
-//        .padding(.bottom, bottomPadding)
-//        .frame(maxHeight: .infinity)
-//        .frame(height: size.height - (maxHeight * progress), alignment: .top)
-//        .background(.red.gradient)
-//        .cornerRadius(10)
-//
-//        .clipped()
-//        .contentShape(.rect)
-//        .offset(y: -minY)
-//
-//    }
-//    .frame(height: calendarHeight)
-//    .zIndex(1000)
-//
-//
-//
-//}

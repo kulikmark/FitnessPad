@@ -101,12 +101,12 @@ struct HomeView: View {
                         .onTapGesture {
                             isShowingGoalSheet = true
                         }
-                        .padding(.top, 30)
+                        .padding(.top, 10)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 20)
                     }
                     
-                    Spacer(minLength: 40)
+//                    Spacer(minLength: 40)
                     
                     // Секция со статьями
                     VStack(alignment: .leading) {
@@ -136,7 +136,7 @@ struct HomeView: View {
                                         }
                                     }
                                     .padding(.horizontal)
-                                    .padding(.top, 20)
+                                    .padding(.top, 30)
                                     .padding(.bottom, 20)
                                 }
                             }
@@ -207,7 +207,7 @@ struct HomeView: View {
                                selectedGoal: $viewModel.selectedGoal,  // Обновлено
                                onSave: {
                                    if let goal = viewModel.selectedGoal {
-                                       viewModel.saveGoal(goal)  // Обновлено
+//                                       viewModel.saveGoal(goal)  // Обновлено
                                        isShowingGoalSheet = false
                                    }
                                },
@@ -220,7 +220,7 @@ struct HomeView: View {
                    }
         
         .onAppear {
-            viewModel.fetchUserGoal()
+//            viewModel.fetchUserGoal()
         }
     }
 }
@@ -274,7 +274,7 @@ struct homeScreenImage: View {
 
 //struct HomeView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        let context = PersistenceController.preview.container.viewContext
+//        let context = PersistenceController.shared.container.viewContext
 //        let viewModel = WorkoutViewModel()
 //        @State var selectedTab: Tab = .workoutDays
 //        @State var selectedDate = Date()

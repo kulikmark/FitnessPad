@@ -8,9 +8,6 @@
 import SwiftUI
 import CoreData
 
-import SwiftUI
-import CoreData
-
 struct ContentView: View {
     @AppStorage("selectedTab") var selectedTab: Tab = .home
     @Environment(\.managedObjectContext) private var viewContext
@@ -45,7 +42,7 @@ struct ContentView: View {
             }
             .onAppear {
                 viewModel.fetchWorkoutDays() // Загружаем тренировочные дни при старте
-                viewModel.fetchUserGoal()    // Загружаем цель пользователя
+//                viewModel.fetchUserGoal()    // Загружаем цель пользователя
             }
         }
     }
@@ -58,3 +55,35 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+
+
+//struct ContentView: View {
+// 
+//    @Environment(\.managedObjectContext) private var viewContext
+//    @StateObject var viewModel = WorkoutViewModel()
+//    @State private var workoutDay: WorkoutDay? = nil
+//
+//    var body: some View {
+//        GeometryReader {
+//            let safeArea = $0.safeAreaInsets
+//            NavigationStack {
+//                ZStack {
+//                        WorkoutDaysList(viewModel: viewModel, workoutDay: $workoutDay, safeArea: safeArea)
+//                            .ignoresSafeArea(.container, edges: .top)
+//                }
+//            }
+//            .onAppear {
+//                viewModel.fetchWorkoutDays() // Загружаем тренировочные дни при старте
+//                viewModel.fetchUserGoal()    // Загружаем цель пользователя
+//            }
+//        }
+//    }
+//}
+//
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//            .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+//    }
+//}
+//

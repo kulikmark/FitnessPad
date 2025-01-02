@@ -16,7 +16,7 @@ struct TabItem: Identifiable {
 
 var tabItems = [
     TabItem(text: "Home", image: "home", tabItem: .home),
-    TabItem(text: "Workout days", image: "workoutDays", tabItem: .workoutDays),
+    TabItem(text: "Workouts", image: "workoutDays", tabItem: .workoutDays),
     TabItem(text: "Exercises", image: "exercises", tabItem: .exercises),
     TabItem(text: "Progress", image: "progressIcon", tabItem: .progress)
 ]
@@ -38,7 +38,7 @@ struct TabBarView: View {
             HStack {
                 ForEach(tabItems) { item in
                     Button {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.5)) {
+                        withAnimation(.interactiveSpring()) {
                             selectedTab = item.tabItem
                         }
                     } label: {
@@ -46,36 +46,30 @@ struct TabBarView: View {
                             Image(item.image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 23, height: 23)
+                                .frame(width: selectedTab == item.tabItem ? 20 : 15, height: selectedTab == item.tabItem ? 20 : 15) // Увеличиваем размер изображения
                             
                             Text(item.text)
                                 .foregroundColor(Color("TextColor"))
-                                .font(.system(size: 12))
-                                .fontWeight(.medium)
+                                .font(.system(size: selectedTab == item.tabItem ? 12 : 10)) // Увеличиваем размер текста
                         }
-                        .padding()
-                        .background(
-                            selectedTab == item.tabItem ?
-                            RoundedRectangle(cornerRadius: 20).fill(Color.white.opacity(0.2)) : nil
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .padding(.horizontal, 20)
                     }
-                    .scaleEffect(selectedTab == item.tabItem ? 1.1 : 1.0)
+                    .animation(.spring(duration: 0.3), value: selectedTab) // Добавляем анимацию
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: 70)
+            .frame(maxWidth: .infinity, maxHeight: 40)
             .padding(.top, 10)
-            .padding(.bottom, 25)
+            .padding(.bottom, 15)
             .background(
                 (Color("ViewColor"))
             )
-            .clipShape(CustomRoundedRectangle(cornerRadius: 30, corners: [.topLeft, .topRight]))
-            .shadow(radius: 10)
+            .clipShape(CustomRoundedRectangle(cornerRadius: 5, corners: [.topLeft, .topRight]))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .edgesIgnoringSafeArea(.bottom) // Игнорируем безопасную зону внизу
     }
 }
+
 
 struct CustomRoundedRectangle: Shape {
     var cornerRadius: CGFloat
