@@ -19,8 +19,6 @@
 		6D37D1042C6780AF004AB4DD /* GoalSelectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D1032C6780AF004AB4DD /* GoalSelectionSheet.swift */; };
 		6D37D1062C67DEB2004AB4DD /* ProgressUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D1052C67DEB2004AB4DD /* ProgressUtils.swift */; };
 		6D536B6F2C681B8C00835D3C /* HomeScreenProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B6E2C681B8C00835D3C /* HomeScreenProgressView.swift */; };
-		6D536B712C68247D00835D3C /* AddTrainingDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B702C68247C00835D3C /* AddTrainingDayView.swift */; };
-		6D536B732C68258100835D3C /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B722C68258100835D3C /* CustomDatePicker.swift */; };
 		6D536B752C6961B800835D3C /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B742C6961B800835D3C /* BackButton.swift */; };
 		6D538FEE2C610DD300478628 /* WorkoutDaysHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D538FED2C610DD300478628 /* WorkoutDaysHeaderView.swift */; };
 		6D538FF02C611B5D00478628 /* DeleteHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D538FEF2C611B5D00478628 /* DeleteHintView.swift */; };
@@ -38,7 +36,6 @@
 		6DBAF97227E7E04E005B8EE4 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97127E7E04E005B8EE4 /* RoundedCorners.swift */; };
 		6DBAF97827E9288C005B8EE4 /* ExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97727E9288C005B8EE4 /* ExercisesView.swift */; };
 		6DBAF97A27E9289C005B8EE4 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97927E9289C005B8EE4 /* ProgressView.swift */; };
-		6DCEDD4D27EBA336007B8AB5 /* WorkoutDayDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCEDD4C27EBA335007B8AB5 /* WorkoutDayDatePicker.swift */; };
 		6DE2A56527F22846002008FE /* WorkoutDayDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE2A56427F22846002008FE /* WorkoutDayDetailsView.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,8 +53,6 @@
 		6D37D1032C6780AF004AB4DD /* GoalSelectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalSelectionSheet.swift; sourceTree = "<group>"; };
 		6D37D1052C67DEB2004AB4DD /* ProgressUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressUtils.swift; sourceTree = "<group>"; };
 		6D536B6E2C681B8C00835D3C /* HomeScreenProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenProgressView.swift; sourceTree = "<group>"; };
-		6D536B702C68247C00835D3C /* AddTrainingDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrainingDayView.swift; sourceTree = "<group>"; };
-		6D536B722C68258100835D3C /* CustomDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePicker.swift; sourceTree = "<group>"; };
 		6D536B742C6961B800835D3C /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		6D538FED2C610DD300478628 /* WorkoutDaysHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDaysHeaderView.swift; sourceTree = "<group>"; };
 		6D538FEF2C611B5D00478628 /* DeleteHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteHintView.swift; sourceTree = "<group>"; };
@@ -78,7 +73,6 @@
 		6DBAF97127E7E04E005B8EE4 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 		6DBAF97727E9288C005B8EE4 /* ExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesView.swift; sourceTree = "<group>"; };
 		6DBAF97927E9289C005B8EE4 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
-		6DCEDD4C27EBA335007B8AB5 /* WorkoutDayDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayDatePicker.swift; sourceTree = "<group>"; };
 		6DE2A56427F22846002008FE /* WorkoutDayDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,9 +128,6 @@
 			isa = PBXGroup;
 			children = (
 				6D8DED5527EA250700A1B6B9 /* HomeView.swift */,
-				6D536B702C68247C00835D3C /* AddTrainingDayView.swift */,
-				6D536B722C68258100835D3C /* CustomDatePicker.swift */,
-				6DCEDD4C27EBA335007B8AB5 /* WorkoutDayDatePicker.swift */,
 				6D37D1032C6780AF004AB4DD /* GoalSelectionSheet.swift */,
 				6D536B6E2C681B8C00835D3C /* HomeScreenProgressView.swift */,
 			);
@@ -315,7 +306,6 @@
 				6D8DED5827EA257A00A1B6B9 /* TabBarModel.swift in Sources */,
 				6D37D0F02C62CE32004AB4DD /* WeightRepsInputView.swift in Sources */,
 				6DBAF97827E9288C005B8EE4 /* ExercisesView.swift in Sources */,
-				6DCEDD4D27EBA336007B8AB5 /* WorkoutDayDatePicker.swift in Sources */,
 				6D567C5B27EA15290039FCAD /* TabBarView.swift in Sources */,
 				6DADFDD8280390D000A122E0 /* ChosenExerciseViewModel.swift in Sources */,
 				6D5B06232D2311A600FAAECB /* WorkoutDayDetailsSetsView.swift in Sources */,
@@ -330,8 +320,6 @@
 				6D0655602C58F7B20015CB6B /* FitnessPad.xcdatamodeld in Sources */,
 				6DAEA1AB27E5EA0F0001EDF7 /* Persistence.swift in Sources */,
 				6DAEA1A427E5EA0D0001EDF7 /* ContentView.swift in Sources */,
-				6D536B712C68247D00835D3C /* AddTrainingDayView.swift in Sources */,
-				6D536B732C68258100835D3C /* CustomDatePicker.swift in Sources */,
 				6D37D0EC2C62C05B004AB4DD /* BodyWeightInputView.swift in Sources */,
 				6DBAF97A27E9289C005B8EE4 /* ProgressView.swift in Sources */,
 				6D538FEE2C610DD300478628 /* WorkoutDaysHeaderView.swift in Sources */,

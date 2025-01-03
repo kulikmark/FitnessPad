@@ -279,7 +279,7 @@ struct ExercisesView: View {
     @ObservedObject var viewModel: WorkoutViewModel
     @State  var isEditing = false
     @State  var selectedExerciseItem: DefaultExerciseItem?
-    @State private var isShowingSheet = false
+    @State private var isShowingAddExerciseView = false
     @State  var isPresentingEditExerciseView = false
     @Binding var workoutDay: WorkoutDay?
     
@@ -298,6 +298,13 @@ struct ExercisesView: View {
             exerciseGroups
         }
         .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
+        
+        .sheet(isPresented: $isShowingAddExerciseView) {
+            AddExerciseView(viewModel: viewModel)
+                .background(Color("BackgroundColor"))
+                .edgesIgnoringSafeArea(.all)
+                .transition(.opacity)
+        }
        
         .navigationBarBackButtonHidden(true)
         .alert(isPresented: $showingAlert) {
@@ -400,7 +407,7 @@ struct ExercisesView: View {
 
      var addButton: some View {
         Button(action: {
-            // Логика для добавления нового упражнения
+            isShowingAddExerciseView = true
         }) {
             Image(systemName: "plus")
                 .font(.system(size: 25))
