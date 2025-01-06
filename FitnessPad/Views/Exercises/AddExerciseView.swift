@@ -13,134 +13,270 @@ struct AddExerciseView: View {
     @ObservedObject var viewModel: WorkoutViewModel
     @Environment(\.presentationMode) var presentationMode
     @State private var exerciseName = ""
-    @State private var selectedGroup: String? = defaultExerciseGroups.first?.name
+    @State private var selectedCategory: ExerciseCategory? = nil
     @State private var exerciseImage: UIImage? = nil
     @State private var isShowingImagePicker = false
-    @State private var isCreatingNewGroup = false
-    @State private var newGroupName = ""
+    @State private var isCreatingNewCategory = false
+    @State private var newCategoryName = ""
     @State private var isImagePicked = false
+    @State private var isExerciseNameValid = true
+    @FocusState private var isExerciseNameFocused: Bool
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Exercise Details")) {
-                    TextField("Exercise Name", text: $exerciseName)
-                    
-                    Picker("Exercise Category", selection: $selectedGroup) {
-                        ForEach(allExerciseGroups.map(\.name), id: \.self) { group in
-                            Text(group).tag(group as String?)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack (spacing: 40) {
+                        
+                        Text("Add New Exercise")
+                            .font(.system(size: 24))
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .id("anchor")
+                        
+                        VStack {
+                            TextField("", text: $exerciseName)
+                                .padding()
+                                .background(isExerciseNameValid ? (Color("ViewColor")) : Color.red.opacity(0.3))
+                                .cornerRadius(15)
+                                .padding(8)
+                                .focused($isExerciseNameFocused)
+                                .onChange(of: exerciseName) { _, _ in
+                                    isExerciseNameValid = !exerciseName.isEmpty
+                                }
+                               
+                            
+                            Text(isExerciseNameValid ? "Enter Exercise Name" : "Exercise name is required")
+                                .font(.system(size: 12))
+                                .foregroundColor(isExerciseNameValid ? .gray : .red)
+                                .padding(.leading, 16)
+                                .padding(.bottom, 8)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .background(Color("ViewColor").opacity(0.2))
+                        .cornerRadius(8)
+                        
+                        
+                        VStack {
+                            
+                            // Логика отображения текста под полем ввода
+                            Text("Exercise Category")
+                                .font(.system(size: 18))
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            List {
+                                ForEach(viewModel.allCategories, id: \.name) { category in
+                                    HStack {
+                                        Text(category.name ?? "Unknown Category")
+                                            .font(.headline)
+                                            .foregroundColor(selectedCategory == category ? .blue : .white)
+                                            .padding(.vertical, 8)
+                                            .padding(.horizontal)
+                                        
+                                        Spacer()
+                                        
+                                        if selectedCategory == category {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .foregroundColor(.blue)
+                                                .padding()
+                                        }
+                                    }
+                                    .background(selectedCategory == category ? Color.blue.opacity(0.1) : Color.clear)
+                                    .cornerRadius(15)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        selectedCategory = category
+                                    }
+                                    .swipeActions {
+                                        Button(role: .destructive) {
+                                            viewModel.deleteCategory(category)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                                    .listRowBackground(Color.clear) // Прозрачный фон для строки
+                                }
+                                .onDelete { indexSet in
+                                    if let index = indexSet.first {
+                                        let categoryToDelete = viewModel.allCategories[index]
+                                        viewModel.deleteCategory(categoryToDelete)
+                                    }
+                                }
+                            }
+                            .background(Color("ViewColor").opacity(0.2))
+                            .cornerRadius(8)
+                            .listStyle(PlainListStyle())
+                            .scrollIndicators(.hidden)
+                            .onAppear {
+                                viewModel.loadCategories()
+                            }
+                            .frame(minHeight: CGFloat(viewModel.allCategories.count) * 60)
+                        }
+                        
+                        
+                        VStack {
+                            
+                            Text("Create New Category")
+                                .font(.system(size: 18))
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            VStack {
+                                
+                                
+                                TextField("", text: $newCategoryName)
+                                    .padding()
+                                    .background(Color("ViewColor"))
+                                    .cornerRadius(15)
+                                    .padding(8)
+                                Text("Enter Category Name")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 16)
+                                    .padding(.bottom, 8)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Button("Done") {
+                                    addNewCategory()
+                                }
+                                .font(.system(size: 14))
+                                .foregroundColor(.white)
+                                .padding()
+                                .padding(.horizontal, 10)
+                                .background(Color("ButtonColor"))
+                                .cornerRadius(10)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding()
+                                
+                            }
+                            .background(Color("ViewColor").opacity(0.2))
+                            .cornerRadius(8)
+                        }
+                        
+                        VStack {
+                            
+                            Text("Add Exercise Picture")
+                                .font(.system(size: 18))
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            VStack {
+                                if let uiImage = exerciseImage {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .padding()
+                                } else if !isImagePicked {
+                                    Text("No image selected")
+                                        .foregroundColor(.gray)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .padding()
+                                }
+                                
+                                Button(action: {
+                                    isShowingImagePicker = true
+                                }) {
+                                    Text("Select Image")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(.white)
+                                        .padding()
+                                        .padding(.horizontal, 5)
+                                        .background(Color("ButtonColor"))
+                                        .cornerRadius(10)
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .padding()
+                                }
+                            }
+                            .background(Color("ViewColor").opacity(0.2))
+                            .cornerRadius(8)
+                        }
+                        
+                        
+                        Button(action: addNewExerciseToCoreData) {
+                            Text("Create Exercise")
+                                .font(.system(size: 16))
+                                .foregroundColor(.white)
+                                .padding()
+                                .padding(.horizontal, 40)
+                                .background(Color("ButtonColor"))
+                                .cornerRadius(10)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding()
                         }
                     }
-                    
-                    Button("Add New Exercise Category") {
-                        isCreatingNewGroup = true
-                    }
-                    
-                    if isCreatingNewGroup {
-                        TextField("New Category Name", text: $newGroupName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-                        
-                        Button("Done") {
-                            if !newGroupName.isEmpty {
-                                defaultExerciseGroups.append(
-                                    ExerciseGroup(name: newGroupName, exercises: [])
-                                )
-                                selectedGroup = newGroupName
-                                newGroupName = ""
-                                isCreatingNewGroup = false
+                    .padding()
+                    .padding(.top, 20)
+                    .onChange(of: isExerciseNameValid) { valid0, valid1 in
+                        if !valid1 {
+                            withAnimation {
+                                proxy.scrollTo("anchor", anchor: .bottom) // Прокрутка до элемента с id
+                                isExerciseNameFocused = true
                             }
                         }
-                        .padding()
-                    }
-                    
-                    Button("Select Image") {
-                        isShowingImagePicker = true
-                    }
-                    
-                    if let uiImage = exerciseImage {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 200)
-                    } else if !isImagePicked {
-                        Text("No image selected")
-                            .foregroundColor(.gray)
                     }
                 }
-                
-                Button(action: addExercise) {
-                    Text("Done")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color("ButtonColor"))
-                        .cornerRadius(10)
-                }
+                .scrollIndicators(.hidden)
             }
-            .navigationTitle("Add Exercise")
-            .navigationBarItems(trailing: Button("Cancel") {
-                presentationMode.wrappedValue.dismiss()
-            })
-            .sheet(isPresented: $isShowingImagePicker) {
-                ImagePicker(selectedImage: $exerciseImage, isImagePicked: $isImagePicked)
-            }
+            .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
+        .sheet(isPresented: $isShowingImagePicker) {
+            ImagePickerWithCrop(selectedImage: $exerciseImage, isImagePicked: $isImagePicked)
         }
     }
     
-    private func addExercise() {
-        guard let selectedGroup = selectedGroup, !exerciseName.isEmpty else {
-            print("No group selected or name is empty")
+    private func addNewCategory() {
+        guard !newCategoryName.isEmpty else { return }
+        
+        if !categoryExists() {
+            viewModel.addNewCategory(newCategoryName)
+            selectedCategory = viewModel.allCategories.last
+        }
+        
+        resetCategoryCreationState()
+    }
+    
+    private func categoryExists() -> Bool {
+        return viewModel.allCategories.contains(where: { $0.name == newCategoryName })
+    }
+    
+    private func resetCategoryCreationState() {
+        newCategoryName = ""
+        isCreatingNewCategory = false
+    }
+    
+    private func addNewExerciseToCoreData() {
+        guard isValidExerciseInput() else {
+            isExerciseNameValid = false
             return
         }
         
-        // Сохраняем упражнение в Core Data
-        let newExercise = Exercise(context: viewModel.viewContext)
-      
-        newExercise.name = exerciseName
-        newExercise.category = selectedGroup
-        if let imageData = exerciseImage?.jpegData(compressionQuality: 1.0) {
-            newExercise.image = imageData
-        } else {
-            newExercise.image = nil
-        }
-//        newExercise.isDefault = false // Устанавливаем флаг для пользовательского упражнения
-        
+        let newExercise = createNewExercise()
+        viewModel.allDefaultExercises.append(newExercise)
         viewModel.saveContext()
-        
-        // Добавляем упражнение в соответствующую категорию в defaultExerciseGroups
-        if let groupIndex = defaultExerciseGroups.firstIndex(where: { $0.name == selectedGroup }) {
-            let newExerciseItem = DefaultExerciseItem(
-                exerciseName: exerciseName,
-                exerciseImage: exerciseImage,
-                categoryName: selectedGroup
-            )
-            defaultExerciseGroups[groupIndex].exercises.append(newExerciseItem)
-        }
-        
-        // Отладка: выводим все упражнения в Core Data
-           printAllExercisesInCoreData()
-        
         presentationMode.wrappedValue.dismiss()
     }
-
     
-    private var allExerciseGroups: [ExerciseGroup] {
-        defaultExerciseGroups
+    private func isValidExerciseInput() -> Bool {
+        return !(exerciseName.isEmpty || selectedCategory == nil)
     }
     
-    private func printAllExercisesInCoreData() {
-        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
+    private func createNewExercise() -> DefaultExercise {
+        let newExercise = DefaultExercise(context: viewModel.viewContext)
+        newExercise.name = exerciseName
+        newExercise.categories = selectedCategory
         
-        do {
-            let exercises = try viewModel.viewContext.fetch(fetchRequest)
-            print("Упражнения в Core Data:")
-            for exercise in exercises {
-                print("Name: \(exercise.name ?? "No Name"), Category: \(exercise.category ?? "No Category")")
-            }
-        } catch {
-            print("Ошибка при получении упражнений из Core Data: \(error)")
+        if let imageData = exerciseImage?.jpegData(compressionQuality: 1.0) {
+            newExercise.image = imageData
         }
+        
+        newExercise.isDefault = false
+        return newExercise
     }
+}
 
+struct AddExerciseView_Previews: PreviewProvider {
+    static var previews: some View {
+        AddExerciseView(viewModel: WorkoutViewModel())
+            .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+    }
 }

@@ -43,9 +43,10 @@ struct WorkoutDaysList: View {
               
                     if let workoutDay = viewModel.workoutDay(for: selectedDate) {
                         WorkoutDayDetailsView(viewModel: viewModel, workoutDay: Binding.constant(workoutDay))
-                            .frame(height: 630)
+                            .frame(height: 670)
                     } else {
                         emptyWorkoutDayView
+                            .frame(height: 670)
                     }
            
             }
@@ -91,7 +92,6 @@ struct WorkoutDaysList: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                   .frame(height: 630)
         .background(Color("BackgroundColor"))
     }
     
@@ -193,30 +193,28 @@ struct WorkoutDaysList: View {
                                         Circle()
                                             .strokeBorder(Color.white, lineWidth: 2)
                                             .frame(width: 40, height: 40)
-//                                            .offset(y: progress * -1)
                                     } else if let _ = viewModel.workoutDay(for: day.date) {
                                         // Даты с тренировками - круг
                                         Circle()
                                             .fill(Color("ButtonColor"))
                                             .frame(width: 5, height: 5)
                                             .padding(.top, 30)
-//                                            .offset(y: progress * -1)
-                                    } else if Calendar.current.isDate(day.date, inSameDayAs: Date()) && day.date != selectedDate {
-                                                       // Если сегодня, но не выбрана дата
-                                                       Circle()
-                                                           .fill(Color.white.opacity(0.1)) // Прозрачный круг для сегодня
-                                                           .frame(width: 40, height: 40)
-//                                                           .offset(y: progress * -1)
-                                                   }
-                                    
+                                        
+                                        // Прозрачный круг для сегодняшнего дня, если дата не выбрана
+                                        if Calendar.current.isDate(day.date, inSameDayAs: Date()) && day.date != selectedDate {
+                                            Circle()
+                                                .fill(Color.white.opacity(0.1)) // Прозрачный круг для сегодня
+                                                .frame(width: 40, height: 40)
+                                        }
+                                    }
                                 }
                                 .contentShape(.rect)
                                 .onTapGesture {
                                     selectedDate = day.date
-                                   
                                 }
                         }
                     })
+
 
                     .frame(height: calendarGridHeight - ((calendarGridHeight - 50) * progress), alignment: .top)
                     .offset(y: (monthProgress * -50) * progress)

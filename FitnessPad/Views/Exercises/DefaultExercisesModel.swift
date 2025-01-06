@@ -40,18 +40,24 @@ let exerciseItems: [DefaultExerciseItem] = [
     DefaultExerciseItem(exerciseName: "Bench Press", exerciseImage: UIImage(named: "Bench Press")),
     DefaultExerciseItem(exerciseName: "Dumbbell Row", exerciseImage: UIImage(named: "Dumbbell Row")),
     DefaultExerciseItem(exerciseName: "Hammer Curls", exerciseImage: UIImage(named: "Hammer Curls")),
+    DefaultExerciseItem(exerciseName: "Outside Running", exerciseImage: UIImage(named: "Outside Running")),
+    DefaultExerciseItem(exerciseName: "Plank", exerciseImage: UIImage(named: "Plank")),
     DefaultExerciseItem(exerciseName: "Pike Push-Ups", exerciseImage: UIImage(named: "Pike Push-Ups")),
     DefaultExerciseItem(exerciseName: "Pistol Squats", exerciseImage: UIImage(named: "Pistol Squats")),
     DefaultExerciseItem(exerciseName: "Pull-Ups", exerciseImage: UIImage(named: "Pull-Ups")),
     DefaultExerciseItem(exerciseName: "Push-Ups", exerciseImage: UIImage(named: "Push-Ups")),
+    DefaultExerciseItem(exerciseName: "Treadmill Running", exerciseImage: UIImage(named: "Treadmill Running")),
     DefaultExerciseItem(exerciseName: "Shoulder Press", exerciseImage: UIImage(named: "Shoulder Press")),
-    DefaultExerciseItem(exerciseName: "Squat", exerciseImage: UIImage(named: "Squat"))
+    DefaultExerciseItem(exerciseName: "Squat", exerciseImage: UIImage(named: "Squat")),
+    DefaultExerciseItem(exerciseName: "Swimming", exerciseImage: UIImage(named: "Swimming"))
 ]
 
 // MARK: - Default Exercise Groups
 var defaultExerciseGroups: [ExerciseGroup] = [
     // MARK: - Define exercise groups
-    ExerciseGroup(name: "ABS", exercises: []),
+    ExerciseGroup(name: "ABS", exercises: [
+        DefaultExerciseItem(exerciseName: "Plank", exerciseImage: UIImage(named: "Plank"), categoryName: "ABS")
+    ]),
     ExerciseGroup(name: "Arms", exercises: [
         DefaultExerciseItem(exerciseName: "Bicep Curls", exerciseImage: UIImage(named: "Bicep Curls"), categoryName: "Arms"),
         DefaultExerciseItem(exerciseName: "Hammer Curls", exerciseImage: UIImage(named: "Hammer Curls"), categoryName: "Arms")
@@ -60,7 +66,11 @@ var defaultExerciseGroups: [ExerciseGroup] = [
         DefaultExerciseItem(exerciseName: "Dumbbell Row", exerciseImage: UIImage(named: "Dumbbell Row"), categoryName: "Back"),
         DefaultExerciseItem(exerciseName: "Pull-Ups", exerciseImage: UIImage(named: "Pull-Ups"), categoryName: "Back")
     ]),
-    ExerciseGroup(name: "Cardio", exercises: []),
+    ExerciseGroup(name: "Cardio", exercises: [
+        DefaultExerciseItem(exerciseName: "Outside Running", exerciseImage: UIImage(named: "Outside Running") ,categoryName: "Cardio"),
+        DefaultExerciseItem(exerciseName: "Treadmill Running", exerciseImage: UIImage(named: "Treadmill Running") ,categoryName: "Cardio"),
+        DefaultExerciseItem(exerciseName: "Swimming", exerciseImage: UIImage(named: "Swimming"), categoryName: "Cardio")
+    ]),
     ExerciseGroup(name: "Chest", exercises: [
         DefaultExerciseItem(exerciseName: "Bench Press", exerciseImage: UIImage(named: "Bench Press"), categoryName: "Chest"),
         DefaultExerciseItem(exerciseName: "Push-Ups", exerciseImage: UIImage(named: "Push-Ups"), categoryName: "Chest")

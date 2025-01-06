@@ -183,7 +183,7 @@ struct ProgressView_Previews: PreviewProvider {
         // Создание сущности Exercise
         let exercise = Exercise(context: context)
         exercise.name = "Bench Press"
-        exercise.category = "Strength"
+        exercise.categories?.name = "Strength"
         if let image = UIImage(named: "bench_press_image") {
             exercise.image = image.pngData()  // Преобразование изображения в Data
                }
