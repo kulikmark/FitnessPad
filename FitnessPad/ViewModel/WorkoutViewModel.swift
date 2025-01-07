@@ -29,44 +29,6 @@ class WorkoutViewModel: ObservableObject {
         }
     }
     
-    func fetchWorkoutDays() {
-        let request: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
-        
-        do {
-            let workoutDays = try viewContext.fetch(request)
-            cacheWorkoutDays(from: workoutDays)
-        } catch {
-            print("Ошибка при получении workoutDays: \(error)")
-        }
-    }
-
-    func cacheWorkoutDays(from days: [WorkoutDay]) {
-        workoutDaysCache = Dictionary(uniqueKeysWithValues: days.compactMap { day in
-            guard let date = day.date else { return nil }
-            return (date, day)
-        })
-    }
-
-    func workoutDay(for date: Date) -> WorkoutDay? {
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date)
-        
-        return workoutDaysCache.values.first { calendar.isDate($0.date ?? Date(), inSameDayAs: startOfDay) }
-    }
-
-    func deleteWorkoutDay(_ workoutDay: WorkoutDay) {
-        viewContext.delete(workoutDay)
-        saveContext()
-        fetchWorkoutDays()
-    }
-    
-    // Метод для обновления bodyWeight в workoutDay
-    func updateBodyWeight(for workoutDay: WorkoutDay, newWeight: Double) {
-        workoutDay.bodyWeight = newWeight
-        saveContext()
-        objectWillChange.send()
-    }
-    
     func loadDefaultExercises() {
         let fetchRequest: NSFetchRequest<DefaultExercise> = DefaultExercise.fetchRequest()
 
@@ -107,6 +69,44 @@ class WorkoutViewModel: ObservableObject {
         return sortedKeys.map { key in
             (category: key, exercises: grouped[key] ?? [])
         }
+    }
+    
+    func fetchWorkoutDays() {
+        let request: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
+        
+        do {
+            let workoutDays = try viewContext.fetch(request)
+            cacheWorkoutDays(from: workoutDays)
+        } catch {
+            print("Ошибка при получении workoutDays: \(error)")
+        }
+    }
+
+    func cacheWorkoutDays(from days: [WorkoutDay]) {
+        workoutDaysCache = Dictionary(uniqueKeysWithValues: days.compactMap { day in
+            guard let date = day.date else { return nil }
+            return (date, day)
+        })
+    }
+
+    func workoutDay(for date: Date) -> WorkoutDay? {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        
+        return workoutDaysCache.values.first { calendar.isDate($0.date ?? Date(), inSameDayAs: startOfDay) }
+    }
+
+    func deleteWorkoutDay(_ workoutDay: WorkoutDay) {
+        viewContext.delete(workoutDay)
+        saveContext()
+        fetchWorkoutDays()
+    }
+    
+    // Метод для обновления bodyWeight в workoutDay
+    func updateBodyWeight(for workoutDay: WorkoutDay, newWeight: Double) {
+        workoutDay.bodyWeight = newWeight
+        saveContext()
+        objectWillChange.send()
     }
     
     func addNewCategory(_ category: String) {
@@ -202,9 +202,6 @@ class WorkoutViewModel: ObservableObject {
     func deleteExerciseFromCoreData(_ exercise: DefaultExercise) {
         let context = PersistenceController.shared.container.viewContext
         
-        // Удаляем упражнение из всех тренировочных дней
-        deleteExerciseFromWorkoutDays(exerciseToDelete: exercise)
-        
         // Удаляем упражнение из Core Data
         context.delete(exercise)
         
@@ -220,28 +217,28 @@ class WorkoutViewModel: ObservableObject {
         }
     }
 
-    func deleteExerciseFromWorkoutDays(exerciseToDelete: DefaultExercise) {
-        let context = PersistenceController.shared.container.viewContext
-
-        // Проходим по кэшированным тренировочным дням
-        for workoutDay in workoutDaysCache.values {
-            if let exercises = workoutDay.exercises as? Set<Exercise> {
-                // Ищем упражнение по имени и удаляем его
-                if let exerciseToRemove = exercises.first(where: { $0.name == exerciseToDelete.name }) {
-                    workoutDay.removeFromExercises(exerciseToRemove)
-                    print("Removed exercise '\(exerciseToRemove.name ?? "Unknown")' from workout day.")
-                }
-            }
-        }
-
-        // Сохраняем изменения
-        do {
-            try context.save()
-            print("Exercise removed from all workout days.")
-        } catch {
-            print("Error removing exercise from workout days: \(error.localizedDescription)")
-        }
-    }
+//    func deleteExerciseFromWorkoutDays(exerciseToDelete: DefaultExercise) {
+//        let context = PersistenceController.shared.container.viewContext
+//
+//        // Проходим по кэшированным тренировочным дням
+//        for workoutDay in workoutDaysCache.values {
+//            if let exercises = workoutDay.exercises as? Set<Exercise> {
+//                // Ищем упражнение по имени и удаляем его
+//                if let exerciseToRemove = exercises.first(where: { $0.name == exerciseToDelete.name }) {
+//                    workoutDay.removeFromExercises(exerciseToRemove)
+//                    print("Removed exercise '\(exerciseToRemove.name ?? "Unknown")' from workout day.")
+//                }
+//            }
+//        }
+//
+//        // Сохраняем изменения
+//        do {
+//            try context.save()
+//            print("Exercise removed from all workout days.")
+//        } catch {
+//            print("Error removing exercise from workout days: \(error.localizedDescription)")
+//        }
+//    }
 
 
 }

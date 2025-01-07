@@ -7,54 +7,6 @@
 
 import CoreData
 
-//struct PersistenceController {
-//    static let shared = PersistenceController()
-//
-//    static var preview: PersistenceController = {
-//        let result = PersistenceController(inMemory: true)
-//        let viewContext = result.container.viewContext
-//        do {
-//            try viewContext.save()
-//        } catch {
-//            let nsError = error as NSError
-//            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-//        }
-//        return result
-//    }()
-//
-//    let container: NSPersistentContainer
-//
-//    init(inMemory: Bool = false) {
-//        container = NSPersistentContainer(name: "FitnessPad")
-////        if inMemory {
-////            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
-////        }
-////
-////        // Enable automatic migration
-////        if let storeDescription = container.persistentStoreDescriptions.first {
-////            storeDescription.shouldMigrateStoreAutomatically = true
-////            storeDescription.shouldInferMappingModelAutomatically = true
-////        }
-////
-//////        container.loadPersistentStores { (storeDescription, error) in
-//////            if let error = error as NSError? {
-//////                fatalError("Unresolved error \(error), \(error.userInfo)")
-//////            }
-//////        }
-////        
-////        // deleting old coredata version for if there are problems with migration due to core data was changed
-////        container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")  // Это удалит старое хранилище
-////        container.loadPersistentStores { (storeDescription, error) in
-////            if let error = error as NSError? {
-////                fatalError("Unresolved error \(error), \(error.userInfo)")
-////            }
-////        }
-////        
-////        container.viewContext.automaticallyMergesChangesFromParent = true
-//    }
-//
-//}
-
 class PersistenceController {
     static let shared = PersistenceController()
 
@@ -86,3 +38,78 @@ class PersistenceController {
         }
     }
 }
+
+extension PersistenceController {
+    func initializeDefaultExercises() async {
+        let context = container.viewContext
+        let fetchRequest: NSFetchRequest<DefaultExercise> = DefaultExercise.fetchRequest()
+        let categoryFetchRequest: NSFetchRequest<ExerciseCategory> = ExerciseCategory.fetchRequest()
+        
+        do {
+            let existingExercises = try context.fetch(fetchRequest)
+            let existingCategories = try context.fetch(categoryFetchRequest)
+            
+            if existingExercises.isEmpty {
+                for group in defaultExerciseGroups {
+                    var category: ExerciseCategory?
+                    if let existingCategory = existingCategories.first(where: { $0.name == group.name }) {
+                        category = existingCategory
+                    } else {
+                        category = ExerciseCategory(context: context)
+                        category?.name = group.name
+                    }
+                    
+                    for exercise in group.exercises {
+                        let defaultExercise = DefaultExercise(context: context)
+                        defaultExercise.name = exercise.exerciseName
+                        defaultExercise.categories = category
+                        
+                        if let image = exercise.exerciseImage, let imageData = image.pngData() {
+                            defaultExercise.image = imageData
+                        }
+                        
+                        defaultExercise.isDefault = true
+                    }
+                }
+                try context.save()
+            }
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
+}
+
+
+extension PersistenceController {
+    func resetDefaultExercises(viewModel: WorkoutViewModel) async {
+        let context = container.viewContext
+
+        do {
+            // Удаляем все DefaultExercise
+            let exerciseFetchRequest: NSFetchRequest<NSFetchRequestResult> = DefaultExercise.fetchRequest()
+            let exerciseDeleteRequest = NSBatchDeleteRequest(fetchRequest: exerciseFetchRequest)
+            try context.execute(exerciseDeleteRequest)
+            
+            // Удаляем все ExerciseCategory
+            let categoryFetchRequest: NSFetchRequest<NSFetchRequestResult> = ExerciseCategory.fetchRequest()
+            let categoryDeleteRequest = NSBatchDeleteRequest(fetchRequest: categoryFetchRequest)
+            try context.execute(categoryDeleteRequest)
+            
+            // Сбрасываем данные (инициализируем дефолтные упражнения и категории)
+            await initializeDefaultExercises()
+            
+            // Перезагружаем упражнения и категории
+            viewModel.loadDefaultExercises()
+             viewModel.loadCategories()
+            
+            saveContext() // Сохраняем изменения в контексте
+            
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
+}
+
+

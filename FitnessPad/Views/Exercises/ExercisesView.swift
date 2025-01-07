@@ -264,40 +264,25 @@
 
 // MARK: - Previews
 
-//struct ExercisesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        // Создание фейковых упражнений
-//        let exercise1 = DefaultExercise(context: PersistenceController.shared.container.viewContext)
-//        exercise1.name = "Push Up"
-//        exercise1.category = "Strength"
-//        exercise1.image = UIImage(named: "defaultExerciseImage")?.jpegData(compressionQuality: 1.0)
-//
-//        let exercise2 = DefaultExercise(context: PersistenceController.shared.container.viewContext)
-//        exercise2.name = "Squat"
-//        exercise2.category = "Strength"
-//        exercise2.image = UIImage(named: "defaultExerciseImage")?.jpegData(compressionQuality: 1.0)
-//
-//        let exercise3 = DefaultExercise(context: PersistenceController.shared.container.viewContext)
-//        exercise3.name = "Running"
-//        exercise3.category = "Cardio"
-//        exercise3.image = UIImage(named: "defaultExerciseImage")?.jpegData(compressionQuality: 1.0)
-//
-//        let exercise4 = DefaultExercise(context: PersistenceController.shared.container.viewContext)
-//        exercise4.name = "Jumping Jacks"
-//        exercise4.category = "Cardio"
-//        exercise4.image = UIImage(named: "defaultExerciseImage")?.jpegData(compressionQuality: 1.0)
-//
-//        // Добавляем фейковые упражнения в WorkoutViewModel
-//        let viewModel = WorkoutViewModel()
-//        viewModel.allDefaultExercises = [exercise1, exercise2, exercise3, exercise4]
-//
-//        return ExercisesView(
-//            viewModel: viewModel, // Используем viewModel с фейковыми данными
-//            workoutDay: .constant(WorkoutDay(context: PersistenceController.shared.container.viewContext)) // Создаем фейковый WorkoutDay
-//        )
-//        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
-//    }
-//}
+struct ExercisesView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Создание фейковых упражнений
+        let exercise1 = DefaultExercise(context: PersistenceController.shared.container.viewContext)
+        exercise1.name = "Push Up"
+//        exercise1.categories?.name = "Strength"
+        exercise1.image = UIImage(named: "defaultExerciseImage")?.jpegData(compressionQuality: 1.0)
+
+        // Добавляем фейковые упражнения в WorkoutViewModel
+        let viewModel = WorkoutViewModel()
+        viewModel.allDefaultExercises = [exercise1]
+
+        return ExercisesView(
+            viewModel: viewModel, // Используем viewModel с фейковыми данными
+            workoutDay: .constant(WorkoutDay(context: PersistenceController.shared.container.viewContext)) // Создаем фейковый WorkoutDay
+        )
+        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+    }
+}
 
 
 import SwiftUI
@@ -307,6 +292,7 @@ enum AlertType {
     case delete(DefaultExercise)
     case defaultExercise
     case alreadyAdded
+    case resetDefaults
     case error
 }
 
@@ -358,16 +344,21 @@ struct ExercisesView: View {
     var header: some View {
         HStack {
             Text("Exercises List")
-                .font(.system(size: 35))
+                .font(.system(size: 24))
                 .fontWeight(.medium)
                 .foregroundColor(Color("TextColor"))
-                .padding(.top, 20)
-                .padding(.leading, 20)
-                .padding(.bottom, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+//                .padding(.top, 20)
+//                .padding(.leading, 20)
+//                .padding(.bottom, 20)
 
             Spacer()
+            resetDefaultsButton
             addButton
         }
+        
+      
     }
 
     // MARK: - Exercises List View
@@ -474,14 +465,41 @@ struct ExercisesView: View {
             .aspectRatio(contentMode: .fill)
     }
 
+    // MARK: - Reset Defaults Button
+      var resetDefaultsButton: some View {
+          HStack (spacing: 10) {
+              Text("Restore\nExercises")
+                  .font(.system(size: 8))
+                  .fontWeight(.medium)
+                  .foregroundColor(Color("TextColor"))
+              
+              Button(action: {
+                  alertType = .resetDefaults
+                  showingAlert = true
+              }) {
+                  Image(systemName: "arrow.counterclockwise")
+                      .font(.system(size: 16))
+                      .foregroundColor(Color("TextColor"))
+              }
+          }
+         
+          .padding(7)
+          .background(Color("ViewColor").opacity(0.2))
+          .cornerRadius(10)
+          .padding(.trailing, 30)
+      }
+    
     // MARK: - Edit and Add Buttons
 var addButton: some View {
         Button(action: {
             isShowingAddExerciseView = true
         }) {
             Image(systemName: "plus")
-                .font(.system(size: 25))
+                .font(.system(size: 17))
                 .foregroundColor(Color("TextColor"))
+                .padding(7)
+                .background(Circle().fill(Color("ButtonColor")))
+               
         }
         .padding(.trailing, 20)
     }
@@ -514,10 +532,15 @@ var addButton: some View {
         }
     }
 
-
+    private func resetToDefaultExercises() {
+        Task {
+            await PersistenceController.shared.resetDefaultExercises(viewModel: viewModel)
+                   }
+       }
+    
     private func confirmDeletion(for exercise: DefaultExercise) {
         // Если пользователь подтвердил удаление
-        viewModel.deleteExerciseFromWorkoutDays(exerciseToDelete: exercise)
+        viewModel.deleteExerciseFromCoreData(exercise)
         
         // Удаляем упражнение из Core Data
         let context = viewModel.viewContext
@@ -561,6 +584,15 @@ var addButton: some View {
                 message: Text("This exercise is already added to your workout day."),
                 dismissButton: .default(Text("OK"))
             )
+        case .resetDefaults:
+                   return Alert(
+                       title: Text("Reset Exercises"),
+                       message: Text("All exercises will be reset to their original state. This action cannot be undone."),
+                       primaryButton: .destructive(Text("Continue")) {
+                           resetToDefaultExercises()
+                       },
+                       secondaryButton: .cancel()
+                   )
         case .error:
             return Alert(
                 title: Text("Error"),
@@ -569,5 +601,4 @@ var addButton: some View {
             )
         }
     }
-
 }
