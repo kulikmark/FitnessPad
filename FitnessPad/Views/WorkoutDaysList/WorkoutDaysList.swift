@@ -215,7 +215,6 @@ struct WorkoutDaysList: View {
                         }
                     })
 
-
                     .frame(height: calendarGridHeight - ((calendarGridHeight - 50) * progress), alignment: .top)
                     .offset(y: (monthProgress * -50) * progress)
                     .contentShape(.rect)

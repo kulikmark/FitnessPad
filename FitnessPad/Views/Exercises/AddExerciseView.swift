@@ -14,6 +14,7 @@ struct AddExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var exerciseName = ""
     @State private var selectedCategory: ExerciseCategory? = nil
+    @State private var selectedAttributes: Set<String> = []
     @State private var exerciseImage: UIImage? = nil
     @State private var isShowingImagePicker = false
     @State private var isCreatingNewCategory = false
@@ -21,10 +22,12 @@ struct AddExerciseView: View {
     @State private var isImagePicked = false
     @State private var isExerciseNameValid = true
     @State private var isCategoryValid = true
+    @State private var isAttributesValid = true
     @State private var isExerciseNameUnique = true
     @State private var isCategoryNameUnique = true
-
-
+    
+    private let attributes = ["Weight", "Reps", "Distance", "Time"]
+    
     @FocusState private var isExerciseNameFocused: Bool
     
     var body: some View {
@@ -37,7 +40,7 @@ struct AddExerciseView: View {
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .id("anchor")
-
+                    
                     VStack {
                         TextField("", text: $exerciseName)
                             .padding()
@@ -55,13 +58,13 @@ struct AddExerciseView: View {
                              : !isExerciseNameUnique
                              ? "Exercise with this name already exists. Please choose another name."
                              : "Enter Exercise Name")
-                            .font(.system(size: 12))
-                            .foregroundColor(isExerciseNameValid && isExerciseNameUnique ? .gray : .red)
-                            .padding(.leading, 16)
-                            .padding(.bottom, 8)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.system(size: 12))
+                        .foregroundColor(isExerciseNameValid && isExerciseNameUnique ? .gray : .red)
+                        .padding(.leading, 16)
+                        .padding(.bottom, 8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-
+                    
                     .background(Color("ViewColor").opacity(0.2))
                     .cornerRadius(8)
                     
@@ -76,20 +79,18 @@ struct AddExerciseView: View {
                             ForEach(viewModel.allCategories, id: \.name) { category in
                                 HStack {
                                     Text(category.name ?? "Unknown Category")
-                                        .font(.headline)
-                                        .foregroundColor(selectedCategory == category ? .blue : .white)
-                                        .padding(.vertical, 8)
-                                        .padding(.horizontal)
-                                    
+                                        .foregroundColor(selectedCategory == category ? .blue : Color("TextColor"))
+//                                        .padding()
                                     Spacer()
                                     
                                     if selectedCategory == category {
                                         Image(systemName: "checkmark.circle.fill")
                                             .foregroundColor(.blue)
-                                            .padding()
+                                            .padding(.trailing, 10)
                                     }
                                 }
-                                .background(selectedCategory == category ? Color.blue.opacity(0.1) : Color.clear)
+                                .listRowBackground(Color.clear)
+//                                .background(selectedCategory == category ? Color.blue.opacity(0.1) : Color.clear)
                                 .cornerRadius(15)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
@@ -103,7 +104,7 @@ struct AddExerciseView: View {
                                         Label("Delete", systemImage: "trash")
                                     }
                                 }
-                                .listRowBackground(Color.clear)
+                               
                             }
                             .onDelete { indexSet in
                                 if let index = indexSet.first {
@@ -119,46 +120,51 @@ struct AddExerciseView: View {
                         .onAppear {
                             viewModel.loadCategories()
                         }
-                        .frame(minHeight: CGFloat(viewModel.allCategories.count) * 60)
+                        .frame(minHeight: CGFloat(viewModel.allCategories.count) * 45)
                     }
                     
                     VStack {
-                        TextField("", text: $newCategoryName)
-                            .padding()
-                            .background(isCategoryNameUnique ? Color("ViewColor") : Color.red.opacity(0.3))
-                            .cornerRadius(15)
-                            .padding(8)
-                            .onChange(of: newCategoryName) { _, _ in
-                                isCategoryNameUnique = isCategoryNameUniqueInCategories()
-                            }
+                        Text("Create New Category")
+                            .font(.system(size: 18))
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        Text(isCategoryNameUnique
-                             ? "Enter Category Name"
-                             : "Category with this name already exists. Please choose another name.")
+                        VStack {
+                            TextField("", text: $newCategoryName)
+                                .padding()
+                                .background(isCategoryNameUnique ? Color("ViewColor") : Color.red.opacity(0.3))
+                                .cornerRadius(15)
+                                .padding(8)
+                                .onChange(of: newCategoryName) { _, _ in
+                                    isCategoryNameUnique = isCategoryNameUniqueInCategories()
+                                }
+                            
+                            
+                            Text(isCategoryNameUnique
+                                 ? "Enter Category Name" : "Category with this name already exists. Please choose another name.")
                             .font(.system(size: 12))
                             .foregroundColor(isCategoryNameUnique ? .gray : .red)
                             .padding(.leading, 16)
                             .padding(.bottom, 8)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Button("Done") {
-                            addNewCategory()
+                            
+                            Button("Done") {
+                                addNewCategory()
+                            }
+                            .font(.system(size: 14))
+                            .foregroundColor(.white)
+                            .padding()
+                            .padding(.horizontal, 10)
+                            .background(isCategoryNameUnique ? Color("ButtonColor") : Color.gray)
+                            .cornerRadius(10)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding()
+                            .disabled(!isCategoryNameUnique)
                         }
-                        .font(.system(size: 14))
-                        .foregroundColor(.white)
-                        .padding()
-                        .padding(.horizontal, 10)
-                        .background(isCategoryNameUnique ? Color("ButtonColor") : Color.gray)
-                        .cornerRadius(10)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding()
-                        .disabled(!isCategoryNameUnique)
+                        .background(Color("ViewColor").opacity(0.2))
+                        .cornerRadius(8)
                     }
-                    .background(Color("ViewColor").opacity(0.2))
-                    .cornerRadius(8)
 
-                    
-                    
                     VStack {
                         Text("Add Exercise Picture")
                             .font(.system(size: 18))
@@ -195,6 +201,53 @@ struct AddExerciseView: View {
                         }
                         .background(Color("ViewColor").opacity(0.2))
                         .cornerRadius(8)
+                    }
+                    
+                    
+                    // Выбор атрибутов сета
+                    VStack {
+                        
+                        Text(isAttributesValid ? "Select Attributes for Exercise" : "Please select at least one attribute")
+                            .font(.system(size: 18))
+                            .foregroundColor(isAttributesValid ? .gray : .red)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        List {
+                         
+                                ForEach(attributes, id: \.self) { attribute in
+                                    HStack {
+                                        Text(attribute)
+                                            .foregroundColor(selectedAttributes.contains(attribute) ? .blue : Color("TextColor"))
+                                          
+                                        Spacer()
+                                        if selectedAttributes.contains(attribute) {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .foregroundColor(.blue)
+                                                .padding(.trailing, 10)
+                                        }
+                                    }
+                                    
+                                    .listRowBackground(Color.clear)
+//                                    .background(selectedAttributes.contains(attribute) ? Color.blue.opacity(0.1) : Color.clear)
+                                    .cornerRadius(15)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        if selectedAttributes.contains(attribute) {
+                                            selectedAttributes.remove(attribute)
+                                           
+                                        } else {
+                                            selectedAttributes.insert(attribute)
+                                            isAttributesValid = true
+                                        }
+                                    }
+                                }
+                            
+                          
+                        }
+                        .background(Color("ViewColor").opacity(0.2))
+                        .cornerRadius(8)
+                        .listStyle(PlainListStyle())
+                        .scrollIndicators(.hidden)
+                        .frame(minHeight: CGFloat(attributes.count) * 45)
                     }
                     
                     Button(action: {
@@ -249,7 +302,7 @@ struct AddExerciseView: View {
         
         resetCategoryCreationState()
     }
-
+    
     
     private func categoryExists() -> Bool {
         return viewModel.allCategories.contains(where: { $0.name == newCategoryName })
@@ -270,20 +323,25 @@ struct AddExerciseView: View {
             if selectedCategory == nil {
                 isCategoryValid = false
             }
+            if selectedAttributes.isEmpty {
+                isAttributesValid = false
+            }
             return
         }
+        
+        // Print selected attributes
+            print("Selected attributes: \(selectedAttributes)")
         
         let newExercise = createNewExercise()
         viewModel.allDefaultExercises.append(newExercise)
         viewModel.saveContext()
         presentationMode.wrappedValue.dismiss()
     }
-
+    
     private func isValidExerciseInput() -> Bool {
         isExerciseNameUnique = isExerciseNameUniqueInCategory()
-        return !(exerciseName.isEmpty || selectedCategory == nil || !isExerciseNameUnique)
+        return !(exerciseName.isEmpty || selectedCategory == nil || !isExerciseNameUnique || selectedAttributes.isEmpty)
     }
-
     
     private func isExerciseNameUniqueInCategory() -> Bool {
         let trimmedName = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -294,11 +352,11 @@ struct AddExerciseView: View {
     private func isCategoryNameUniqueInCategories() -> Bool {
         return !viewModel.allCategories.contains(where: { $0.name?.lowercased() == newCategoryName.lowercased() })
     }
-
-
     
+    // Метод создания нового упражнения
     private func createNewExercise() -> DefaultExercise {
         let newExercise = DefaultExercise(context: viewModel.viewContext)
+        newExercise.id = UUID()
         newExercise.name = exerciseName
         newExercise.categories = selectedCategory
         
@@ -307,6 +365,43 @@ struct AddExerciseView: View {
         }
         
         newExercise.isDefault = false
+        
+        // Создаем атрибуты для упражнения
+        var attributes: [ExerciseAttribute] = []
+        
+        if selectedAttributes.contains("Weight") {
+            let weightAttribute = ExerciseAttribute(context: viewModel.viewContext)
+            weightAttribute.name = "Weight"
+            weightAttribute.isAdded = true
+            attributes.append(weightAttribute)
+        }
+        
+        if selectedAttributes.contains("Reps") {
+            let repsAttribute = ExerciseAttribute(context: viewModel.viewContext)
+            repsAttribute.name = "Reps"
+            repsAttribute.isAdded = true
+            attributes.append(repsAttribute)
+        }
+        
+        if selectedAttributes.contains("Time") {
+            let timeAttribute = ExerciseAttribute(context: viewModel.viewContext)
+            timeAttribute.name = "Time"
+            timeAttribute.isAdded = true
+            attributes.append(timeAttribute)
+        }
+        
+        if selectedAttributes.contains("Distance") {
+            let distanceAttribute = ExerciseAttribute(context: viewModel.viewContext)
+            distanceAttribute.name = "Distance"
+            distanceAttribute.isAdded = true
+            attributes.append(distanceAttribute)
+        }
+        
+        // Связываем атрибуты с упражнением
+        newExercise.attributes = NSSet(array: attributes)
+        
+        print(newExercise)
+
         return newExercise
     }
 }

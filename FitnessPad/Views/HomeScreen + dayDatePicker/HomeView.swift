@@ -206,7 +206,7 @@ struct HomeView: View {
                            GoalSelectionSheet(
                                selectedGoal: $viewModel.selectedGoal,  // Обновлено
                                onSave: {
-                                   if let goal = viewModel.selectedGoal {
+                                   if viewModel.selectedGoal != nil {
 //                                       viewModel.saveGoal(goal)  // Обновлено
                                        isShowingGoalSheet = false
                                    }

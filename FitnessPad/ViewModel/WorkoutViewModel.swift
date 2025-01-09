@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 class WorkoutViewModel: ObservableObject {
-    @Published var workoutDays: [WorkoutDay] = []
+//    @Published var workoutDays: [WorkoutDay] = []
     @Published private(set) var workoutDaysCache: [Date: WorkoutDay] = [:]
    
     @Published var allCategories: [ExerciseCategory] = []
@@ -28,37 +28,31 @@ class WorkoutViewModel: ObservableObject {
             print("Failed to save context: \(error)")
         }
     }
-    
+   
+    func loadEntities<T: NSManagedObject>(_ entityType: T.Type, sortDescriptors: [NSSortDescriptor]? = nil) -> [T] {
+        let fetchRequest = T.fetchRequest()
+        fetchRequest.sortDescriptors = sortDescriptors
+
+        do {
+            return try viewContext.fetch(fetchRequest) as? [T] ?? []
+        } catch {
+            print("Failed to fetch \(T.self): \(error.localizedDescription)")
+            return []
+        }
+    }
+
+    // Использование:
     func loadDefaultExercises() {
-        let fetchRequest: NSFetchRequest<DefaultExercise> = DefaultExercise.fetchRequest()
-
-        do {
-            allDefaultExercises = try viewContext.fetch(fetchRequest)
-
-            if allDefaultExercises.isEmpty {
-                print("No default exercises found in Core Data.")
-            } else {
-                print("Loaded \(allDefaultExercises.count) default exercises from Core Data:")
-                for exercise in allDefaultExercises {
-                    print("- Name: \(exercise.name ?? "Unknown"), Category: \(exercise.categories?.name ?? "Unknown")")
-                }
-            }
-        } catch {
-            let nsError = error as NSError
-            print("Failed to load default exercises: \(nsError), \(nsError.userInfo)")
-        }
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        allDefaultExercises = loadEntities(DefaultExercise.self, sortDescriptors: [sortDescriptor])
     }
-    
+
     func loadCategories() {
-        let fetchRequest: NSFetchRequest<ExerciseCategory> = ExerciseCategory.fetchRequest()
-        
-        do {
-            let categories = try viewContext.fetch(fetchRequest)
-            allCategories = categories // Присваиваем массив объектов типа ExerciseCategory
-        } catch {
-            print("Failed to load categories from CoreData: \(error)")
-        }
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        allCategories = loadEntities(ExerciseCategory.self, sortDescriptors: [sortDescriptor])
     }
+
+
     
     var allDefaultExercisesGroupedByCategory: [(category: String, exercises: [DefaultExercise])] {
         let filteredExercises = allDefaultExercises.filter { $0.categories != nil } // Исключаем упражнения без категории
@@ -133,10 +127,11 @@ class WorkoutViewModel: ObservableObject {
         
         allCategories.removeAll { $0 == category } // Удаляем объект категории из списка
     }
+
     
     func addExerciseToWorkoutDay(_ defaultExercise: DefaultExercise, workoutDay: WorkoutDay?) {
         guard let workoutDay = workoutDay else { return }
-        
+
         let context = PersistenceController.shared.container.viewContext
 
         // Проверяем, есть ли уже упражнение с таким именем
@@ -148,11 +143,14 @@ class WorkoutViewModel: ObservableObject {
 
         // Добавляем новое упражнение
         let newExercise = Exercise(context: context)
+        newExercise.id = defaultExercise.id
         newExercise.name = defaultExercise.name
         newExercise.image = defaultExercise.image
-        newExercise.categories = defaultExercise.categories // Связываем с категорией
+       
+        newExercise.attributes = defaultExercise.attributes
         newExercise.workoutDay = workoutDay
 
+        // Сохраняем изменения
         do {
             try context.save()
             print("Exercise \(defaultExercise.name ?? "Unknown") successfully added to workout day.")
@@ -163,22 +161,30 @@ class WorkoutViewModel: ObservableObject {
     
     func addSet(to exercise: Exercise) {
         let newSet = ExerciseSet(context: viewContext)
-        newSet.count = (exercise.setsArray.last?.count ?? 0) + 1
         
-        if exercise.categories?.name == "Cardio" {
-            // Если категория "Cardio", используем distance и time
-            newSet.distance = exercise.setsArray.last?.distance ?? 0.0 // Копируем дистанцию
-            newSet.time = exercise.setsArray.last?.time ?? 0.0 // Копируем время
+        // Определяем новый номер сета
+        newSet.count = (exercise.setsArray.last?.count ?? 0) + 1
+
+        // Копируем значения из последнего сета или устанавливаем дефолтные значения
+        if let lastSet = exercise.setsArray.last {
+            newSet.distance = lastSet.distance // Копируем дистанцию
+            newSet.time = lastSet.time // Копируем время
+            newSet.reps = lastSet.reps // Копируем повторения
+            newSet.weight = lastSet.weight // Копируем вес
         } else {
-            // Для всех остальных категорий используем weight и reps
-            newSet.reps = exercise.setsArray.last?.reps ?? 0 // Копируем повторения
-            newSet.weight = exercise.setsArray.last?.weight ?? 0.0 // Копируем вес
+            // Если нет предыдущих сетов, устанавливаем значения по умолчанию
+            newSet.distance = 0.0
+            newSet.time = 0.0
+            newSet.reps = 0
+            newSet.weight = 0.0
         }
         
+        // Добавляем новый сет к упражнению
         exercise.addToSets(newSet)
+        
+        // Сохраняем изменения
         saveContext()
     }
-
 
     func deleteExerciseFromWorkoutDay(_ exercise: Exercise) {
         viewContext.delete(exercise)
@@ -200,22 +206,119 @@ class WorkoutViewModel: ObservableObject {
        }
     
     func deleteExerciseFromCoreData(_ exercise: DefaultExercise) {
-        let context = PersistenceController.shared.container.viewContext
-        
-        // Удаляем упражнение из Core Data
-        context.delete(exercise)
-        
-        do {
-            try context.save()
-            
-            // Удаляем упражнение из локального массива после сохранения
-            allDefaultExercises.removeAll { $0.objectID == exercise.objectID }
-            
-            print("Exercise deleted successfully.")
-        } catch {
-            print("Failed to delete exercise: \(error.localizedDescription)")
+        guard let exerciseId = exercise.id else {
+            print("Exercise ID is nil, cannot proceed with deletion.")
+            return
         }
+
+        // Удаляем упражнения из тренировочных дней
+        workoutDaysCache.forEach { (_, workoutDay) in
+            if let exercisesSet = workoutDay.exercises as? Set<Exercise> {
+                // Отфильтровываем упражнения, у которых ID не совпадает
+                let filteredExercises = exercisesSet.filter { $0.id != exerciseId }
+                
+                // Обновляем связь exercises для WorkoutDay
+                workoutDay.exercises = NSSet(set: filteredExercises)
+                
+                print("Updated exercises for workout day: \(filteredExercises.map { $0.name ?? "Unnamed Exercise" })")
+            }
+        }
+
+        // Сохраняем изменения в Core Data
+        saveContext()
+
+        print("Exercise with ID \(exerciseId) successfully deleted from all workout days.")
     }
+
+
+
+
+
+    func updateExerciseInWorkoutDays(exercise: DefaultExercise) {
+        guard let exerciseId = exercise.id else {
+            print("Exercise ID is nil, cannot proceed with update.")
+            return
+        }
+
+        // Обходим все тренировочные дни
+        workoutDaysCache.forEach { (_, workoutDay) in
+            if let exercisesSet = workoutDay.exercises as? Set<Exercise> {
+                // Находим упражнения с совпадающим ID
+                exercisesSet.forEach { exerciseInDay in
+                    if exerciseInDay.id == exerciseId {
+                        // Обновляем свойства упражнения
+                        exerciseInDay.name = exercise.name
+                        exerciseInDay.image = exercise.image
+                        exerciseInDay.attributes = exercise.attributes
+
+                    }
+                }
+            }
+        }
+
+        // Сохраняем изменения в Core Data
+        saveContext()
+    }
+
+    
+
+}
+
+extension WorkoutDay {
+    var exercisesArray: [Exercise] {
+        let set = exercises as? Set<Exercise> ?? []
+        return set.sorted { $0.name ?? "" < $1.name ?? "" } // Сортировка по имени
+    }
+}
+
+extension Exercise {
+    var setsArray: [ExerciseSet] {
+        let set = sets as? Set<ExerciseSet> ?? []
+        return set.sorted { $0.count < $1.count } // Упорядочьте по вашему усмотрению
+    }
+}
+
+extension Exercise {
+    // Возвращает массив аттрибутов, соответствующих указанному имени и состоянию isAdded
+    func attribute(for name: String) -> ExerciseAttribute? {
+            guard let attributes = self.attributes as? Set<ExerciseAttribute> else {
+                print("No attributes found for exercise \(self.name ?? "Unknown")")
+                return nil
+            }
+            print("Attributes found: \(attributes)")
+            return attributes.first(where: { $0.name == name && $0.isAdded })
+        }
+
+    // Возвращает все аттрибуты, соответствующие состоянию isAdded
+    func addedAttributes() -> [ExerciseAttribute] {
+        guard let attributes = self.attributes as? Set<ExerciseAttribute> else {
+            return []
+        }
+        return attributes.filter { $0.isAdded }
+    }
+}
+
+
+extension Array {
+    func enumeratedArray() -> [(offset: Int, element: Element)] {
+        return self.enumerated().map { (offset: $0.offset, element: $0.element) }
+    }
+}
+
+extension NumberFormatter {
+    static var decimal: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }
+    
+    static var integer: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .none
+        return formatter
+    }
+}
 
 //    func deleteExerciseFromWorkoutDays(exerciseToDelete: DefaultExercise) {
 //        let context = PersistenceController.shared.container.viewContext
@@ -240,5 +343,55 @@ class WorkoutViewModel: ObservableObject {
 //        }
 //    }
 
+//    func addSet(to exercise: Exercise) {
+//        let newSet = ExerciseSet(context: viewContext)
+//        newSet.count = (exercise.setsArray.last?.count ?? 0) + 1
+//
+//        if exercise.categories?.name == "Cardio" {
+//            // Если категория "Cardio", используем distance и time
+//            newSet.distance = exercise.setsArray.last?.distance ?? 0.0 // Копируем дистанцию
+//            newSet.time = exercise.setsArray.last?.time ?? 0.0 // Копируем время
+//        } else {
+//            // Для всех остальных категорий используем weight и reps
+//            newSet.reps = exercise.setsArray.last?.reps ?? 0 // Копируем повторения
+//            newSet.weight = exercise.setsArray.last?.weight ?? 0.0 // Копируем вес
+//        }
+//
+//        exercise.addToSets(newSet)
+//        saveContext()
+//    }
 
-}
+
+//    func loadDefaultExercises() {
+//        let fetchRequest: NSFetchRequest<DefaultExercise> = DefaultExercise.fetchRequest()
+//
+//        do {
+//            allDefaultExercises = try viewContext.fetch(fetchRequest)
+//
+//            if allDefaultExercises.isEmpty {
+//                print("No default exercises found in Core Data.")
+//            } else {
+//                print("Loaded \(allDefaultExercises.count) default exercises from Core Data:")
+//                for exercise in allDefaultExercises {
+//                    print("- Name: \(exercise.name ?? "Unknown"), Category: \(exercise.categories?.name ?? "Unknown")")
+//                }
+//            }
+//        } catch {
+//            let nsError = error as NSError
+//            print("Failed to load default exercises: \(nsError), \(nsError.userInfo)")
+//        }
+//    }
+//
+//    func loadCategories() {
+//        let fetchRequest: NSFetchRequest<ExerciseCategory> = ExerciseCategory.fetchRequest()
+//
+//        do {
+//            let categories = try viewContext.fetch(fetchRequest)
+//            // Сортируем категории по имени
+//            allCategories = categories.sorted {
+//                ($0.name ?? "").localizedCaseInsensitiveCompare($1.name ?? "") == .orderedAscending
+//            }
+//        } catch {
+//            print("Failed to load categories from CoreData: \(error)")
+//        }
+//    }

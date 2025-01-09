@@ -61,6 +61,7 @@ extension PersistenceController {
                     
                     for exercise in group.exercises {
                         let defaultExercise = DefaultExercise(context: context)
+                        defaultExercise.id = exercise.id // Добавляем id
                         defaultExercise.name = exercise.exerciseName
                         defaultExercise.categories = category
                         
@@ -79,6 +80,7 @@ extension PersistenceController {
         }
     }
 }
+
 
 
 extension PersistenceController {

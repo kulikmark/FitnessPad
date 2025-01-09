@@ -5,286 +5,6 @@
 //  Created by Марк Кулик on 22.03.2022.
 //
 
-//import SwiftUI
-//import CoreData
-//
-//struct ExercisesView: View {
-//    @ObservedObject var viewModel: WorkoutViewModel
-//    @State var isEditing = false
-//    @State var selectedExerciseItem: DefaultExercise?
-//    @State private var isShowingAddExerciseView = false
-//    @State var isPresentingEditExerciseView = false
-//    @Binding var workoutDay: WorkoutDay?
-//    
-//    @State private var showingAlert = false
-//    @State private var alertMessage = ""
-//    
-//    @Environment(\.presentationMode) var presentationMode
-//
-//    // Пример для сетки
-//    let gridForm = [GridItem(.flexible()), GridItem(.flexible())]
-//
-//    var body: some View {
-//        VStack(alignment: .leading, spacing: 20) {
-//            header
-//            exerciseGroups
-//        }
-//        .onAppear {
-//            viewModel.loadDefaultExercises()
-//        }
-//        .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
-//        .sheet(isPresented: $isShowingAddExerciseView) {
-//            AddExerciseView(viewModel: viewModel)
-//                .background(Color("BackgroundColor"))
-//                .edgesIgnoringSafeArea(.all)
-//                .transition(.opacity)
-//        }
-//        .navigationBarBackButtonHidden(true)
-//        .alert(isPresented: $showingAlert) {
-//            alertForExerciseManipulations(exercise: selectedExerciseItem)
-//        }
-//
-//    }
-//
-//    // MARK: - Header
-//    var header: some View {
-//        HStack {
-//            Text("Exercises List")
-//                .font(.system(size: 35))
-//                .fontWeight(.medium)
-//                .foregroundColor(Color("TextColor"))
-//                .padding(.top, 20)
-//                .padding(.leading, 20)
-//                .padding(.bottom, 20)
-//
-//            Spacer()
-//
-//            editButton
-//            addButton
-//        }
-//    }
-//
-//    // MARK: - Exercise Groups
-//    var exerciseGroups: some View {
-//        ScrollView(showsIndicators: false) {
-//            ForEach(groupedExercises.keys.sorted(), id: \.self) { category in
-//                VStack(alignment: .leading, spacing: 15) {
-//                    groupHeader(for: category)
-//                    groupContent(for: category)
-//                }
-//            }
-//        }
-//        .padding(.bottom, 40)
-//    }
-//
-//    private var groupedExercises: [String: [DefaultExercise]] {
-//        Dictionary(grouping: viewModel.allDefaultExercises, by: { $0.category ?? "Uncategorized" })
-//    }
-//
-//    func groupHeader(for category: String) -> some View {
-//        HStack {
-//            Text(category)
-//                .font(.system(size: 30))
-//                .fontWeight(.bold)
-//                .foregroundColor(Color("TextColor"))
-//                .padding(.leading, 20)
-//                .padding(.bottom, 10)
-//        }
-//    }
-//
-//    func groupContent(for category: String) -> some View {
-//        LazyVGrid(columns: gridForm, spacing: 15) {
-//            ForEach(groupedExercises[category] ?? [], id: \.self) { exercise in
-//                exerciseButton(for: exercise)
-//            }
-//        }
-//        .padding(.horizontal, 20)
-//    }
-//    
-//    func exerciseButton(for exercise: DefaultExercise) -> some View {
-//        VStack {
-//            HStack {
-//                Spacer()
-//                if isEditing {
-//                    Button(action: {
-//                        deleteExercise(exercise)
-//                        selectedExerciseItem = exercise
-//                    }) {
-//                        Image(systemName: "trash")
-//                            .font(.system(size: 20))
-//                            .foregroundColor(.red)
-//                            .padding(5)
-//                    }
-//                } else {
-//                    
-//                }
-//            }
-//            .frame(maxWidth: .infinity, alignment: .trailing)
-//
-//            exerciseImage(for: exercise)
-//            Text(exercise.name ?? "Unknown")
-//                .font(.system(size: 23))
-//                .fontWeight(.medium)
-//                .foregroundColor(Color("TextColor"))
-//                .multilineTextAlignment(.center)
-//                .padding(.vertical, 10)
-//        }
-//        .frame(maxWidth: .infinity, maxHeight: 400)
-//        .background(Color.white.opacity(0.1))
-//        .cornerRadius(10)
-//        .onTapGesture {
-//            addExerciseToWorkoutDay(for: exercise)
-//        }
-//    }
-//    
-//    func exerciseImage(for item: DefaultExercise) -> some View {
-//        let defaultExerciseImage = UIImage(named: "defaultExerciseImage")!
-//        let image: UIImage
-//        if let imageData = item.image, let userImage = UIImage(data: imageData) {
-//            image = userImage
-//        } else {
-//            image = defaultExerciseImage // Используйте здесь вашу картинку по умолчанию
-//        }
-//
-//        return Image(uiImage: image)
-//            .resizable()
-//            .aspectRatio(contentMode: .fill)
-//            .frame(minWidth: 150, maxWidth: 200, minHeight: 150, maxHeight: 200)
-//            .clipShape(RoundedRectangle(cornerRadius: 10))
-//    }
-//
-//    // MARK: - Edit and Add Buttons
-//    var editButton: some View {
-//        Button(action: {
-//            isEditing.toggle()  // Переключаем режим редактирования
-//        }) {
-//            Image(systemName: isEditing ? "checkmark" : "pencil")  // Используем галочку для редактирования, карандаш — для обычного режима
-//                .font(.system(size: 25))
-//                .foregroundColor(Color("TextColor"))
-//                .padding(.trailing, 20)
-//        }
-//    }
-//    
-//    var addButton: some View {
-//        Button(action: {
-//            isShowingAddExerciseView = true
-//        }) {
-//            Image(systemName: "plus")
-//                .font(.system(size: 25))
-//                .foregroundColor(Color("TextColor"))
-//        }
-//        .padding(.trailing, 20)
-//    }
-//
-//    // MARK: - Helper Functions
-//    private func addExerciseToWorkoutDay(for exercise: DefaultExercise) {
-//        if workoutDay?.exercisesArray.contains(where: { $0.name == exercise.name }) == true {
-//            alertMessage = "Exercise '\(exercise.name ?? "Unknown")' is already added to the workout day."
-//                   showingAlert = true
-//        } else {
-//            viewModel.addExerciseToWorkoutDay(exercise, workoutDay: workoutDay)
-//            presentationMode.wrappedValue.dismiss()
-//        }
-//    }
-//    
-//    private func deleteExercise(_ exercise: DefaultExercise) {
-//        if exercise.isDefault {
-//            // Не даем удалить предустановленные упражнения
-//            alertMessage = "You cannot delete the default exercise."
-//            showingAlert = true
-//        } else {
-//            // Показываем предупреждение, если это не предустановленное упражнение
-//            alertMessage = "This will remove the exercise from all workout days and reset your progress. Are you sure you want to delete it?"
-//            showingAlert = true
-//        }
-//    }
-//
-//    private func confirmDeletion(for exercise: DefaultExercise) {
-//        // Если пользователь подтвердил удаление
-//        viewModel.deleteExerciseFromWorkoutDays(exerciseToDelete: exercise)
-//        
-//        // Удаляем упражнение из Core Data
-//        let context = viewModel.viewContext
-//        context.delete(exercise)
-//        
-//        do {
-//            try context.save()
-//        } catch {
-//            print("Error saving after deletion: \(error)")
-//        }
-//    }
-//    
-//    private func alertForExerciseManipulations(exercise: DefaultExercise?) -> Alert {
-//        // Проверяем, что selectedExerciseItem не nil
-//        if let exercise = exercise {
-//            print("Exercise passed to alert: \(exercise.name ?? "Unknown")") // Это поможет вам убедиться, что объект передан
-//        } else {
-//            print("Exercise is nil") // Если selectedExerciseItem == nil
-//        }
-//        
-//        guard let exercise = exercise else {
-//            return Alert(
-//                title: Text("Error"),
-//                message: Text("Something went wrong."),
-//                dismissButton: .default(Text("OK"))
-//            )
-//        }
-//
-//        if workoutDay?.exercisesArray.contains(where: { $0.name == exercise.name }) == true {
-//            return Alert(
-//                title: Text("Exercise Already Added"),
-//                message: Text(alertMessage),
-//                dismissButton: .default(Text("OK"))
-//            )
-//        }
-//        
-//        switch exercise.isDefault {
-//        case true:
-//            // Если упражнение дефолтное, показываем только кнопку "OK"
-//            return Alert(
-//                title: Text("Warning"),
-//                message: Text(alertMessage),
-//                dismissButton: .default(Text("OK"))
-//            )
-//        case false:
-//            // Если упражнение не дефолтное, показываем кнопки "Delete" и "Cancel"
-//            return Alert(
-//                title: Text("Warning"),
-//                message: Text(alertMessage),
-//                primaryButton: .destructive(Text("Delete")) {
-//                    confirmDeletion(for: exercise)
-//                },
-//                secondaryButton: .cancel()
-//            )
-//        }
-//    }
-//
-//    
-//}
-
-// MARK: - Previews
-
-struct ExercisesView_Previews: PreviewProvider {
-    static var previews: some View {
-        // Создание фейковых упражнений
-        let exercise1 = DefaultExercise(context: PersistenceController.shared.container.viewContext)
-        exercise1.name = "Push Up"
-//        exercise1.categories?.name = "Strength"
-        exercise1.image = UIImage(named: "defaultExerciseImage")?.jpegData(compressionQuality: 1.0)
-
-        // Добавляем фейковые упражнения в WorkoutViewModel
-        let viewModel = WorkoutViewModel()
-        viewModel.allDefaultExercises = [exercise1]
-
-        return ExercisesView(
-            viewModel: viewModel, // Используем viewModel с фейковыми данными
-            workoutDay: .constant(WorkoutDay(context: PersistenceController.shared.container.viewContext)) // Создаем фейковый WorkoutDay
-        )
-        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
-    }
-}
-
-
 import SwiftUI
 import CoreData
 
@@ -349,9 +69,6 @@ struct ExercisesView: View {
                 .foregroundColor(Color("TextColor"))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-//                .padding(.top, 20)
-//                .padding(.leading, 20)
-//                .padding(.bottom, 20)
 
             Spacer()
             resetDefaultsButton
@@ -409,6 +126,7 @@ struct ExercisesView: View {
            Button(action: {
                isShowingEditExerciseView = true
                selectedExercise = exercise
+               print(exercise)
            }) {
                Label("Edit", systemImage: "pencil")
                    .foregroundColor(.text)
@@ -508,7 +226,7 @@ var addButton: some View {
     
     private func addExerciseToWorkoutDay(for exercise: DefaultExercise) {
         
-        if workoutDay?.exercisesArray.contains(where: { $0.name == exercise.name }) == true {
+        if workoutDay?.exercisesArray.contains(where: { $0.id == exercise.id }) == true {
             print("Exercise already added: \(exercise.name ?? "Unknown")")
             alertType = .alreadyAdded
             showingAlert = true
@@ -517,6 +235,8 @@ var addButton: some View {
             viewModel.addExerciseToWorkoutDay(exercise, workoutDay: workoutDay)
             presentationMode.wrappedValue.dismiss()
         }
+        
+        print("Exercise \(String(describing: exercise)) added to workoutday \(String(describing: workoutDay))")
     }
 
     
@@ -602,3 +322,27 @@ var addButton: some View {
         }
     }
 }
+
+
+// MARK: - Previews
+
+struct ExercisesView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Создание фейковых упражнений
+        let exercise1 = DefaultExercise(context: PersistenceController.shared.container.viewContext)
+        exercise1.name = "Push Up"
+//        exercise1.categories?.name = "Strength"
+        exercise1.image = UIImage(named: "defaultExerciseImage")?.jpegData(compressionQuality: 1.0)
+
+        // Добавляем фейковые упражнения в WorkoutViewModel
+        let viewModel = WorkoutViewModel()
+        viewModel.allDefaultExercises = [exercise1]
+
+        return ExercisesView(
+            viewModel: viewModel, // Используем viewModel с фейковыми данными
+            workoutDay: .constant(WorkoutDay(context: PersistenceController.shared.container.viewContext)) // Создаем фейковый WorkoutDay
+        )
+        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+    }
+}
+

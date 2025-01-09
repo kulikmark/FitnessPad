@@ -10,11 +10,13 @@ import SwiftUI
 
 // MARK: - ExerciseItem Model
 class DefaultExerciseItem {
+    var id: UUID
     var exerciseName: String
     var exerciseImage: UIImage?
     var categoryName: String?
 
     init(exerciseName: String, exerciseImage: UIImage? = nil, categoryName: String? = nil) {
+        self.id = UUID()  // Генерация уникального идентификатора
         self.exerciseName = exerciseName
         self.exerciseImage = exerciseImage
         self.categoryName = categoryName
@@ -24,7 +26,6 @@ class DefaultExerciseItem {
     func toData() -> Data? {
         return exerciseImage?.jpegData(compressionQuality: 1.0)
     }
-
 }
 
 // MARK: - ExerciseGroup Structure
