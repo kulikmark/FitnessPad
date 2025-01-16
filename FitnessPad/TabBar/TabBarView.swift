@@ -7,30 +7,10 @@
 
 import SwiftUI
 
-struct TabItem: Identifiable {
-    var id = UUID()
-    var text: String
-    var image: String
-    var tabItem: Tab
-}
-
-var tabItems = [
-    TabItem(text: "Home", image: "home", tabItem: .home),
-    TabItem(text: "Workouts", image: "workoutDays", tabItem: .workoutDays),
-    TabItem(text: "Exercises", image: "exercises", tabItem: .exercises),
-    TabItem(text: "Progress", image: "progressIcon", tabItem: .progress)
-]
-
-enum Tab: String {
-    case home
-    case workoutDays
-    case exercises
-    case progress
-}
-
 struct TabBarView: View {
-    @AppStorage("selectedTab") var selectedTab: Tab = .home
-    
+    @Binding var selectedTab: Tab
+    @State private var animatingTab: Tab? = nil  // Отслеживание анимации
+
     var body: some View {
         VStack {
             Spacer()
@@ -38,35 +18,37 @@ struct TabBarView: View {
             HStack {
                 ForEach(tabItems) { item in
                     Button {
-                        withAnimation(.interactiveSpring()) {
-                            selectedTab = item.tabItem
+                        selectedTab = item.tabItem
+                        animatingTab = item.tabItem  // Запускаем анимацию
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            animatingTab = nil  // Отключаем анимацию после завершения
                         }
                     } label: {
                         VStack {
-                            Image(item.image)
+                            Image(systemName: item.image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: selectedTab == item.tabItem ? 20 : 15, height: selectedTab == item.tabItem ? 20 : 15) // Увеличиваем размер изображения
+                                .frame(width: 22, height: 22)
+                                .foregroundStyle(selectedTab == item.tabItem ? Color.white : Color.gray)
+                                .scaleEffect(animatingTab == item.tabItem ? 1.2 : 1.0)  // Увеличиваем только выбранный таб
+                                .animation(.spring(response: 0.3, dampingFraction: 0.5), value: animatingTab == item.tabItem)
                             
                             Text(item.text)
-                                .foregroundColor(Color("TextColor"))
-                                .font(.system(size: selectedTab == item.tabItem ? 12 : 10)) // Увеличиваем размер текста
+                                .foregroundStyle(selectedTab == item.tabItem ? Color.white : Color.gray)
+                                .font(.footnote)
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 10)
                     }
-                    .animation(.spring(duration: 0.3), value: selectedTab) // Добавляем анимацию
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: 40)
             .padding(.top, 10)
             .padding(.bottom, 20)
-            .background(
-                (Color("ViewColor"))
-            )
-            .clipShape(CustomRoundedRectangle(cornerRadius: 5, corners: [.topLeft, .topRight]))
+            .background(Color("ViewColor"))
+            .clipShape(CustomRoundedRectangle(cornerRadius: 10, corners: [.topLeft, .topRight]))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-        .edgesIgnoringSafeArea(.bottom) // Игнорируем безопасную зону внизу
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
@@ -83,8 +65,8 @@ struct CustomRoundedRectangle: Shape {
     }
 }
 
-struct TabBarView_Previews: PreviewProvider {
-    static var previews: some View {
-        TabBarView()
-    }
-}
+//struct TabBarView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TabBarView()
+//    }
+//}

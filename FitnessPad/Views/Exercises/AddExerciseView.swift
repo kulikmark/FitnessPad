@@ -26,6 +26,13 @@ struct AddExerciseView: View {
     @State private var isExerciseNameUnique = true
     @State private var isCategoryNameUnique = true
     
+    @State private var showPermissionAlert = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
+    @State private var isAddingNewCategory = false
+
+    
     private let attributes = ["Weight", "Reps", "Distance", "Time"]
     
     @FocusState private var isExerciseNameFocused: Bool
@@ -35,12 +42,14 @@ struct AddExerciseView: View {
             ScrollView {
                 VStack (spacing: 40) {
                     
+                    // MARK: - Title
                     Text("Add New Exercise")
                         .font(.system(size: 24))
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .id("anchor")
                     
+                    // MARK: - Exercise Name
                     VStack {
                         TextField("", text: $exerciseName)
                             .padding()
@@ -50,7 +59,7 @@ struct AddExerciseView: View {
                             .focused($isExerciseNameFocused)
                             .onChange(of: exerciseName) { _, _ in
                                 isExerciseNameValid = !exerciseName.isEmpty
-                                isExerciseNameUnique = isExerciseNameUniqueInCategory() // Проверка уникальности
+                                isExerciseNameUnique = isExerciseNameUniqueInCategory()
                             }
                         
                         Text(!isExerciseNameValid
@@ -64,10 +73,10 @@ struct AddExerciseView: View {
                         .padding(.bottom, 8)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    
                     .background(Color("ViewColor").opacity(0.2))
                     .cornerRadius(8)
                     
+                    // MARK: - Category List Selection
                     VStack {
                         Text(isCategoryValid ? "Exercise Category" : "Choose Exercise Category")
                             .font(.system(size: 18))
@@ -80,7 +89,6 @@ struct AddExerciseView: View {
                                 HStack {
                                     Text(category.name ?? "Unknown Category")
                                         .foregroundColor(selectedCategory == category ? .blue : Color("TextColor"))
-//                                        .padding()
                                     Spacer()
                                     
                                     if selectedCategory == category {
@@ -90,7 +98,6 @@ struct AddExerciseView: View {
                                     }
                                 }
                                 .listRowBackground(Color.clear)
-//                                .background(selectedCategory == category ? Color.blue.opacity(0.1) : Color.clear)
                                 .cornerRadius(15)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
@@ -98,18 +105,35 @@ struct AddExerciseView: View {
                                     isCategoryValid = true
                                 }
                                 .swipeActions {
-                                    Button(role: .destructive) {
-                                        viewModel.deleteCategory(category)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
+                                    // Проверка на дефолтность категории перед удалением
+                                    if category.isDefault != true { // Если категория не дефолтная
+                                        Button(role: .destructive) {
+                                            viewModel.deleteCategory(category)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    } else {
+                                        // Если категория дефолтная, показываем предупреждение с алертом
+                                        Button {
+                                            // Показать Alert, что дефолтную категорию нельзя удалить
+                                            showAlert = true
+                                        } label: {
+                                            Label("Cannot Delete", systemImage: "lock.fill")
+                                        }
+                                        .tint(.gray)
                                     }
                                 }
-                               
                             }
                             .onDelete { indexSet in
                                 if let index = indexSet.first {
                                     let categoryToDelete = viewModel.allCategories[index]
-                                    viewModel.deleteCategory(categoryToDelete)
+                                    // Проверка на дефолтность категории
+                                    if categoryToDelete.isDefault != true {
+                                        viewModel.deleteCategory(categoryToDelete)
+                                    } else {
+                                        // Уведомление с Alert
+                                        showAlert = true
+                                    }
                                 }
                             }
                         }
@@ -121,50 +145,76 @@ struct AddExerciseView: View {
                             viewModel.loadCategories()
                         }
                         .frame(minHeight: CGFloat(viewModel.allCategories.count) * 45)
-                    }
-                    
-                    VStack {
-                        Text("Create New Category")
-                            .font(.system(size: 18))
-                            .foregroundColor(.gray)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        VStack {
-                            TextField("", text: $newCategoryName)
+                        Button(action: {
+                            isAddingNewCategory.toggle() // Переключаем видимость формы добавления новой категории
+                        }) {
+                            Text("+ Add New Category")
+                                .font(.system(size: 14))
+                                .foregroundColor(.white)
                                 .padding()
-                                .background(isCategoryNameUnique ? Color("ViewColor") : Color.red.opacity(0.3))
-                                .cornerRadius(15)
-                                .padding(8)
-                                .onChange(of: newCategoryName) { _, _ in
-                                    isCategoryNameUnique = isCategoryNameUniqueInCategories()
-                                }
-                            
-                            
-                            Text(isCategoryNameUnique
-                                 ? "Enter Category Name" : "Category with this name already exists. Please choose another name.")
-                            .font(.system(size: 12))
-                            .foregroundColor(isCategoryNameUnique ? .gray : .red)
-                            .padding(.leading, 16)
-                            .padding(.bottom, 8)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Button("Done") {
-                                addNewCategory()
-                            }
-                            .font(.system(size: 14))
-                            .foregroundColor(.white)
-                            .padding()
-                            .padding(.horizontal, 10)
-                            .background(isCategoryNameUnique ? Color("ButtonColor") : Color.gray)
-                            .cornerRadius(10)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding()
-                            .disabled(!isCategoryNameUnique)
+                                .padding(.horizontal, 5)
+                                .background(Color("ButtonColor"))
+                                .cornerRadius(10)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding()
                         }
-                        .background(Color("ViewColor").opacity(0.2))
-                        .cornerRadius(8)
+                    }
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("Cannot Delete Category"),
+                            message: Text("Default categories cannot be deleted."),
+                            dismissButton: .default(Text("OK"))
+                        )
                     }
 
+
+                    // MARK: - Create New Category
+                    if isAddingNewCategory {
+                        VStack {
+                            Text("Create New Category")
+                                .font(.system(size: 18))
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            VStack {
+                                TextField("", text: $newCategoryName)
+                                    .padding()
+                                    .background(isCategoryNameUnique ? Color("ViewColor") : Color.red.opacity(0.3))
+                                    .cornerRadius(15)
+                                    .padding(8)
+                                    .onChange(of: newCategoryName) { _, _ in
+                                        isCategoryNameUnique = isCategoryNameUniqueInCategories()
+                                    }
+                                
+                                Text(isCategoryNameUnique
+                                     ? "Enter Category Name" : "Category with this name already exists. Please choose another name.")
+                                .font(.system(size: 12))
+                                .foregroundColor(isCategoryNameUnique ? .gray : .red)
+                                .padding(.leading, 16)
+                                .padding(.bottom, 8)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Button("Done") {
+                                    addNewCategory()
+                                    isAddingNewCategory.toggle()
+                                }
+                                .font(.system(size: 14))
+                                .foregroundColor(.white)
+                                .padding()
+                                .padding(.horizontal, 10)
+                                .background(isCategoryNameUnique ? Color("ButtonColor") : Color.gray)
+                                .cornerRadius(10)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding()
+                                .disabled(!isCategoryNameUnique)
+                            }
+                            .background(Color("ViewColor").opacity(0.2))
+                            .cornerRadius(8)
+                        }
+                    }
+                    
+                    // MARK: - Add Exercise Picture
                     VStack {
                         Text("Add Exercise Picture")
                             .font(.system(size: 18))
@@ -186,7 +236,23 @@ struct AddExerciseView: View {
                             }
                             
                             Button(action: {
-                                isShowingImagePicker = true
+                                PHPhotoLibrary.checkPermission { granted, status in
+                                    if granted {
+                                        isShowingImagePicker = true
+                                    } else {
+                                        switch status {
+                                        case .denied:
+                                            alertMessage = "Photo access is denied. Please allow access in Settings."
+                                        case .restricted:
+                                            alertMessage = "Photo access is restricted by system settings."
+                                        case .limited:
+                                            alertMessage = "Photo access is limited. Please allow full access in Settings."
+                                        default:
+                                            alertMessage = "Unable to access the photo library."
+                                        }
+                                        showPermissionAlert = true
+                                    }
+                                }
                             }) {
                                 Text("Select Image")
                                     .font(.system(size: 14))
@@ -198,50 +264,53 @@ struct AddExerciseView: View {
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .padding()
                             }
+                            .alert(isPresented: $showPermissionAlert) {
+                                Alert(
+                                    title: Text("Access Error"),
+                                    message: Text(alertMessage),
+                                    primaryButton: .default(Text("Open Settings")) {
+                                        if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                                            UIApplication.shared.open(appSettings)
+                                        }
+                                    },
+                                    secondaryButton: .cancel(Text("Cancel"))
+                                )
+                            }
                         }
                         .background(Color("ViewColor").opacity(0.2))
                         .cornerRadius(8)
                     }
                     
-                    
-                    // Выбор атрибутов сета
+                    // MARK: - Select Attributes
                     VStack {
-                        
                         Text(isAttributesValid ? "Select Attributes for Exercise" : "Please select at least one attribute")
                             .font(.system(size: 18))
                             .foregroundColor(isAttributesValid ? .gray : .red)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         List {
-                         
-                                ForEach(attributes, id: \.self) { attribute in
-                                    HStack {
-                                        Text(attribute)
-                                            .foregroundColor(selectedAttributes.contains(attribute) ? .blue : Color("TextColor"))
-                                          
-                                        Spacer()
-                                        if selectedAttributes.contains(attribute) {
-                                            Image(systemName: "checkmark.circle.fill")
-                                                .foregroundColor(.blue)
-                                                .padding(.trailing, 10)
-                                        }
-                                    }
-                                    
-                                    .listRowBackground(Color.clear)
-//                                    .background(selectedAttributes.contains(attribute) ? Color.blue.opacity(0.1) : Color.clear)
-                                    .cornerRadius(15)
-                                    .contentShape(Rectangle())
-                                    .onTapGesture {
-                                        if selectedAttributes.contains(attribute) {
-                                            selectedAttributes.remove(attribute)
-                                           
-                                        } else {
-                                            selectedAttributes.insert(attribute)
-                                            isAttributesValid = true
-                                        }
+                            ForEach(attributes, id: \.self) { attribute in
+                                HStack {
+                                    Text(attribute)
+                                        .foregroundColor(selectedAttributes.contains(attribute) ? .blue : Color("TextColor"))
+                                    Spacer()
+                                    if selectedAttributes.contains(attribute) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundColor(.blue)
+                                            .padding(.trailing, 10)
                                     }
                                 }
-                            
-                          
+                                .listRowBackground(Color.clear)
+                                .cornerRadius(15)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    if selectedAttributes.contains(attribute) {
+                                        selectedAttributes.remove(attribute)
+                                    } else {
+                                        selectedAttributes.insert(attribute)
+                                        isAttributesValid = true
+                                    }
+                                }
+                            }
                         }
                         .background(Color("ViewColor").opacity(0.2))
                         .cornerRadius(8)
@@ -250,6 +319,7 @@ struct AddExerciseView: View {
                         .frame(minHeight: CGFloat(attributes.count) * 45)
                     }
                     
+                    // MARK: - Submit Button
                     Button(action: {
                         addNewExerciseToCoreData()
                         
@@ -274,7 +344,6 @@ struct AddExerciseView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding()
                     }
-                    
                     .disabled(!newCategoryName.isEmpty)
                 }
                 .padding()
@@ -288,24 +357,54 @@ struct AddExerciseView: View {
         }
     }
     
-    private func addNewCategory() {
-        guard !newCategoryName.isEmpty else { return }
+    
+    private func createNewExercise() -> DefaultExercise {
+        let newExercise = DefaultExercise(context: viewModel.viewContext)
+        newExercise.id = UUID()
+        newExercise.name = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
+        newExercise.categories = selectedCategory
+        newExercise.image = exerciseImage?.jpegData(compressionQuality: 1.0)
+        newExercise.isDefault = false
+        newExercise.attributes = NSSet(array: createExerciseAttributes())
         
-        isCategoryNameUnique = isCategoryNameUniqueInCategories()
-        guard isCategoryNameUnique else { return }
-        
-        if !categoryExists() {
-            viewModel.addNewCategory(newCategoryName)
-            selectedCategory = viewModel.allCategories.last
-            isCategoryValid = true
+        print(newExercise)
+        return newExercise
+    }
+    
+    private func createExerciseAttributes() -> [ExerciseAttribute] {
+        return ["Weight", "Reps", "Time", "Distance"].compactMap { name in
+            selectedAttributes.contains(name) ? createExerciseAttribute(named: name) : nil
         }
+    }
+    
+    private func createExerciseAttribute(named name: String) -> ExerciseAttribute {
+        let attribute = ExerciseAttribute(context: viewModel.viewContext)
+        attribute.name = name
+        attribute.isAdded = true
+        return attribute
+    }
+    
+    private func isExerciseNameUniqueInCategory() -> Bool {
+        return !viewModel.allDefaultExercises.contains {
+            $0.name?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == exerciseName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        }
+    }
+    
+    private func addNewCategory() {
+        guard !newCategoryName.isEmpty, !categoryExists() else { return }
         
+        viewModel.addNewCategory(newCategoryName)
+        selectedCategory = viewModel.allCategories.last
+        isCategoryValid = true
         resetCategoryCreationState()
     }
     
+    private func isCategoryNameUniqueInCategories() -> Bool {
+        return !viewModel.allCategories.contains { $0.name?.lowercased() == newCategoryName.lowercased() }
+    }
     
     private func categoryExists() -> Bool {
-        return viewModel.allCategories.contains(where: { $0.name == newCategoryName })
+        return viewModel.allCategories.contains { $0.name == newCategoryName }
     }
     
     private func resetCategoryCreationState() {
@@ -313,96 +412,29 @@ struct AddExerciseView: View {
         isCreatingNewCategory = false
     }
     
+    private func isValidExerciseInput() -> Bool {
+        return !(exerciseName.isEmpty || selectedCategory == nil || !isExerciseNameUniqueInCategory() || selectedAttributes.isEmpty)
+    }
+    
+    private func handleInvalidExerciseInput() {
+        isExerciseNameValid = !exerciseName.isEmpty
+        isCategoryValid = selectedCategory != nil
+        isAttributesValid = !selectedAttributes.isEmpty
+    }
+    
     private func addNewExerciseToCoreData() {
-        exerciseName = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
-        
         guard isValidExerciseInput() else {
-            if exerciseName.isEmpty {
-                isExerciseNameValid = false
-            }
-            if selectedCategory == nil {
-                isCategoryValid = false
-            }
-            if selectedAttributes.isEmpty {
-                isAttributesValid = false
-            }
+            handleInvalidExerciseInput()
             return
         }
         
         // Print selected attributes
-            print("Selected attributes: \(selectedAttributes)")
+        print("Selected attributes: \(selectedAttributes)")
         
         let newExercise = createNewExercise()
         viewModel.allDefaultExercises.append(newExercise)
         viewModel.saveContext()
         presentationMode.wrappedValue.dismiss()
-    }
-    
-    private func isValidExerciseInput() -> Bool {
-        isExerciseNameUnique = isExerciseNameUniqueInCategory()
-        return !(exerciseName.isEmpty || selectedCategory == nil || !isExerciseNameUnique || selectedAttributes.isEmpty)
-    }
-    
-    private func isExerciseNameUniqueInCategory() -> Bool {
-        let trimmedName = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return !viewModel.allDefaultExercises.contains(where: {
-            $0.name?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == trimmedName.lowercased()
-        })
-    }
-    private func isCategoryNameUniqueInCategories() -> Bool {
-        return !viewModel.allCategories.contains(where: { $0.name?.lowercased() == newCategoryName.lowercased() })
-    }
-    
-    // Метод создания нового упражнения
-    private func createNewExercise() -> DefaultExercise {
-        let newExercise = DefaultExercise(context: viewModel.viewContext)
-        newExercise.id = UUID()
-        newExercise.name = exerciseName
-        newExercise.categories = selectedCategory
-        
-        if let imageData = exerciseImage?.jpegData(compressionQuality: 1.0) {
-            newExercise.image = imageData
-        }
-        
-        newExercise.isDefault = false
-        
-        // Создаем атрибуты для упражнения
-        var attributes: [ExerciseAttribute] = []
-        
-        if selectedAttributes.contains("Weight") {
-            let weightAttribute = ExerciseAttribute(context: viewModel.viewContext)
-            weightAttribute.name = "Weight"
-            weightAttribute.isAdded = true
-            attributes.append(weightAttribute)
-        }
-        
-        if selectedAttributes.contains("Reps") {
-            let repsAttribute = ExerciseAttribute(context: viewModel.viewContext)
-            repsAttribute.name = "Reps"
-            repsAttribute.isAdded = true
-            attributes.append(repsAttribute)
-        }
-        
-        if selectedAttributes.contains("Time") {
-            let timeAttribute = ExerciseAttribute(context: viewModel.viewContext)
-            timeAttribute.name = "Time"
-            timeAttribute.isAdded = true
-            attributes.append(timeAttribute)
-        }
-        
-        if selectedAttributes.contains("Distance") {
-            let distanceAttribute = ExerciseAttribute(context: viewModel.viewContext)
-            distanceAttribute.name = "Distance"
-            distanceAttribute.isAdded = true
-            attributes.append(distanceAttribute)
-        }
-        
-        // Связываем атрибуты с упражнением
-        newExercise.attributes = NSSet(array: attributes)
-        
-        print(newExercise)
-
-        return newExercise
     }
 }
 
@@ -412,3 +444,122 @@ struct AddExerciseView_Previews: PreviewProvider {
             .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
     }
 }
+
+
+
+//    private func addNewCategory() {
+//        guard !newCategoryName.isEmpty else { return }
+//
+//        isCategoryNameUnique = isCategoryNameUniqueInCategories()
+//        guard isCategoryNameUnique else { return }
+//
+//        if !categoryExists() {
+//            viewModel.addNewCategory(newCategoryName)
+//            selectedCategory = viewModel.allCategories.last
+//            isCategoryValid = true
+//        }
+//
+//        resetCategoryCreationState()
+//    }
+//
+//
+//    private func categoryExists() -> Bool {
+//        return viewModel.allCategories.contains(where: { $0.name == newCategoryName })
+//    }
+//
+//    private func resetCategoryCreationState() {
+//        newCategoryName = ""
+//        isCreatingNewCategory = false
+//    }
+//
+//    private func addNewExerciseToCoreData() {
+//        exerciseName = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
+//
+//        guard isValidExerciseInput() else {
+//            if exerciseName.isEmpty {
+//                isExerciseNameValid = false
+//            }
+//            if selectedCategory == nil {
+//                isCategoryValid = false
+//            }
+//            if selectedAttributes.isEmpty {
+//                isAttributesValid = false
+//            }
+//            return
+//        }
+//
+//        // Print selected attributes
+//            print("Selected attributes: \(selectedAttributes)")
+//
+//        let newExercise = createNewExercise()
+//        viewModel.allDefaultExercises.append(newExercise)
+//        viewModel.saveContext()
+//        presentationMode.wrappedValue.dismiss()
+//    }
+//
+//    private func isValidExerciseInput() -> Bool {
+//        isExerciseNameUnique = isExerciseNameUniqueInCategory()
+//        return !(exerciseName.isEmpty || selectedCategory == nil || !isExerciseNameUnique || selectedAttributes.isEmpty)
+//    }
+//
+//    private func isExerciseNameUniqueInCategory() -> Bool {
+//        let trimmedName = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
+//        return !viewModel.allDefaultExercises.contains(where: {
+//            $0.name?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == trimmedName.lowercased()
+//        })
+//    }
+//    private func isCategoryNameUniqueInCategories() -> Bool {
+//        return !viewModel.allCategories.contains(where: { $0.name?.lowercased() == newCategoryName.lowercased() })
+//    }
+//
+//    // Метод создания нового упражнения
+//    private func createNewExercise() -> DefaultExercise {
+//        let newExercise = DefaultExercise(context: viewModel.viewContext)
+//        newExercise.id = UUID()
+//        newExercise.name = exerciseName
+//        newExercise.categories = selectedCategory
+//
+//        if let imageData = exerciseImage?.jpegData(compressionQuality: 1.0) {
+//            newExercise.image = imageData
+//        }
+//
+//        newExercise.isDefault = false
+//
+//        // Создаем атрибуты для упражнения
+//        var attributes: [ExerciseAttribute] = []
+//
+//        if selectedAttributes.contains("Weight") {
+//            let weightAttribute = ExerciseAttribute(context: viewModel.viewContext)
+//            weightAttribute.name = "Weight"
+//            weightAttribute.isAdded = true
+//            attributes.append(weightAttribute)
+//        }
+//
+//        if selectedAttributes.contains("Reps") {
+//            let repsAttribute = ExerciseAttribute(context: viewModel.viewContext)
+//            repsAttribute.name = "Reps"
+//            repsAttribute.isAdded = true
+//            attributes.append(repsAttribute)
+//        }
+//
+//        if selectedAttributes.contains("Time") {
+//            let timeAttribute = ExerciseAttribute(context: viewModel.viewContext)
+//            timeAttribute.name = "Time"
+//            timeAttribute.isAdded = true
+//            attributes.append(timeAttribute)
+//        }
+//
+//        if selectedAttributes.contains("Distance") {
+//            let distanceAttribute = ExerciseAttribute(context: viewModel.viewContext)
+//            distanceAttribute.name = "Distance"
+//            distanceAttribute.isAdded = true
+//            attributes.append(distanceAttribute)
+//        }
+//
+//        // Связываем атрибуты с упражнением
+//        newExercise.attributes = NSSet(array: attributes)
+//
+//        print(newExercise)
+//
+//        return newExercise
+//    }

@@ -16,7 +16,6 @@ enum AlertType {
     case error
 }
 
-
 struct ExercisesView: View {
     @ObservedObject var viewModel: WorkoutViewModel
     @State var isEditing = false
@@ -33,12 +32,12 @@ struct ExercisesView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            header
+            exercisesListHeaderView
             exercisesListView
         }
-        .onAppear {
-            viewModel.loadDefaultExercises()
-        }
+//        .onAppear {
+//            viewModel.loadDefaultExercises()
+//        }
         .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $isShowingAddExerciseView) {
             AddExerciseView(viewModel: viewModel)
@@ -61,7 +60,7 @@ struct ExercisesView: View {
     }
 
     // MARK: - Header
-    var header: some View {
+    var exercisesListHeaderView: some View {
         HStack {
             Text("Exercises List")
                 .font(.system(size: 24))
@@ -74,8 +73,6 @@ struct ExercisesView: View {
             resetDefaultsButton
             addButton
         }
-        
-      
     }
 
     // MARK: - Exercises List View
@@ -114,7 +111,6 @@ struct ExercisesView: View {
            Button(action: {
               deleteExercise(exercise)
                selectedExercise = exercise
-               print("Delete button tapped")
            }) {
                Label("Delete", systemImage: "trash")
                    .foregroundColor(.text)
@@ -134,6 +130,17 @@ struct ExercisesView: View {
            .tint(.viewColor2)
        }
     
+    private func lockedSwipeAction(for exercise: DefaultExercise) -> some View {
+        Button(action: {
+           deleteExercise(exercise)
+            selectedExercise = exercise
+        }) {
+            Image(systemName: "lock.fill")
+                .foregroundColor(.text)
+        }
+        .tint(.gray)
+    }
+    
     // MARK: - Exercise Row View
     private func exerciseRow(for exercise: DefaultExercise) -> some View {
         Section {
@@ -141,19 +148,23 @@ struct ExercisesView: View {
                 exerciseImage(for: exercise)
                     .frame(width: 100, height: 50)
                     .clipShape(RoundedRectangle(cornerRadius: 3))
-
+                
                 Text(exercise.name ?? "Unknown")
                     .font(.system(size: 16))
                     .foregroundColor(Color("TextColor"))
                     .padding(.leading, 10)
                 
                     .swipeActions {
-                        deleteSwipeAction(for: exercise)
-                        editSwipeAction(for: exercise)
+                        if exercise.isDefault {
+                            lockedSwipeAction(for: exercise)
+                        } else {
+                            deleteSwipeAction(for: exercise)
+                            editSwipeAction(for: exercise)
+                        }
                     }
-
+                
                 Spacer()
-
+                
                 Button(action: {
                     selectedExercise = exercise
                     addExerciseToWorkoutDay(for: exercise)
@@ -162,11 +173,11 @@ struct ExercisesView: View {
                     
                 }
             }
-            
             .frame(height: 50)
-            
+          
         }
     }
+
 
     // MARK: - Exercise Image View
     func exerciseImage(for item: DefaultExercise) -> some View {
@@ -294,8 +305,8 @@ var addButton: some View {
             )
         case .defaultExercise:
             return Alert(
-                title: Text("Warning"),
-                message: Text("You cannot delete the default exercise."),
+                title: Text("Locked Operation"),
+                message: Text("You cannot delete or edit the default exercise."),
                 dismissButton: .default(Text("OK"))
             )
         case .alreadyAdded:

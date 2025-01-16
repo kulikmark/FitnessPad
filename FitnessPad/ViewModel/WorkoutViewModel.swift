@@ -9,15 +9,16 @@ import SwiftUI
 import CoreData
 
 class WorkoutViewModel: ObservableObject {
-//    @Published var workoutDays: [WorkoutDay] = []
     @Published private(set) var workoutDaysCache: [Date: WorkoutDay] = [:]
-   
     @Published var allCategories: [ExerciseCategory] = []
-
     @Published var allDefaultExercises: [DefaultExercise] = []
-    
     @Published var selectedGoal: FitnessGoal?
     let viewContext = PersistenceController.shared.container.viewContext
+    
+    init() {
+        loadDefaultExercises()
+        fetchWorkoutDays()
+    }
     
     func saveContext() {
         do {
@@ -29,52 +30,33 @@ class WorkoutViewModel: ObservableObject {
         }
     }
    
-    func loadEntities<T: NSManagedObject>(_ entityType: T.Type, sortDescriptors: [NSSortDescriptor]? = nil) -> [T] {
-        let fetchRequest = T.fetchRequest()
-        fetchRequest.sortDescriptors = sortDescriptors
-
-        do {
-            return try viewContext.fetch(fetchRequest) as? [T] ?? []
-        } catch {
-            print("Failed to fetch \(T.self): \(error.localizedDescription)")
-            return []
-        }
-    }
-
-    // Использование:
-    func loadDefaultExercises() {
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-        allDefaultExercises = loadEntities(DefaultExercise.self, sortDescriptors: [sortDescriptor])
-    }
-
-    func loadCategories() {
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-        allCategories = loadEntities(ExerciseCategory.self, sortDescriptors: [sortDescriptor])
-    }
-
-
-    
-    var allDefaultExercisesGroupedByCategory: [(category: String, exercises: [DefaultExercise])] {
-        let filteredExercises = allDefaultExercises.filter { $0.categories != nil } // Исключаем упражнения без категории
-        let grouped = Dictionary(grouping: filteredExercises) { $0.categories?.name ?? "Uncategorized" }
-        
-        let sortedKeys = grouped.keys.sorted()
-        
-        return sortedKeys.map { key in
-            (category: key, exercises: grouped[key] ?? [])
-        }
-    }
+//    func fetchWorkoutDays() {
+//        let request: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
+//        
+//        do {
+//            let workoutDays = try viewContext.fetch(request)
+//            cacheWorkoutDays(from: workoutDays)
+//        } catch {
+//            print("Ошибка при получении workoutDays: \(error)")
+//        }
+//    }
     
     func fetchWorkoutDays() {
-        let request: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
-        
-        do {
-            let workoutDays = try viewContext.fetch(request)
-            cacheWorkoutDays(from: workoutDays)
-        } catch {
-            print("Ошибка при получении workoutDays: \(error)")
-        }
-    }
+          DispatchQueue.global(qos: .userInitiated).async {
+              let request: NSFetchRequest<WorkoutDay> = WorkoutDay.fetchRequest()
+              
+              do {
+                  let workoutDays = try self.viewContext.fetch(request)
+                  DispatchQueue.main.async {
+                      self.cacheWorkoutDays(from: workoutDays)
+                  }
+              } catch {
+                  DispatchQueue.main.async {
+                      print("Ошибка при получении workoutDays: \(error)")
+                  }
+              }
+          }
+      }
 
     func cacheWorkoutDays(from days: [WorkoutDay]) {
         workoutDaysCache = Dictionary(uniqueKeysWithValues: days.compactMap { day in
@@ -88,6 +70,21 @@ class WorkoutViewModel: ObservableObject {
         let startOfDay = calendar.startOfDay(for: date)
         
         return workoutDaysCache.values.first { calendar.isDate($0.date ?? Date(), inSameDayAs: startOfDay) }
+    }
+    
+    // MARK: - Отсортированные тренировки
+    var sortedWorkoutDays: [WorkoutDay] {
+       workoutDaysCache.values.sorted {
+            ($0.date ?? Date()) < ($1.date ?? Date())
+        }
+    }
+    
+    func createWorkoutDay(for date: Date) {
+        let newWorkoutDay = WorkoutDay(context: viewContext)
+        newWorkoutDay.date = Calendar.current.startOfDay(for: date)
+        saveContext()
+        fetchWorkoutDays()
+        objectWillChange.send()
     }
 
     func deleteWorkoutDay(_ workoutDay: WorkoutDay) {
@@ -103,9 +100,69 @@ class WorkoutViewModel: ObservableObject {
         objectWillChange.send()
     }
     
+    func loadEntities<T: NSManagedObject>(_ entityType: T.Type, sortDescriptors: [NSSortDescriptor]? = nil) -> [T] {
+        let fetchRequest = T.fetchRequest()
+        fetchRequest.sortDescriptors = sortDescriptors
+
+        do {
+            return try viewContext.fetch(fetchRequest) as? [T] ?? []
+        } catch {
+            print("Failed to fetch \(T.self): \(error.localizedDescription)")
+            return []
+        }
+    }
+
+   
+//    func loadDefaultExercises() {
+//        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+//        allDefaultExercises = loadEntities(DefaultExercise.self, sortDescriptors: [sortDescriptor])
+//    }
+    
+    func loadDefaultExercises() {
+        guard allDefaultExercises.isEmpty else { return }
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+            let exercises = self.loadEntities(DefaultExercise.self, sortDescriptors: [sortDescriptor])
+            
+            DispatchQueue.main.async {
+                self.allDefaultExercises = exercises
+            }
+        }
+    }
+
+
+//    func loadCategories() {
+//        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+//        allCategories = loadEntities(ExerciseCategory.self, sortDescriptors: [sortDescriptor])
+//    }
+
+    func loadCategories() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+            let categories = self.loadEntities(ExerciseCategory.self, sortDescriptors: [sortDescriptor])
+            
+            DispatchQueue.main.async {
+                self.allCategories = categories
+            }
+        }
+    }
+
+    var allDefaultExercisesGroupedByCategory: [(category: String, exercises: [DefaultExercise])] {
+        let filteredExercises = allDefaultExercises.filter { $0.categories != nil } // Исключаем упражнения без категории
+        let grouped = Dictionary(grouping: filteredExercises) { $0.categories?.name ?? "Uncategorized" }
+        
+        let sortedKeys = grouped.keys.sorted()
+        
+        return sortedKeys.map { key in
+            (category: key, exercises: grouped[key] ?? [])
+        }
+    }
+    
     func addNewCategory(_ category: String) {
         let newCategory = ExerciseCategory(context: viewContext)
         newCategory.name = category
+        newCategory.isDefault = false
         saveContext()
         allCategories.append(newCategory) // Добавляем объект категории, а не строку
         print("\(newCategory.name ?? "Unnamed") category was just created")
@@ -130,17 +187,16 @@ class WorkoutViewModel: ObservableObject {
 
     
     func addExerciseToWorkoutDay(_ defaultExercise: DefaultExercise, workoutDay: WorkoutDay?) {
+        objectWillChange.send()
+        
         guard let workoutDay = workoutDay else { return }
 
         let context = PersistenceController.shared.container.viewContext
 
-        // Проверяем, есть ли уже упражнение с таким именем
-        if workoutDay.exercisesArray.contains(where: { $0.name == defaultExercise.name }) {
-            // Отображаем алерт или логируем сообщение
+        if workoutDay.exercisesArray.contains(where: { $0.id == defaultExercise.id }) {
             print("Exercise '\(defaultExercise.name ?? "Unknown")' is already added to the workout day.")
             return
         }
-
         // Добавляем новое упражнение
         let newExercise = Exercise(context: context)
         newExercise.id = defaultExercise.id
@@ -230,10 +286,6 @@ class WorkoutViewModel: ObservableObject {
         print("Exercise with ID \(exerciseId) successfully deleted from all workout days.")
     }
 
-
-
-
-
     func updateExerciseInWorkoutDays(exercise: DefaultExercise) {
         guard let exerciseId = exercise.id else {
             print("Exercise ID is nil, cannot proceed with update.")
@@ -260,65 +312,18 @@ class WorkoutViewModel: ObservableObject {
         saveContext()
     }
 
-    
-
-}
-
-extension WorkoutDay {
-    var exercisesArray: [Exercise] {
-        let set = exercises as? Set<Exercise> ?? []
-        return set.sorted { $0.name ?? "" < $1.name ?? "" } // Сортировка по имени
-    }
-}
-
-extension Exercise {
-    var setsArray: [ExerciseSet] {
-        let set = sets as? Set<ExerciseSet> ?? []
-        return set.sorted { $0.count < $1.count } // Упорядочьте по вашему усмотрению
-    }
-}
-
-extension Exercise {
-    // Возвращает массив аттрибутов, соответствующих указанному имени и состоянию isAdded
-    func attribute(for name: String) -> ExerciseAttribute? {
-            guard let attributes = self.attributes as? Set<ExerciseAttribute> else {
-                print("No attributes found for exercise \(self.name ?? "Unknown")")
-                return nil
-            }
-            print("Attributes found: \(attributes)")
-            return attributes.first(where: { $0.name == name && $0.isAdded })
-        }
-
-    // Возвращает все аттрибуты, соответствующие состоянию isAdded
-    func addedAttributes() -> [ExerciseAttribute] {
-        guard let attributes = self.attributes as? Set<ExerciseAttribute> else {
-            return []
-        }
-        return attributes.filter { $0.isAdded }
-    }
 }
 
 
-extension Array {
-    func enumeratedArray() -> [(offset: Int, element: Element)] {
-        return self.enumerated().map { (offset: $0.offset, element: $0.element) }
-    }
-}
 
-extension NumberFormatter {
-    static var decimal: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        return formatter
-    }
-    
-    static var integer: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .none
-        return formatter
-    }
-}
+
+
+
+
+
+
+
+
 
 //    func deleteExerciseFromWorkoutDays(exerciseToDelete: DefaultExercise) {
 //        let context = PersistenceController.shared.container.viewContext

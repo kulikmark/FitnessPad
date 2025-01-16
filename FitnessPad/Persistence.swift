@@ -44,32 +44,53 @@ extension PersistenceController {
         let context = container.viewContext
         let fetchRequest: NSFetchRequest<DefaultExercise> = DefaultExercise.fetchRequest()
         let categoryFetchRequest: NSFetchRequest<ExerciseCategory> = ExerciseCategory.fetchRequest()
+        let attributeFetchRequest: NSFetchRequest<ExerciseAttribute> = ExerciseAttribute.fetchRequest()
         
         do {
             let existingExercises = try context.fetch(fetchRequest)
             let existingCategories = try context.fetch(categoryFetchRequest)
+            let existingAttributes = try context.fetch(attributeFetchRequest)
             
             if existingExercises.isEmpty {
                 for group in defaultExerciseGroups {
-                    var category: ExerciseCategory?
-                    if let existingCategory = existingCategories.first(where: { $0.name == group.name }) {
-                        category = existingCategory
-                    } else {
-                        category = ExerciseCategory(context: context)
-                        category?.name = group.name
-                    }
+                    // Проверка существующей категории или создание новой
+                    let category = existingCategories.first(where: { $0.name == group.name }) ?? {
+                        let newCategory = ExerciseCategory(context: context)
+                        newCategory.name = group.name
+                        newCategory.isDefault = true // Устанавливаем флаг для новой категории
+                        return newCategory
+                    }()
                     
                     for exercise in group.exercises {
                         let defaultExercise = DefaultExercise(context: context)
-                        defaultExercise.id = exercise.id // Добавляем id
+                        defaultExercise.id = exercise.id
                         defaultExercise.name = exercise.exerciseName
                         defaultExercise.categories = category
                         
+                        // Добавление атрибутов
+                        var exerciseAttributes: Set<ExerciseAttribute> = []
+                        for attributeItem in exercise.attributeItems {
+                            let attribute = existingAttributes.first(where: { $0.name == attributeItem.name }) ?? {
+                                let newAttribute = ExerciseAttribute(context: context)
+                                newAttribute.name = attributeItem.name
+                                newAttribute.isAdded = attributeItem.isAdded
+                                return newAttribute
+                            }()
+                            exerciseAttributes.insert(attribute)
+                        }
+                        defaultExercise.attributes = exerciseAttributes as NSSet
+                        
+                        // Добавление изображения
                         if let image = exercise.exerciseImage, let imageData = image.pngData() {
                             defaultExercise.image = imageData
                         }
                         
                         defaultExercise.isDefault = true
+                        
+                        // Отладка
+                        if let id = defaultExercise.id {
+                            print("Создано упражнение с id: \(id.uuidString), название: \(defaultExercise.name ?? "Неизвестно")")
+                        }
                     }
                 }
                 try context.save()
@@ -80,6 +101,8 @@ extension PersistenceController {
         }
     }
 }
+
+
 
 
 

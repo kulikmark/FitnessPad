@@ -8,400 +8,210 @@
 import SwiftUI
 import CoreData
 
+import Combine
+
+struct KeyboardAdaptive: ViewModifier {
+    @State private var keyboardHeight: CGFloat = 0
+
+    func body(content: Content) -> some View {
+        content
+            .padding(.bottom, keyboardHeight)
+            .onReceive(Publishers.keyboardHeight) { height in
+                self.keyboardHeight = height
+            }
+            .animation(.easeOut(duration: 0.16), value: keyboardHeight)
+    }
+}
+
+extension Publishers {
+    static var keyboardHeight: AnyPublisher<CGFloat, Never> {
+        let willShow = NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
+            .map { notification in
+                (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
+            }
+        
+        let willHide = NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
+            .map { _ in CGFloat(0) }
+        
+        return MergeMany(willShow, willHide)
+            .eraseToAnyPublisher()
+    }
+}
+
 struct WorkoutDaysList: View {
     
     @StateObject var viewModel: WorkoutViewModel
     @Binding var workoutDay: WorkoutDay?
     
-    @State var selectedMonth: Date = .currentMonth
     @State var selectedDate: Date = .now
-    @State private var scrollPosition: String?
-    
-    var safeArea: EdgeInsets
-    
+    @State private var selectedIndex: Int = 0
+    @State private var isCalendarPresented: Bool = false
+
     var body: some View {
-        
-        let maxHeight = calendarHeight - (calendarTitleViewHeight + weekDayLabelHeight + safeArea.top + 50  + topPadding + bottomPadding - 50)
-        
         ZStack {
-            // Фон под всеми вью
+            // Фон
             Color("BackgroundColor")
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
             
-            // Содержание
-            ScrollView (.vertical) {
+            VStack {
+                if let workoutDay = viewModel.workoutDay(for: selectedDate) {
+                    WorkoutDayDetailsView(viewModel: viewModel, workoutDay: Binding.constant(workoutDay))
+                        .padding(.bottom, 50)
+                        .frame(maxHeight: .infinity)
+                } else {
+                    EmptyWorkoutDayView(selectedDate: $selectedDate)
+                        .frame(maxHeight: .infinity)
+                }
                 
-                VStack(spacing: 20) {
-                    CalendarView()
-                        .background {
-                            Divider()
-                                .opacity(0.1)
-                                .id("CONTENTVIEW")
-                        }
-                
-                
-              
-                    if let workoutDay = viewModel.workoutDay(for: selectedDate) {
-                        WorkoutDayDetailsView(viewModel: viewModel, workoutDay: Binding.constant(workoutDay))
-                            .frame(height: 670)
-                    } else {
-                        emptyWorkoutDayView
-                            .frame(height: 670)
-                    }
-           
+                Spacer()
             }
-                .scrollTargetLayout()
-            }
-            .scrollPosition(id: $scrollPosition, anchor: .top)
-            .scrollIndicators(.hidden)
-            .scrollTargetBehavior(CustomScrollBehaviour(maxHeight: maxHeight))
             .onAppear {
-                guard scrollPosition == nil else { return }
-                scrollPosition = "CONTENTVIEW"
-                
                 selectedDate = Calendar.current.startOfDay(for: Date())
             }
-                
+            
+            // ✅ WorkoutdayMiniView фиксирован внизу
+            VStack {
+                Spacer()
+                WorkoutdayMiniView(viewModel: viewModel, selectedDate: $selectedDate, selectedIndex: $selectedIndex)
+                    .padding(.bottom, 30)
+                    .background(Color("ViewColor"))
+                    .onTapGesture {
+                        isCalendarPresented.toggle()
+                    }
+                    .sheet(isPresented: $isCalendarPresented) {
+                        CalendarView(viewModel: viewModel, workoutDay: $workoutDay, selectedDate: $selectedDate, selectedIndex: $selectedIndex)
+                    }
             }
+            .ignoresSafeArea(.keyboard, edges: .bottom) // ⬅️ Игнорируем клавиатуру
         }
+    }
 
-    var emptyWorkoutDayView: some View {
-        VStack(spacing: 0) {
-            Image("emptyWorkoutDay")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity)
-                .frame(height: 150)
-            
-            Text("You haven't created a workout day yet.")
-                .foregroundColor(.white)
-                .padding()
-            
-            Button(action: {
-                createWorkoutDay()
-            }) {
-                Text("Create Workout")
-                    .font(.title2)
-                    .foregroundColor(Color("TextColor"))
-                    .padding(15)
-                    .background(Color("ButtonColor"))
-                    .cornerRadius(10)
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
-                
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("BackgroundColor"))
-    }
-    
-    func createWorkoutDay() {
-        // Создаем новый объект WorkoutDay
-        let newWorkoutDay = WorkoutDay(context: viewModel.viewContext)
-        newWorkoutDay.date = selectedDate
-        
-        // Сохраняем в CoreData
-        viewModel.saveContext()
-        
-        viewModel.fetchWorkoutDays()
-        
-        // Обновляем workoutDay, чтобы отобразить экран деталей
-        workoutDay = newWorkoutDay
-    }
     
     
-    @ViewBuilder
-    func CalendarView() -> some View {
-        GeometryReader {
-            let size = $0.size
-            let minY = $0.frame(in: .scrollView(axis: .vertical)).minY
-            
-            let maxHeight = size.height - (calendarTitleViewHeight + weekDayLabelHeight + safeArea.top + 50  + topPadding + bottomPadding - 50)
-            let progress = max(min((-minY / maxHeight), 1), 0)
-            
-            
-            VStack (alignment: .leading,spacing: 0, content: {
-                Text(currentMonth)
-                    .font(.system(size: 35 - (10 * progress)))
-                    .offset(y: -50 * progress)
-                    .frame(maxHeight: .infinity, alignment: .bottom )
-                    .overlay(alignment: .topLeading, content: {
-                        GeometryReader {
-                            let size = $0.size
-                            
-                            Text(currentYear)
-                                .font(.system(size: 25 - (10 * progress)))
-                                .offset(x: (size.width + 5) * progress, y: progress * 3)
-                        }
-                    })
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .overlay(alignment: .topTrailing, content: {
-                        HStack(spacing: 15) {
-                            HStack {
-                                let today = Date()
-                                Button("\(today, formatter: dayFormatter)", systemImage: "arrow.forward") {
-                                    resetToCurrentDate()
-                                }
-                                .contentShape(.rect)
-                                .padding(5)
-                                .background(Color("ButtonColor"))
-                                .cornerRadius(10)
-                                .padding(.trailing, 10)
-                            }
-                            
-                            Button("", systemImage: "chevron.left") {
-                                /// Update to prev month
-                                monthUpdate(false)
-                            }
-                            .contentShape(.rect)
-                            
-                            Button("", systemImage: "chevron.right") {
-                                /// Update to next month
-                                monthUpdate(true)
-                            }
-                            .contentShape(.rect)
-                        }
-                        .font(.title3)
-                        .foregroundStyle(.primary)
-                        .offset(x: progress * 200)
-                    })
-                    .frame(height: calendarTitleViewHeight)
-                
-                VStack(spacing: 0) {
-                    /// Weekdays
-                    HStack(spacing:0) {
-                        ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { symbol in
-                            Text(symbol.prefix(3))
-                                .font(.caption)
-                                .frame(maxWidth: .infinity)
-                                .foregroundStyle(.secondary)
+    struct WorkoutdayMiniView: View {
+        @ObservedObject var viewModel: WorkoutViewModel
+        @Binding var selectedDate: Date
+        @Binding var selectedIndex: Int
+        
+        var body: some View {
+            VStack {
+                // Проверка, есть ли тренировка для выбранной даты
+                if viewModel.workoutDay(for: selectedDate) != nil, !viewModel.sortedWorkoutDays.isEmpty {
+                    TabView(selection: $selectedIndex) {
+                        ForEach(viewModel.sortedWorkoutDays.indices, id: \.self) { index in
+                            miniViewItem(for: viewModel.sortedWorkoutDays[index])
+                                .padding(.horizontal, 20)
+                                .tag(index)
                         }
                     }
-                    .frame(height: weekDayLabelHeight, alignment: .bottom)
-                    
-                    
-                    /// Calendar Grid View
-                    LazyVGrid(columns: Array(repeating: GridItem(spacing: 0), count: 7), spacing: 0, content: {
-                        ForEach(selectedMonthDates) { day in
-                            Text(day.shortSymbol)
-                                .foregroundStyle(day.ignored ? .secondary : .primary)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                                .overlay {
-                                    if Calendar.current.isDate(day.date, inSameDayAs: selectedDate) {
-                                        // Выделенная дата - обводка
-                                        Circle()
-                                            .strokeBorder(Color.white, lineWidth: 2)
-                                            .frame(width: 40, height: 40)
-                                    } else if let _ = viewModel.workoutDay(for: day.date) {
-                                        // Даты с тренировками - круг
-                                        Circle()
-                                            .fill(Color("ButtonColor"))
-                                            .frame(width: 5, height: 5)
-                                            .padding(.top, 30)
-                                        
-                                        // Прозрачный круг для сегодняшнего дня, если дата не выбрана
-                                        if Calendar.current.isDate(day.date, inSameDayAs: Date()) && day.date != selectedDate {
-                                            Circle()
-                                                .fill(Color.white.opacity(0.1)) // Прозрачный круг для сегодня
-                                                .frame(width: 40, height: 40)
-                                        }
-                                    }
-                                }
-                                .contentShape(.rect)
-                                .onTapGesture {
-                                    selectedDate = day.date
-                                }
-                        }
-                    })
-
-                    .frame(height: calendarGridHeight - ((calendarGridHeight - 50) * progress), alignment: .top)
-                    .offset(y: (monthProgress * -50) * progress)
-                    .contentShape(.rect)
-                    .clipped()
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    .animation(.easeInOut(duration: 0.3), value: selectedIndex)
+                } else {
+                    emptyTabView()
                 }
-                .offset(y: progress * -50)
-                
-            })
-            .foregroundStyle(.white)
-            .padding(.horizontal, horizontalPadding)
-            .padding(.top, topPadding)
-            .padding(.top, safeArea.top)
-            .padding(.bottom, bottomPadding)
-            .frame(maxHeight: .infinity)
-            .frame(height: size.height - (maxHeight * progress), alignment: .top)
-            //            .background(.red.gradient)
+            }
             .background(Color("ViewColor"))
+            .frame(height: 65)
+            .cornerRadius(15, corners: [.topLeft, .topRight])
+            .onAppear {
+                updateSelectedIndexForCurrentDate()
+            }
+            // Обновляем дату при изменении индекса
+            .onChange(of: selectedIndex) { oldIndex, newIndex in
+                let newWorkoutDay = viewModel.sortedWorkoutDays[newIndex]
+                selectedDate = newWorkoutDay.date ?? Date()
+            }
+            // Обновляем индекс при изменении даты
+            .onChange(of: selectedDate) { _, newDate in
+                updateSelectedIndexForDate(newDate)
+            }
+        }
+        
+        private func updateSelectedIndexForCurrentDate() {
+            // Загружаем тренировку на текущую дату
+            if let todayWorkoutDay = viewModel.workoutDay(for: Date()) {
+                updateSelectedIndexForDate(todayWorkoutDay.date ?? Date())
+            }
+        }
+        
+        private func updateSelectedIndexForDate(_ date: Date) {
+            if let index = viewModel.sortedWorkoutDays.firstIndex(where: { Calendar.current.isDate($0.date ?? Date(), inSameDayAs: date) }) {
+                selectedIndex = index
+            }
+        }
+        
+        // MARK: - Элемент miniViewItem
+        func miniViewItem(for workoutDay: WorkoutDay) -> some View {
+            HStack {
+                Image("miniView") // Картинка слева
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 40, height: 40)
+                    .clipped()
+                    .padding(.leading, 10)
+                
+                Spacer()
+                
+                // Дата тренировки
+                Text(workoutDay.date?.formattedDate() ?? "Unknown Date")
+                    .font(.system(size: 16))
+                    .foregroundColor(.white)
+                
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color("ViewColor2").opacity(0.9))
             .cornerRadius(10)
-            /// Sticking it to top
-            .clipped()
-            .contentShape(.rect)
-            .offset(y: -minY)
-            
-        }
-        .frame(height: calendarHeight)
-        .zIndex(1000)
-    }
-    
-    func resetToCurrentDate() {
-        let today = Date()
-        selectedDate = today
-        selectedMonth = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: today)) ?? today
-    }
-    
-    func format (_ format: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = format
-        return formatter.string(from: selectedMonth)
-    }
-    
-    private var dayFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d" // Формат для отображения только числа дня
-        return formatter
-    }
-
-    
-    /// Month increment / decrement
-    func monthUpdate(_ increment: Bool = true) {
-        let calendar = Calendar.current
-        guard let month = calendar.date(byAdding: .month, value: increment ? 1 : -1, to: selectedMonth) else { return }
-        guard let date = calendar.date(byAdding: .month, value: increment ? 1 : -1, to: selectedDate) else { return }
-        selectedMonth = month
-        selectedDate = date
-    }
-    
-    /// Selected Month Dates
-    var selectedMonthDates: [Day] {
-        return extractDates(selectedMonth)
-    }
-    
-    var currentMonth: String {
-        return format("MMMM")
-    }
-    
-    var currentYear: String {
-        return format("YYYY")
-    }
-    
-    var monthProgress: CGFloat {
-        let calendar = Calendar.current
-        if let index = selectedMonthDates.firstIndex(where: { calendar.isDate($0.date, inSameDayAs: selectedDate) }) {
-            
-            return CGFloat(index / 7).rounded()
-        }
-        return 1
-    }
-    
-    var calendarHeight: CGFloat {
-        return calendarTitleViewHeight + weekDayLabelHeight + calendarGridHeight + safeArea.top + topPadding + bottomPadding
-    }
-    
-    var calendarTitleViewHeight: CGFloat {
-        return 75
-    }
-    
-    var weekDayLabelHeight: CGFloat {
-        return 30
-    }
-    
-    var calendarGridHeight: CGFloat {
-        return CGFloat(selectedMonthDates.count / 7) * 50
-    }
-    
-    var horizontalPadding: CGFloat {
-        return 15
-    }
-    
-    var topPadding: CGFloat {
-        return 15
-    }
-    
-    var bottomPadding: CGFloat {
-        return 5
-    }
-}
-
-extension Date {
-    static var currentMonth: Date {
-        let calendar = Calendar.current
-        guard let currentMonth = calendar.date(from: Calendar.current.dateComponents([.month, .year], from: .now)) else {
-            return .now
-        }
-        return currentMonth
-    }
-    
-    
-}
-
-extension View {
-    
-    /// Extracting Dates
-    func extractDates(_ month: Date) -> [Day] {
-        var days: [Day] = []
-        let calendar = Calendar.current
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd"
-        
-        guard let range = calendar.range(of: .day, in: .month, for: month)?.compactMap({ value -> Date? in
-            return calendar.date(byAdding: .day, value: value - 1, to: month)
-        }) else { return days }
-        
-        let firstWeekDay = calendar.component(.weekday, from: range.first!)
-        
-        for index in Array(0..<firstWeekDay - 1).reversed() {
-            guard let date = calendar.date(byAdding: .day, value: -index - 1, to: range.first!) else {return days}
-            let shortSymbol = formatter.string(from: date)
-            days.append(.init(shortSymbol: shortSymbol, date: date, ignored: true))
         }
         
-        range.forEach { date in
-            let shortSymbol = formatter.string(from: date)
-            days.append(.init(shortSymbol: shortSymbol, date: date))
-        }
-        
-        
-        let lastWeekDay = 7 - calendar.component(.weekday, from: range.last!)
-        
-        if lastWeekDay > 0 {
-            for index in 0..<lastWeekDay {
-                guard let date = calendar.date(byAdding: .day, value: index + 1, to: range.last!) else {return days}
-                let shortSymbol = formatter.string(from: date)
-                days.append(.init(shortSymbol: shortSymbol, date: date, ignored: true))
+        func emptyTabView() -> some View {
+            HStack {
+                Text("Tap to create your workout")
+                    .font(.system(size: 16))
+                    .foregroundColor(.text)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(15)
             }
-        }
-        
-        return days
-    }
-}
-
-struct Day: Identifiable {
-    var id: UUID = .init()
-    var shortSymbol: String
-    var date: Date
-    var ignored: Bool = false
-    
-}
-
-/// Custom Scroll Behaviour
-struct CustomScrollBehaviour: ScrollTargetBehavior {
-    var maxHeight: CGFloat
-    func updateTarget(_ target: inout ScrollTarget, context: TargetContext) {
-        if target.rect.minY < maxHeight {
-            if target.rect.minY > maxHeight / 2 {
-                target.rect.origin.y = maxHeight
-            } else {
-                target.rect = .zero
-            }
+            .frame(maxWidth: .infinity)
+            .background(Color("ViewColor"))
+            .frame(height: 60)
+            .cornerRadius(15, corners: [.topLeft, .topRight])
         }
     }
 }
 
+
+
+// Нет тренировки
 struct WorkoutDaysList_Previews: PreviewProvider {
     @State static var workoutDay: WorkoutDay? = nil
     static var previews: some View {
-        let safeArea = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0) // Пример значения
-        WorkoutDaysList(viewModel: WorkoutViewModel(), workoutDay: $workoutDay, safeArea: safeArea)
+        WorkoutDaysList(viewModel: WorkoutViewModel(), workoutDay: $workoutDay)
     }
 }
+
+//// Есть тренировки
+//struct WorkoutDaysList_Previews: PreviewProvider {
+//    @State static var workoutDay: WorkoutDay? = {
+//        // Создаем объект WorkoutDay для примера
+//        let context = PersistenceController.shared.container.viewContext
+//        let workoutDay = WorkoutDay(context: context)
+//        workoutDay.date = Date() // Устанавливаем текущую дату для примера
+//        // Сохраняем в Core Data (для работы с Preview)
+//        try? context.save()
+//        return workoutDay
+//    }()
+//
+//    @State static var viewModel = WorkoutViewModel()
+//
+//    static var previews: some View {
+//        WorkoutDaysList(viewModel: viewModel, workoutDay: $workoutDay)
+//            .onAppear {
+//                // Сымитировать загрузку тренировочных дней
+//                viewModel.cacheWorkoutDays(from: [workoutDay!])
+//            }
+//            .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+//    }
+//}
