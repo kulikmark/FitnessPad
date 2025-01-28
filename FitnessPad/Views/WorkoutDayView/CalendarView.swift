@@ -10,7 +10,6 @@ import SwiftUI
 
 struct CalendarView: View {
     @EnvironmentObject var viewModel: WorkoutViewModel
-    //    @Binding var workoutDay: WorkoutDay?
     @State var selectedMonth: Date = .currentMonth
     @Binding var selectedDate: Date
     @Binding var selectedIndex: Int

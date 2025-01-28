@@ -154,13 +154,13 @@
 			isa = PBXGroup;
 			children = (
 				6DADFDDB28044BE100A122E0 /* WorkoutDayView.swift */,
+				6DB8CF9A2D302DC8004404E1 /* CalendarView.swift */,
 				6D8B485E2D32DF0800516B7C /* EmptyWorkoutDayView.swift */,
 				6D6259B02D35D2F90082FC4B /* WorkoutDayViewHeaderView.swift */,
 				6D6259D52D38631A0082FC4B /* ExercisesListView.swift */,
 				6D6259D72D38633F0082FC4B /* ExerciseRowView.swift */,
 				6D6259D92D38635D0082FC4B /* ExerciseSetView.swift */,
 				6D6259DB2D3863870082FC4B /* ExerciseAttributes.swift */,
-				6DB8CF9A2D302DC8004404E1 /* CalendarView.swift */,
 				6D538FEF2C611B5D00478628 /* DeleteHintView.swift */,
 			);
 			path = WorkoutDayView;

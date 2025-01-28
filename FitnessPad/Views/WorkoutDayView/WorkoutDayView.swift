@@ -60,8 +60,8 @@ struct WorkoutDayView: View {
         .onChange(of: selectedDate) { _, newDate in
             viewModel.fetchWorkoutDays() // Обновляем данные при изменении даты
         }
-        
-        
+    
+ 
     }
     
     private var exercisesListView: some View {
@@ -141,29 +141,6 @@ struct WorkoutDayView: View {
                         .font(.system(size: 16))
                         .foregroundColor(Color("ButtonTextColor"))
                 }
-                
-                Spacer()
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color("ButtonColor"))
-            .cornerRadius(10)
-        }
-        
-        func dayMiniViewItem(for foodDay: FoodDay) -> some View {
-            HStack {
-                Image("miniView")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 40, height: 40)
-                    .clipped()
-                    .padding(.leading, 10)
-                
-                Spacer()
-                
-                Text(foodDay.date?.formattedDate() ?? "Unknown Date")
-                    .font(.system(size: 16))
-                    .foregroundColor(Color("ButtonTextColor"))
                 
                 Spacer()
             }

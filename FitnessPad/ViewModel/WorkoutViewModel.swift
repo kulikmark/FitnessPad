@@ -80,12 +80,6 @@ class WorkoutViewModel: ObservableObject {
         workoutDaysCache.values.sorted { ($0.date ?? Date()) < ($1.date ?? Date()) }
     }
     
-//    func updateBodyWeight(for workoutDay: WorkoutDay, newWeight: Double) {
-//        workoutDay.bodyWeight = newWeight
-//        saveContext()
-//        objectWillChange.send()
-//    }
-    
     // MARK: - Food Days Management
     func fetchFoodDays() {
         let request: NSFetchRequest<FoodDay> = FoodDay.fetchRequest()

@@ -419,7 +419,7 @@ struct FoodDayView_Previews: PreviewProvider {
         let context = PersistenceController.shared.container.viewContext
         
         // Создаем mock FoodDay и DaySummary
-        var foodDay = FoodDay(context: context)
+        let foodDay = FoodDay(context: context)
         foodDay.date = Date()
         
         let daySummary = DaySummary(context: context)
