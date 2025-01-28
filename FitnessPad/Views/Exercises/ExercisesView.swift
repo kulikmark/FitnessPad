@@ -8,417 +8,387 @@
 import SwiftUI
 import CoreData
 
-// MARK: - ExerciseItem Model
-class ExerciseItem: Identifiable {
-    var id = UUID()
-    var exerciseName: String
-    var exerciseImage: UIImage?
-    var categoryName: String?
-
-    init(exerciseName: String, exerciseImage: UIImage? = nil, categoryName: String? = nil) {
-        self.exerciseName = exerciseName
-        self.exerciseImage = exerciseImage
-        self.categoryName = categoryName
-    }
-
-    // Convert UIImage to Data
-    func toData() -> Data? {
-        return exerciseImage?.jpegData(compressionQuality: 1.0)
-    }
-
-    func isDefault(in context: NSManagedObjectContext) -> Bool {
-        let fetchRequest: NSFetchRequest<Exercise> = Exercise.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "exerciseName == %@ AND isDefault == YES", exerciseName)
-        fetchRequest.fetchLimit = 1
-
-        do {
-            if let existingExercise = try context.fetch(fetchRequest).first {
-                return existingExercise.isDefault
-            }
-        } catch {
-            print("Error fetching exercise: \(error)")
-        }
-        return false
-    }
+enum AlertType {
+    case delete(DefaultExercise)
+    case defaultExercise
+    case alreadyAdded
+    case resetDefaults
+    case error
 }
 
-// MARK: - ExerciseGroup Structure
-struct ExerciseGroup: Identifiable {
-    var id = UUID()
-    var name: String
-    var exercises: [ExerciseItem]
-}
-
-// MARK: - Default Exercise Items
-let exerciseItems: [ExerciseItem] = [
-    // MARK: - Add exercise items
-    ExerciseItem(exerciseName: "Bicep Curls", exerciseImage: UIImage(named: "Bicep Curls")),
-    ExerciseItem(exerciseName: "Bench Press", exerciseImage: UIImage(named: "Bench Press")),
-    ExerciseItem(exerciseName: "Dumbbell Row", exerciseImage: UIImage(named: "Dumbbell Row")),
-    ExerciseItem(exerciseName: "Hammer Curls", exerciseImage: UIImage(named: "Hammer Curls")),
-    ExerciseItem(exerciseName: "Pike Push-Ups", exerciseImage: UIImage(named: "Pike Push-Ups")),
-    ExerciseItem(exerciseName: "Pistol Squats", exerciseImage: UIImage(named: "Pistol Squats")),
-    ExerciseItem(exerciseName: "Pull-Ups", exerciseImage: UIImage(named: "Pull-Ups")),
-    ExerciseItem(exerciseName: "Push-Ups", exerciseImage: UIImage(named: "Push-Ups")),
-    ExerciseItem(exerciseName: "Shoulder Press", exerciseImage: UIImage(named: "Shoulder Press")),
-    ExerciseItem(exerciseName: "Squat", exerciseImage: UIImage(named: "Squat"))
-]
-
-// MARK: - Default Exercise Groups
-var defaultExerciseGroups: [ExerciseGroup] = [
-    // MARK: - Define exercise groups
-    ExerciseGroup(name: "ABS", exercises: []),
-    ExerciseGroup(name: "Arms", exercises: [
-        ExerciseItem(exerciseName: "Bicep Curls", exerciseImage: UIImage(named: "Bicep Curls"), categoryName: "Arms"),
-        ExerciseItem(exerciseName: "Hammer Curls", exerciseImage: UIImage(named: "Hammer Curls"), categoryName: "Arms")
-    ]),
-    ExerciseGroup(name: "Back", exercises: [
-        ExerciseItem(exerciseName: "Dumbbell Row", exerciseImage: UIImage(named: "Dumbbell Row"), categoryName: "Back"),
-        ExerciseItem(exerciseName: "Pull-Ups", exerciseImage: UIImage(named: "Pull-Ups"), categoryName: "Back")
-    ]),
-    ExerciseGroup(name: "Cardio", exercises: []),
-    ExerciseGroup(name: "Chest", exercises: [
-        ExerciseItem(exerciseName: "Bench Press", exerciseImage: UIImage(named: "Bench Press"), categoryName: "Chest"),
-        ExerciseItem(exerciseName: "Push-Ups", exerciseImage: UIImage(named: "Push-Ups"), categoryName: "Chest")
-    ]),
-    ExerciseGroup(name: "Legs", exercises: [
-        ExerciseItem(exerciseName: "Pistol Squats", exerciseImage: UIImage(named: "Pistol Squats"), categoryName: "Legs"),
-        ExerciseItem(exerciseName: "Squat", exerciseImage: UIImage(named: "Squat"), categoryName: "Legs")
-    ]),
-    ExerciseGroup(name: "Shoulders", exercises: [
-        ExerciseItem(exerciseName: "Pike Push-Ups", exerciseImage: UIImage(named: "Pike Push-Ups"), categoryName: "Shoulders"),
-        ExerciseItem(exerciseName: "Shoulder Press", exerciseImage: UIImage(named: "Shoulder Press"), categoryName: "Shoulders")
-    ])
-]
-
-// MARK: - ExercisesView
 struct ExercisesView: View {
-    @ObservedObject var viewModel: WorkoutViewModel
-    @Binding var workoutDay: WorkoutDay?
-    @Binding var selectedExerciseItem: ExerciseItem?
-    @Binding var isShowingExercisesView: Bool
-    @State private var isPresentingAddExerciseView = false
-    @State private var isPresentingEditExerciseView = false
-    @State private var isEditing = false
-    @State private var isShowingDeleteAlert = false
-    @State private var itemToDelete: ExerciseItem?
-    @State private var groupToDelete: ExerciseGroup?
+    @EnvironmentObject var viewModel: WorkoutViewModel
+    @State var isEditing = false
+    @State var selectedExercise: DefaultExercise?
+    @State private var isShowingAddExerciseView = false
+    @State private var isShowingEditExerciseView = false
+    @State private var isFromWokroutDayView: Bool
+    @State private var showFavouritesOnly = false
     
-    @FetchRequest(
-        entity: Exercise.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Exercise.exerciseName, ascending: true)]
-    ) private var coreDataExercises: FetchedResults<Exercise>
+    @State private var selectedDate: Date
     
-    private var allExerciseGroups: [ExerciseGroup] {
-        defaultExerciseGroups
-    }
+    @State private var alertType: AlertType?
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
     
-    private var hasUserExercisesOrCategories: Bool {
-        !coreDataExercises.isEmpty || !defaultExerciseGroups.contains { $0.exercises.isEmpty }
-    }
+    @State private var navigationPath = NavigationPath()
     
-    let gridForm = [GridItem(.flexible()), GridItem(.flexible())]
+    @Environment(\.presentationMode) var presentationMode
+    
+    // Добавьте инициализатор
+    init(isFromWokroutDayView: Bool = false, selectedDate: Date = Date()) {
+         _isFromWokroutDayView = State(initialValue: isFromWokroutDayView)
+         _selectedDate = State(initialValue: selectedDate)
+     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            header
-            exerciseGroups
+           NavigationStack(path: $navigationPath) { // Используем NavigationStack
+               VStack(alignment: .leading, spacing: 20) {
+                   exercisesListHeaderView
+                   exercisesListView
+               }
+               .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
+               .sheet(isPresented: $isShowingAddExerciseView) {
+                   ExerciseFormView(viewModel: viewModel)
+                       .background(Color("BackgroundColor"))
+                       .edgesIgnoringSafeArea(.all)
+                       .transition(.opacity)
+               }
+               .sheet(isPresented: $isShowingEditExerciseView) {
+                   if let exercise = selectedExercise {
+                       ExerciseFormView(viewModel: viewModel, exerciseToEdit: exercise)
+                           .background(Color("BackgroundColor"))
+                           .edgesIgnoringSafeArea(.all)
+                           .transition(.opacity)
+                   }
+               }
+               .alert(isPresented: $showingAlert) {
+                   alertForExerciseManipulations()
+               }
+               .navigationDestination(for: DefaultExercise.self) { exercise in
+                   ExerciseDetailView(viewModel: viewModel, exercise: exercise)
+               }
+           }
+       }
+    
+    // MARK: - Header
+    var exercisesListHeaderView: some View {
+        HStack(spacing: 15) {
+            Text("Exercises List")
+                .font(.system(size: 24))
+                .fontWeight(.medium)
+                .foregroundColor(Color("TextColor"))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+            
+            Spacer()
+            resetDefaultsButton
+            heartButton
+            addButton
         }
-        .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
-        .sheet(isPresented: $isPresentingAddExerciseView) {
-            AddExerciseView(viewModel: viewModel)
-        }
-        .sheet(isPresented: $isPresentingEditExerciseView) {
-            if let selectedExercise = selectedExerciseItem {
-                let category = coreDataExercises.first(where: { $0.exerciseName == selectedExercise.exerciseName })?.exerciseCategory ?? ""
-                EditExerciseView(viewModel: viewModel, exerciseItem: selectedExercise, originalCategory: category)
+        .padding(.trailing, 20)
+    }
+    
+    // MARK: - Exercises List View
+    private var exercisesListView: some View {
+        List {
+            // Группируем упражнения по категориям
+            ForEach(viewModel.allDefaultExercisesGroupedByCategory, id: \.category) { category, exercises in
+                let filteredExercises = showFavouritesOnly ? exercises.filter { $0.isFavourite } : exercises
+                
+                if !filteredExercises.isEmpty {
+                    Section {
+                        // Название категории
+                        Text(category)
+                            .font(.headline)
+                            .foregroundColor(Color("TextColor"))
+                            .padding(.top, 10)
+                            .padding(.bottom, 10)
+                        
+                        // Сами упражнения
+                        ForEach(filteredExercises, id: \.self) { exercise in
+                            exerciseRow(for: exercise)
+                                .listRowBackground(Color.clear)
+                        }
+                    }
+                    .listRowBackground(Color.clear)
+                }
             }
         }
-        .alert(isPresented: $isShowingDeleteAlert) {
-            Alert(
-                title: Text("are you sure??"),
-                message: Text("This action will delete the selected item. All data associated with it will be lost."),
-                primaryButton: .destructive(Text("Delete")) {
-                    if let group = groupToDelete {
-                        viewModel.deleteExercises(in: group.name)
-                    } else if let item = itemToDelete {
-                        deleteExercise(item)
+        .scrollIndicators(.hidden)
+        .scrollContentBackground(.hidden)
+        .listStyle(PlainListStyle())
+        .padding(.bottom, 33)
+    }
+    
+    
+    // MARK: - Swipe Actions
+    private func deleteSwipeAction(for exercise: DefaultExercise) -> some View {
+        Button(action: {
+            deleteExercise(exercise)
+            selectedExercise = exercise
+        }) {
+            Label("Delete", systemImage: "trash")
+                .foregroundColor(.text)
+        }
+        .tint(.red)
+    }
+    
+    private func editSwipeAction(for exercise: DefaultExercise) -> some View {
+        Button(action: {
+            isShowingEditExerciseView = true
+            selectedExercise = exercise
+            print(exercise)
+        }) {
+            if let uiImage = UIImage(systemName: "pencil")?
+                .withTintColor(UIColor(Color("TextColor")), renderingMode: .alwaysOriginal) {
+                Image(uiImage: uiImage) // Преобразуем UIImage в Image SwiftUI
+            }
+        }
+        .tint(.clear) // Убираем стандартный tint кнопки
+    }
+    
+    private func favouriteSwipeAction(for exercise: DefaultExercise) -> some View {
+        Button(action: {
+            toggleFavourite(for: exercise)
+        }) {
+            Image(uiImage: UIImage(systemName: exercise.isFavourite ? "heart.fill" : "heart")!
+                .withTintColor(exercise.isFavourite ? .red : .gray, renderingMode: .alwaysOriginal))
+        }
+        .tint(.clear) // Убираем системный tint
+    }
+    
+    private func toggleFavourite(for exercise: DefaultExercise) {
+        viewModel.toggleFavourite(for: exercise)
+    }
+    
+    private func lockedSwipeAction(for exercise: DefaultExercise) -> some View {
+        Button(action: {
+            // Показываем алерт, что это дефолтное упражнение
+            alertType = .defaultExercise
+            showingAlert = true
+        }) {
+            Image(systemName: "lock.fill")
+                .foregroundColor(.text)
+        }
+        .tint(.gray)
+    }
+    
+    // MARK: - Exercise Row View
+        private func exerciseRow(for exercise: DefaultExercise) -> some View {
+            Section {
+                Button {
+                    if isFromWokroutDayView {
+                        // Логика добавления упражнения в тренировочный день
+                        addExerciseToWorkoutDay(for: exercise, isFromWokroutDayView: true)
+                    } else {
+                        // Логика для перехода из таббара
+                        navigationPath.append(exercise)
                     }
+                } label: {
+                    HStack {
+                        exerciseImage(for: exercise)
+                            .frame(width: 100, height: 50)
+                            .clipShape(RoundedRectangle(cornerRadius: 3))
+                        
+                        Text(exercise.name ?? "Unknown")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color("TextColor"))
+                            .padding(.leading, 10)
+                        
+                        Spacer()
+                    }
+                    .frame(height: 50)
+                    .frame(maxWidth: .infinity)
+                }
+                .swipeActions {
+                    if exercise.isDefault {
+                        lockedSwipeAction(for: exercise)
+                    } else {
+                        deleteSwipeAction(for: exercise)
+                    }
+                    favouriteSwipeAction(for: exercise)
+                }
+            }
+        }
+
+    
+    // MARK: - Exercise Image View
+    func exerciseImage(for item: DefaultExercise) -> some View {
+        let defaultExerciseImage = UIImage(named: "defaultExerciseImage")!
+        let image: UIImage
+        if let imageData = item.image, let userImage = UIImage(data: imageData) {
+            image = userImage
+        } else {
+            image = defaultExerciseImage // Используйте здесь вашу картинку по умолчанию
+        }
+        
+        return Image(uiImage: image)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+    }
+    
+    // MARK: - Header Buttons
+    var resetDefaultsButton: some View {
+        HStack (spacing: 10) {
+            Text("Restore\nExercises")
+                .font(.system(size: 8))
+                .foregroundColor(Color("TextColor"))
+            
+            Button(action: {
+                alertType = .resetDefaults
+                showingAlert = true
+            }) {
+                Image(systemName: "arrow.counterclockwise")
+                    .font(.system(size: 16))
+                    .foregroundColor(Color("TextColor"))
+            }
+        }
+        .padding(.trailing, 20)
+    }
+    
+    var addButton: some View {
+        Button(action: {
+            isShowingAddExerciseView = true
+        }) {
+            Image(systemName: "plus")
+                .font(.system(size: 17))
+                .foregroundColor(Color("TextColor"))
+        }
+    }
+    
+    var heartButton: some View {
+        Button(action: {
+            showFavouritesOnly.toggle()
+        }) {
+            Image(systemName: showFavouritesOnly ? "heart.fill" : "heart")
+                .font(.system(size: 17))
+                .foregroundColor(showFavouritesOnly ? .red : Color("TextColor"))
+        }
+    }
+    
+    // MARK: - Helper Functions
+    
+    private func addExerciseToWorkoutDay(for exercise: DefaultExercise, isFromWokroutDayView: Bool = false) {
+        if isFromWokroutDayView {
+            // Логика добавления упражнения только при вызове из экрана деталей
+            if let workoutDay = viewModel.workoutDay(for: selectedDate),
+               workoutDay.exercisesArray.contains(where: { $0.id == exercise.id }) {
+                print("Exercise already added: \(exercise.name ?? "Unknown")")
+                alertType = .alreadyAdded
+                showingAlert = true
+            } else {
+                print("Adding exercise: \(exercise.name ?? "Unknown")")
+                viewModel.addExerciseToWorkoutDay(exercise, workoutDay: viewModel.workoutDay(for: selectedDate), date: selectedDate)
+                viewModel.fetchWorkoutDays() // Обновляем кэш
+                presentationMode.wrappedValue.dismiss()
+            }
+        } else {
+            // Логика для вызова из таббара (ничего не делаем или показываем сообщение)
+          
+        }
+    }
+    
+    
+    private func deleteExercise(_ exercise: DefaultExercise) {
+        if exercise.isDefault {
+            // Не даем удалить предустановленные упражнения
+            alertType = .defaultExercise
+            showingAlert = true
+        } else {
+            // Показываем предупреждение для удаления недефолтного упражнения
+            alertType = .delete(exercise)
+            showingAlert = true
+        }
+    }
+    
+    private func resetToDefaultExercises() {
+        
+        PersistenceController.shared.resetDefaultExercises(viewModel: viewModel)
+        
+    }
+    
+    private func confirmDeletion(for exercise: DefaultExercise) {
+        // Если пользователь подтвердил удаление
+        viewModel.deleteExerciseFromCoreData(exercise)
+        
+        // Удаляем упражнение из Core Data
+        let context = viewModel.viewContext
+        context.delete(exercise)
+        
+        do {
+            try context.save()
+        } catch {
+            print("Error saving after deletion: \(error)")
+        }
+    }
+    
+    private func alertForExerciseManipulations() -> Alert {
+        guard let alertType = alertType else {
+            return Alert(
+                title: Text("Error"),
+                message: Text("Something went wrong."),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+        
+        switch alertType {
+        case .delete(let exercise):
+            return Alert(
+                title: Text("Warning"),
+                message: Text("This will remove the exercise from all workout days and reset your progress. Are you sure you want to delete it?"),
+                primaryButton: .destructive(Text("Delete")) {
+                    confirmDeletion(for: exercise)
                 },
                 secondaryButton: .cancel()
             )
+        case .defaultExercise:
+            return Alert(
+                title: Text("Locked Operation"),
+                message: Text("You cannot delete or edit the default exercise."),
+                dismissButton: .default(Text("OK"))
+            )
+        case .alreadyAdded:
+            return Alert(
+                title: Text("Exercise Already Added"),
+                message: Text("This exercise is already added to your workout day."),
+                dismissButton: .default(Text("OK"))
+            )
+        case .resetDefaults:
+            return Alert(
+                title: Text("Reset Exercises"),
+                message: Text("All exercises will be reset to their original state. This action cannot be undone."),
+                primaryButton: .destructive(Text("Continue")) {
+                    resetToDefaultExercises()
+                },
+                secondaryButton: .cancel()
+            )
+        case .error:
+            return Alert(
+                title: Text("Error"),
+                message: Text("Something went wrong."),
+                dismissButton: .default(Text("OK"))
+            )
         }
-    }
-    
-    // MARK: - Header
-    private var header: some View {
-        HStack {
-            Text("Exercises")
-                .font(.system(size: 43))
-                .fontWeight(.medium)
-                .foregroundColor(Color("TextColor"))
-                .padding(.top, 20)
-                .padding(.leading, 20)
-                .padding(.bottom, 20)
-            
-            Spacer()
-            
-            editButton
-            addButton
-        }
-    }
-    
-    // MARK: - Edit Button
-    private var editButton: some View {
-        Button {
-            isEditing.toggle()
-        } label: {
-            Image(systemName: isEditing ? "checkmark" : "pencil")
-                .font(.system(size: 30, weight: .regular))
-                .foregroundColor(Color.black)
-                .padding(15)
-                .background(Circle().fill(Color("ButtonColor")))
-                .clipShape(Circle())
-                .padding()
-                .opacity(hasUserExercisesOrCategories ? 1.0 : 0.3)
-        }
-        .disabled(!hasUserExercisesOrCategories)
-    }
-    
-    // MARK: - Add Button
-    private var addButton: some View {
-        Button {
-            isPresentingAddExerciseView = true
-        } label: {
-            Image(systemName: "plus")
-                .font(.system(size: 30, weight: .regular))
-                .foregroundColor(Color.black)
-                .padding(15)
-                .background(Circle().fill(Color("ButtonColor")))
-                .clipShape(Circle())
-                .padding()
-        }
-    }
-    
-    // MARK: - Exercise Groups
-    private var exerciseGroups: some View {
-        ScrollView(showsIndicators: false) {
-            ForEach(allExerciseGroups, id: \.name) { group in
-                VStack(alignment: .leading, spacing: 15) {
-                    groupHeader(for: group)
-                    groupContent(for: group)
-                }
-            }
-        }
-        .padding(.bottom, 100)
-    }
-    
-    // MARK: - Group Header
-    private func groupHeader(for group: ExerciseGroup) -> some View {
-        HStack {
-            Text(group.name)
-                .font(.system(size: 30))
-                .fontWeight(.bold)
-                .foregroundColor(Color("TextColor"))
-                .padding(.leading, 20)
-                .padding(.bottom, 10)
-            
-            if !defaultExerciseGroups.contains(where: { $0.name == group.name }) {
-                deleteButton(for: group)
-            }
-        }
-    }
-    
-    // MARK: - Delete Button for Group
-    private func deleteButton(for group: ExerciseGroup) -> some View {
-        Button(action: {
-            groupToDelete = group
-            isShowingDeleteAlert = true
-        }) {
-            VStack {
-                Image(systemName: "trash")
-                    .font(.system(size: 25))
-                    .foregroundColor(.red)
-                    .padding(.leading, 10)
-                    .padding(.bottom, 10)
-                Text("Delete category")
-                    .foregroundColor(Color("TextColor"))
-                    .font(.system(size: 12))
-                    .padding(.bottom, 10)
-            }
-            .opacity(isEditing ? 1 : 0)
-        }
-    }
-    
-    // MARK: - Group Content
-    private func groupContent(for group: ExerciseGroup) -> some View {
-        let userExercises = coreDataExercises
-            .filter { $0.exerciseCategory == group.name && !$0.isDefault }
-            .map { exercise in
-                ExerciseItem(
-                    exerciseName: exercise.exerciseName ?? "",
-                    exerciseImage: UIImage(data: exercise.exerciseImage ?? Data()),
-                    categoryName: exercise.exerciseCategory
-                )
-            }
-        
-        let defaultExercises = group.exercises.filter { exerciseItem in
-            !userExercises.contains { $0.exerciseName == exerciseItem.exerciseName }
-        }
-
-        return Group {
-            if defaultExercises.isEmpty && userExercises.isEmpty {
-                Text("No exercises available")
-                    .font(.system(size: 20))
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
-                    .padding(.bottom, 20)
-            } else {
-                LazyVGrid(columns: gridForm) {
-                    ForEach(defaultExercises) { item in
-                        exerciseButton(for: item, in: group)
-                    }
-                    ForEach(userExercises) { item in
-                        exerciseButton(for: item, in: group)
-                    }
-                }
-                .padding(.bottom, 20)
-            }
-        }
-    }
-    
-    // MARK: - Exercise Button
-    private func exerciseButton(for item: ExerciseItem, in group: ExerciseGroup) -> some View {
-        ZStack(alignment: .topTrailing) {
-            Button {
-                if isEditing {
-                    if !item.isDefault(in: viewModel.viewContext) {  // Check if the exercise is default
-                        selectedExerciseItem = item
-                        isPresentingEditExerciseView = true
-                    } else {
-                        print("Cannot edit default exercises")
-                    }
-                } else if workoutDay != nil {
-                    addExerciseToWorkoutDay(with: item)
-                }
-            } label: {
-                VStack {
-                    exerciseImage(for: item)
-                    Text(item.exerciseName)
-                        .font(.system(size: 23))
-                        .fontWeight(.medium)
-                        .foregroundColor(Color("TextColor"))
-                        .padding(.vertical, 10)
-                }
-                .background(Color.white.opacity(0.1))
-                .cornerRadius(15)
-                .padding(.horizontal, 10)
-            }
-            
-            if !item.isDefault(in: viewModel.viewContext) {
-                deleteExerciseButton(for: item, in: group)
-            }
-        }
-        .disabled(workoutDay == nil && !isEditing)
-    }
-
-    // MARK: - Exercise Image
-    private func exerciseImage(for item: ExerciseItem) -> some View {
-        Group {
-            if let image = item.exerciseImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(minWidth: 150, maxWidth: 200, minHeight: 150, maxHeight: 200)
-                    .cornerRadius(15)
-            } else {
-                Image("defaultExerciseImage")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
-            }
-        }
-    }
-    
-    // MARK: - Delete Exercise Button
-    private func deleteExerciseButton(for item: ExerciseItem, in group: ExerciseGroup) -> some View {
-        Button(action: {
-            itemToDelete = item
-            isShowingDeleteAlert = true
-        }) {
-            Image(systemName: "trash")
-                .foregroundColor(.red)
-                .padding(10)
-                .background(Color.white.opacity(0.7))
-                .clipShape(Circle())
-                .offset(x: -7, y: -10)
-        }
-        .opacity(isEditing && !item.isDefault(in: viewModel.viewContext) ? 1 : 0)
-    }
-    
-    // MARK: - Delete Exercise
-    private func deleteExercise(_ item: ExerciseItem) {
-        if let exerciseToDelete = coreDataExercises.first(where: {
-            $0.exerciseName == item.exerciseName &&
-            $0.exerciseCategory == item.categoryName
-        }) {
-            if exerciseToDelete.isDefault {
-                print("Cannot delete default exercise: \(item.exerciseName)")
-            } else {
-                viewModel.deleteExercise(exerciseToDelete)
-            }
-        }
-    }
-    
-    // MARK: - Add Exercise to Workout Day
-    private func addExerciseToWorkoutDay(with exerciseItem: ExerciseItem) {
-        guard let workoutDay = workoutDay else {
-            print("Error: workoutDay is nil")
-            return
-        }
-
-        let existingExercises = workoutDay.exercisesArray
-        let exerciseAlreadyExists = existingExercises.contains {
-            $0.exerciseName == exerciseItem.exerciseName &&
-            $0.exerciseCategory == exerciseItem.categoryName
-        }
-
-        if !exerciseAlreadyExists {
-            let newExercise = Exercise(context: viewModel.viewContext)
-            newExercise.exerciseName = exerciseItem.exerciseName
-            newExercise.exerciseImage = exerciseItem.toData()
-            newExercise.exerciseCategory = exerciseItem.categoryName
-            newExercise.isDefault = false // User-defined exercise
-
-            let newSet = ExerciseSet(context: viewModel.viewContext)
-            newSet.count = 1
-            newSet.weight = 0.0
-            newSet.reps = 0
-            newExercise.addToSets(newSet)
-
-            workoutDay.addToExercises(newExercise)
-            viewModel.saveContext()
-        } else {
-            print("Exercise already exists, not adding.")
-        }
-
-        isShowingExercisesView = false
     }
 }
 
+
 // MARK: - Previews
+
 struct ExercisesView_Previews: PreviewProvider {
     static var previews: some View {
-        let context = PersistenceController.preview.container.viewContext
-        let workoutViewModel = WorkoutViewModel()
-        let workoutDay = WorkoutDay(context: context)
+        // Создание фейковых упражнений
+        let exercise1 = DefaultExercise(context: PersistenceController.shared.container.viewContext)
+        exercise1.name = "Push Up"
+        exercise1.image = UIImage(named: "defaultExerciseImage")?.jpegData(compressionQuality: 1.0)
         
-        return ExercisesView(
-            viewModel: workoutViewModel,
-            workoutDay: .constant(workoutDay),
-            selectedExerciseItem: .constant(nil),
-            isShowingExercisesView: .constant(true)
-        )
-        .environment(\.managedObjectContext, context)
+        // Добавляем фейковые упражнения в WorkoutViewModel
+        let viewModel = WorkoutViewModel()
+        viewModel.allDefaultExercises = [exercise1]
+        
+        return ExercisesView()
+        .environmentObject(viewModel) // Передаем viewModel как EnvironmentObject
+        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
     }
 }
