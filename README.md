@@ -21,15 +21,15 @@
 
 <table>
   <tr>
-    <td align="center"><img src="Screenshots/1.png" width="200"></td>
-    <td align="center"><img src="Screenshots/2.png" width="200"></td>
-    <td align="center"><img src="Screenshots/3.png" width="200"></td>
-    <td align="center"><img src="Screenshots/4.png" width="200"></td>
-    <td align="center"><img src="Screenshots/5.png" width="200"></td>
-    <td align="center"><img src="Screenshots/6.png" width="200"></td>
-    <td align="center"><img src="Screenshots/7.png" width="200"></td>
-    <td align="center"><img src="Screenshots/8.png" width="200"></td>
-    <td align="center"><img src="Screenshots/9.png" width="200"></td>
-    <td align="center"><img src="Screenshots/10.png" width="200"></td>
+    <td align="center"><img src="Screenshots/1.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/2.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/3.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/4.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/5.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/6.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/7.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/8.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/9.jpeg" width="200"></td>
+    <td align="center"><img src="Screenshots/10.jpeg" width="200"></td>
   </tr>
 </table>
