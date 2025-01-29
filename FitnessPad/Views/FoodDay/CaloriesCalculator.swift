@@ -158,9 +158,12 @@ struct CaloriesCalculator: View {
         .overlay(alignment: .topTrailing) {
             CloseButtonCircle()
         }
-        .simultaneousGesture(TapGesture().onEnded {
+        .onTapGesture {
             UIApplication.shared.endEditing(true)
-        })
+        }
+//        .simultaneousGesture(TapGesture().onEnded {
+//            UIApplication.shared.endEditing(true)
+//        })
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Error"), message: Text("Please enter valid data."), dismissButton: .default(Text("OK")))
         }

@@ -124,7 +124,7 @@ class WorkoutViewModel: ObservableObject {
         }
     }
     
-    func addMeal(name: String, proteins: Double, fats: Double, carbohydrates: Double, calories: Double, date: Date) {
+    func addMeal(name: String, products: String, proteins: Double, fats: Double, carbohydrates: Double, calories: Double, date: Date) {
         let context = PersistenceController.shared.container.viewContext
         let foodDay = self.foodDay(for: date) ?? FoodDay(context: context)
         foodDay.id = UUID()
@@ -133,6 +133,7 @@ class WorkoutViewModel: ObservableObject {
         let newMeal = Meal(context: context)
         newMeal.id = UUID()
         newMeal.name = name
+        newMeal.products = products
         newMeal.proteins = proteins
         newMeal.fats = fats
         newMeal.carbohydrates = carbohydrates
@@ -157,8 +158,9 @@ class WorkoutViewModel: ObservableObject {
         print("Meal saved: \(newMeal.name ?? "Unknown")")
     }
     
-    func updateMeal(meal: Meal, name: String, calories: Double, proteins: Double, fats: Double, carbohydrates: Double) {
+    func updateMeal(meal: Meal, name: String, products: String, calories: Double, proteins: Double, fats: Double, carbohydrates: Double) {
         meal.name = name
+        meal.products = products
         meal.calories = calories
         meal.proteins = proteins
         meal.fats = fats

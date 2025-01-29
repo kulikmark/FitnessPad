@@ -8,6 +8,8 @@
 import SwiftUI
 import CoreData
 
+import SwiftUI
+
 struct WorkoutDayView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var viewModel: WorkoutViewModel
@@ -24,20 +26,15 @@ struct WorkoutDayView: View {
                 if viewModel.workoutDay(for: selectedDate) != nil {
                     WorkoutDayViewHeaderView(selectedDate: $selectedDate)
                     exercisesListView
-                    
-                    
                 } else {
                     EmptyWorkoutDayView(selectedDate: $selectedDate)
                 }
             }
-            //                .padding(.bottom, 50)
-            //                .frame(maxHeight: .infinity)
             .simultaneousGesture(TapGesture().onEnded {
                 UIApplication.shared.endEditing(true)
                 viewModel.saveContext()
             })
             
-            // ✅ WorkoutdayMiniView
             VStack {
                 Spacer()
                 DaysMiniView(selectedDate: $selectedDate, selectedIndex: $selectedIndex)
@@ -49,25 +46,41 @@ struct WorkoutDayView: View {
                     .sheet(isPresented: $isCalendarPresented) {
                         CalendarView(selectedDate: $selectedDate, selectedIndex: $selectedIndex)
                             .environmentObject(viewModel)
+                            .onChange(of: selectedDate) { _, newDate in
+                                        // Когда выбранная дата изменяется, обновляем selectedIndex
+                                        if let index = viewModel.sortedWorkoutDays.firstIndex(where: { $0.date == newDate }) {
+                                            selectedIndex = index
+                                        }
+                                    }
                     }
             }
-            
-            
         }
         .onAppear {
             selectedDate = Calendar.current.startOfDay(for: Date())
+            updateSelectedIndex(for: selectedDate) // Инициализация индекса при старте
         }
-        .onChange(of: selectedDate) { _, newDate in
-            viewModel.fetchWorkoutDays() // Обновляем данные при изменении даты
+//        .onChange(of: selectedDate) { _, newDate in
+//            viewModel.fetchWorkoutDays() // Обновляем данные при изменении даты
+//            updateSelectedIndex(for: newDate) // Обновляем индекс при изменении даты
+//        }
+        .onChange(of: viewModel.sortedWorkoutDays) {
+            if let workoutDay = viewModel.workoutDay(for: selectedDate),
+               let index = viewModel.sortedWorkoutDays.firstIndex(where: { $0.id == workoutDay.id }) {
+                selectedIndex = index
+            }
         }
+    }
     
- 
+    private func updateSelectedIndex(for date: Date) {
+        if let workoutDay = viewModel.workoutDay(for: date),
+           let index = viewModel.sortedWorkoutDays.firstIndex(where: { $0.id == workoutDay.id }) {
+            selectedIndex = index
+        }
     }
     
     private var exercisesListView: some View {
         ExercisesListView(selectedDate: $selectedDate)
     }
-    
     
     struct DaysMiniView: View {
         @EnvironmentObject var viewModel: WorkoutViewModel
@@ -93,30 +106,6 @@ struct WorkoutDayView: View {
             .background(Color("ViewColor"))
             .frame(height: 65)
             .cornerRadius(15, corners: [.topLeft, .topRight])
-            .onAppear {
-                updateSelectedIndexForCurrentDate()
-            }
-            .onChange(of: selectedIndex) { oldIndex, newIndex in
-                let newWorkoutDay = viewModel.sortedWorkoutDays[newIndex]
-                selectedDate = newWorkoutDay.date ?? Date()
-            }
-            .onChange(of: selectedDate) { _, newDate in
-                updateSelectedIndexForDate(newDate)
-            }
-        }
-        
-        private func updateSelectedIndexForCurrentDate() {
-            
-            if let todayWorkoutDay = viewModel.workoutDay(for: Date()) {
-                updateSelectedIndexForDate(todayWorkoutDay.date ?? Date())
-            }
-        }
-        
-        
-        private func updateSelectedIndexForDate(_ date: Date) {
-            if let index = viewModel.sortedWorkoutDays.firstIndex(where: { Calendar.current.isDate($0.date ?? Date(), inSameDayAs: date) }) {
-                selectedIndex = index
-            }
         }
         
         func dayMiniViewItem(for workoutDay: WorkoutDay) -> some View {
@@ -131,12 +120,9 @@ struct WorkoutDayView: View {
                 Spacer()
                 
                 HStack(alignment: .center, spacing: 4) {
-                    // Отображаем дату
                     Text(workoutDay.date?.formattedDate() ?? "Unknown Date")
                         .font(.system(size: 16))
                         .foregroundColor(Color("ButtonTextColor"))
-                    
-                    // Отображаем день недели (например, "WED")
                     Text(workoutDay.date?.formattedDayOfWeek() ?? "N/A")
                         .font(.system(size: 16))
                         .foregroundColor(Color("ButtonTextColor"))
@@ -166,6 +152,7 @@ struct WorkoutDayView: View {
         }
     }
 }
+
 
 
 //// Нет тренировки
