@@ -63,6 +63,13 @@ struct WorkoutDayView: View {
 //            viewModel.fetchWorkoutDays() // Обновляем данные при изменении даты
 //            updateSelectedIndex(for: newDate) // Обновляем индекс при изменении даты
 //        }
+        .onChange(of: selectedDate) { _, newDate in
+            if let index = viewModel.sortedWorkoutDays.firstIndex(where: { $0.date == newDate }) {
+                selectedIndex = index // Обновляем индекс при изменении даты
+            }
+        }
+
+        // При создании тренировки TabView отображает дату этой созданной тренировки
         .onChange(of: viewModel.sortedWorkoutDays) {
             if let workoutDay = viewModel.workoutDay(for: selectedDate),
                let index = viewModel.sortedWorkoutDays.firstIndex(where: { $0.id == workoutDay.id }) {
@@ -99,6 +106,13 @@ struct WorkoutDayView: View {
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     .animation(.easeInOut(duration: 0.3), value: selectedIndex)
+                    .onChange(of: selectedIndex) { _, newIndex in
+                        if newIndex < viewModel.sortedWorkoutDays.count {
+                            let selectedWorkoutDay = viewModel.sortedWorkoutDays[newIndex]
+                            selectedDate = selectedWorkoutDay.date ?? Date() // Обновляем выбранную дату
+                        }
+                    }
+
                 } else {
                     emptyTabView()
                 }
@@ -106,6 +120,14 @@ struct WorkoutDayView: View {
             .background(Color("ViewColor"))
             .frame(height: 65)
             .cornerRadius(15, corners: [.topLeft, .topRight])
+           
+        }
+        
+        private func updateSelectedIndex(for date: Date) {
+            if let workoutDay = viewModel.workoutDay(for: date),
+               let index = viewModel.sortedWorkoutDays.firstIndex(where: { $0.id == workoutDay.id }) {
+                selectedIndex = index
+            }
         }
         
         func dayMiniViewItem(for workoutDay: WorkoutDay) -> some View {

@@ -7,84 +7,6 @@
 
 import Foundation
 
-//struct Product: Identifiable {
-//    let id = UUID()
-//    let name: String
-//    let category: String
-//    let proteins: Double
-//    let fats: Double
-//    let carbohydrates: Double
-//    let calories: Double
-//}
-//
-//let productsByCategory: [String: [Product]] = [
-//    "Milk": [
-//        Product(name: "Milk 2.5%", category: "Milk", proteins: 2.8, fats: 2.5, carbohydrates: 4.7, calories: 52),
-//        Product(name: "Milk 3.2%", category: "Milk", proteins: 2.9, fats: 3.2, carbohydrates: 4.7, calories: 60),
-//        Product(name: "Skim Milk", category: "Milk", proteins: 3.4, fats: 0.2, carbohydrates: 5.0, calories: 40),
-//        Product(name: "Whole Milk", category: "Milk", proteins: 3.3, fats: 8.0, carbohydrates: 12.0, calories: 150)
-//    ],
-//    "Meat": [
-//        Product(name: "Chicken Breast", category: "Meat", proteins: 31, fats: 3.6, carbohydrates: 0, calories: 165),
-//        Product(name: "Beef", category: "Meat", proteins: 26, fats: 15, carbohydrates: 0, calories: 250),
-//        Product(name: "Pork", category: "Meat", proteins: 25, fats: 16, carbohydrates: 0, calories: 242),
-//        Product(name: "Lamb", category: "Meat", proteins: 25, fats: 21, carbohydrates: 0, calories: 294),
-//        Product(name: "Turkey Breast", category: "Meat", proteins: 29, fats: 1.0, carbohydrates: 0, calories: 135)
-//    ],
-//    "Fish": [
-//        Product(name: "Salmon", category: "Fish", proteins: 20, fats: 13, carbohydrates: 0, calories: 208),
-//        Product(name: "Trout", category: "Fish", proteins: 23, fats: 10, carbohydrates: 0, calories: 168),
-//        Product(name: "Tuna", category: "Fish", proteins: 22, fats: 5, carbohydrates: 0, calories: 132),
-//        Product(name: "Cod", category: "Fish", proteins: 20, fats: 0.7, carbohydrates: 0, calories: 90),
-//        Product(name: "Shrimp", category: "Fish", proteins: 24, fats: 0.3, carbohydrates: 0, calories: 99)
-//    ],
-//    "Vegetables": [
-//        Product(name: "Broccoli", category: "Vegetables", proteins: 2.8, fats: 0.4, carbohydrates: 6.6, calories: 55),
-//        Product(name: "Spinach", category: "Vegetables", proteins: 2.9, fats: 0.4, carbohydrates: 3.6, calories: 23),
-//        Product(name: "Carrot", category: "Vegetables", proteins: 0.9, fats: 0.2, carbohydrates: 9.6, calories: 41),
-//        Product(name: "Potato", category: "Vegetables", proteins: 2.0, fats: 0.2, carbohydrates: 17.5, calories: 77),
-//        Product(name: "Cucumber", category: "Vegetables", proteins: 0.8, fats: 0.1, carbohydrates: 3.6, calories: 16)
-//    ],
-//    "Fruits": [
-//        Product(name: "Apple", category: "Fruits", proteins: 0.5, fats: 0.3, carbohydrates: 25, calories: 95),
-//        Product(name: "Banana", category: "Fruits", proteins: 1.3, fats: 0.3, carbohydrates: 27, calories: 105),
-//        Product(name: "Orange", category: "Fruits", proteins: 0.9, fats: 0.2, carbohydrates: 12, calories: 62),
-//        Product(name: "Blueberries", category: "Fruits", proteins: 1.0, fats: 0.3, carbohydrates: 14, calories: 84),
-//        Product(name: "Strawberry", category: "Fruits", proteins: 0.8, fats: 0.3, carbohydrates: 7.7, calories: 32)
-//    ],
-//    "Grains": [
-//        Product(name: "Rice", category: "Grains", proteins: 4.2, fats: 0.4, carbohydrates: 45, calories: 200),
-//        Product(name: "Oats", category: "Grains", proteins: 2.5, fats: 1.5, carbohydrates: 27, calories: 150),
-//        Product(name: "Quinoa", category: "Grains", proteins: 4.1, fats: 1.9, carbohydrates: 21, calories: 120),
-//        Product(name: "Whole Wheat Bread", category: "Grains", proteins: 13, fats: 3.4, carbohydrates: 40, calories: 250),
-//        Product(name: "Pasta", category: "Grains", proteins: 7.0, fats: 1.1, carbohydrates: 25, calories: 131)
-//    ],
-//    "Dairy": [
-//        Product(name: "Cheddar Cheese", category: "Dairy", proteins: 25, fats: 33, carbohydrates: 1.3, calories: 402),
-//        Product(name: "Greek Yogurt", category: "Dairy", proteins: 10, fats: 0.4, carbohydrates: 4, calories: 59),
-//        Product(name: "Butter", category: "Dairy", proteins: 1.0, fats: 81.1, carbohydrates: 0.1, calories: 717),
-//        Product(name: "Cottage Cheese", category: "Dairy", proteins: 11, fats: 4.3, carbohydrates: 3.4, calories: 98),
-//        Product(name: "Mozzarella", category: "Dairy", proteins: 22, fats: 22, carbohydrates: 2.3, calories: 280)
-//    ],
-//    "Nuts and Seeds": [
-//        Product(name: "Almonds", category: "Nuts and Seeds", proteins: 21.2, fats: 49.9, carbohydrates: 21.6, calories: 576),
-//        Product(name: "Walnuts", category: "Nuts and Seeds", proteins: 15.2, fats: 65.2, carbohydrates: 13.7, calories: 654),
-//        Product(name: "Chia Seeds", category: "Nuts and Seeds", proteins: 16.5, fats: 30.7, carbohydrates: 42.1, calories: 486),
-//        Product(name: "Sunflower Seeds", category: "Nuts and Seeds", proteins: 20.8, fats: 51.5, carbohydrates: 20.0, calories: 584),
-//        Product(name: "Peanut Butter", category: "Nuts and Seeds", proteins: 25, fats: 50, carbohydrates: 20, calories: 588)
-//    ],
-//    "Beverages": [
-//        Product(name: "Coffee", category: "Beverages", proteins: 0.3, fats: 0.0, carbohydrates: 0.0, calories: 2),
-//        Product(name: "Tea", category: "Beverages", proteins: 0.0, fats: 0.0, carbohydrates: 0.0, calories: 2),
-//        Product(name: "Orange Juice", category: "Beverages", proteins: 1.0, fats: 0.2, carbohydrates: 26, calories: 112),
-//        Product(name: "Coca Cola", category: "Beverages", proteins: 0, fats: 0, carbohydrates: 39, calories: 140),
-//        Product(name: "Water", category: "Beverages", proteins: 0, fats: 0, carbohydrates: 0, calories: 0)
-//    ]
-//]
-
-
-import Foundation
-
 struct Product: Identifiable {
     let id = UUID()
     let name: String
@@ -212,129 +134,77 @@ let productsByCategory: [String: [Product]] = [
            Product(name: "Йогурт греческий", category: "Молочные продукты", proteins: 5, fats: 3.2, carbohydrates: 3.5, calories: 66),
            Product(name: "\"Actimel\" разных видов", category: "Молочные продукты", proteins: 2.7, fats: 1.5, carbohydrates: 10.5, calories: 71)
        ],
-    "Говядина": [
-           Product(name: "Говядина 1 категории", category: "Говядина", proteins: 18.6, fats: 16, carbohydrates: 0, calories: 218),
-           Product(name: "Говядина 2 категории", category: "Говядина", proteins: 20, fats: 9.8, carbohydrates: 0, calories: 168),
-           Product(name: "Говядина, вырезка", category: "Говядина", proteins: 22.2, fats: 7.1, carbohydrates: 0, calories: 158)
+    "Мясо": [
+           Product(name: "Говядина 1 категории", category: "Мясо", proteins: 18.6, fats: 16, carbohydrates: 0, calories: 218),
+           Product(name: "Говядина 2 категории", category: "Мясо", proteins: 20, fats: 9.8, carbohydrates: 0, calories: 168),
+           Product(name: "Говядина, вырезка", category: "Мясо", proteins: 22.2, fats: 7.1, carbohydrates: 0, calories: 158),
+           Product(name: "Телятина 1 категории", category: "Мясо", proteins: 19.7, fats: 2, carbohydrates: 0, calories: 97),
+           Product(name: "Свинина жирная", category: "Мясо", proteins: 11.7, fats: 49.3, carbohydrates: 0, calories: 491),
+           Product(name: "Свинина мясная", category: "Мясо", proteins: 14.3, fats: 33.3, carbohydrates: 0, calories: 357),
+           Product(name: "Свинина, вырезка", category: "Мясо", proteins: 19.4, fats: 7.1, carbohydrates: 0, calories: 142),
+           Product(name: "Баранина 1 категории", category: "Мясо", proteins: 15.6, fats: 16.3, carbohydrates: 0, calories: 209),
+           Product(name: "Баранина 2 категории", category: "Мясо", proteins: 19.8, fats: 9.6, carbohydrates: 0, calories: 166),
+           Product(name: "Конина", category: "Мясо", proteins: 20.2, fats: 7, carbohydrates: 0, calories: 187),
+           Product(name: "Язык говяжий", category: "Мясо", proteins: 16, fats: 12.1, carbohydrates: 2.2, calories: 173),
+           Product(name: "Язык свиной", category: "Мясо", proteins: 15.9, fats: 16, carbohydrates: 2.1, calories: 208),
+           Product(name: "Печень говяжья", category: "Мясо", proteins: 17.9, fats: 3.7, carbohydrates: 5.3, calories: 127),
+           Product(name: "Печень свиная", category: "Мясо", proteins: 18.8, fats: 3.8, carbohydrates: 4.7, calories: 109),
+           Product(name: "Кролик", category: "Мясо", proteins: 21.2, fats: 11, carbohydrates: 0, calories: 183),
+           Product(name: "Кабан", category: "Мясо", proteins: 21.5, fats: 3.3, carbohydrates: 0, calories: 122),
+           Product(name: "Лось", category: "Мясо", proteins: 23, fats: 1.5, carbohydrates: 0, calories: 111),
+           Product(name: "Оленина", category: "Мясо", proteins: 19.5, fats: 8.5, carbohydrates: 0, calories: 155)
        ],
-       "Телятина": [
-           Product(name: "Телятина 1 категории", category: "Телятина", proteins: 19.7, fats: 2, carbohydrates: 0, calories: 97)
+       "Птица": [
+           Product(name: "Бройлеры (цыплята) 1 кат.", category: "Птица", proteins: 18.7, fats: 16.1, carbohydrates: 0, calories: 220),
+           Product(name: "Бройлеры (цыплята) 2 кат.", category: "Птица", proteins: 19.7, fats: 11.2, carbohydrates: 0, calories: 180),
+           Product(name: "Курица 1 кат.", category: "Птица", proteins: 18.2, fats: 18.4, carbohydrates: 0, calories: 238),
+           Product(name: "Курица 2 кат.", category: "Птица", proteins: 21.2, fats: 8.2, carbohydrates: 0, calories: 159),
+           Product(name: "Куриная грудка", category: "Птица", proteins: 23.6, fats: 1.9, carbohydrates: 0, calories: 113),
+           Product(name: "Куриные окорочка", category: "Птица", proteins: 16.8, fats: 10.2, carbohydrates: 0, calories: 158),
+           Product(name: "Куриная печень", category: "Птица", proteins: 19.1, fats: 6.3, carbohydrates: 0.6, calories: 136),
+           Product(name: "Куриное сердце", category: "Птица", proteins: 15.8, fats: 10.3, carbohydrates: 0.8, calories: 159),
+           Product(name: "Индейка", category: "Птица", proteins: 19.5, fats: 22, carbohydrates: 0, calories: 276),
+           Product(name: "Индейка, грудка", category: "Птица", proteins: 23.6, fats: 1.5, carbohydrates: 0, calories: 114),
+           Product(name: "Индейка, фарш", category: "Птица", proteins: 20, fats: 8, carbohydrates: 0.5, calories: 161),
+           Product(name: "Утка домашняя, мясо и кожа", category: "Птица", proteins: 15.8, fats: 38, carbohydrates: 0, calories: 405),
+           Product(name: "Утка дикая, мясо и кожа", category: "Птица", proteins: 17.4, fats: 15.2, carbohydrates: 0, calories: 211),
+           Product(name: "Утка дикая, мясо", category: "Птица", proteins: 19.8, fats: 4.3, carbohydrates: 0, calories: 123),
+           Product(name: "Перепел, мясо и кожа", category: "Птица", proteins: 19.6, fats: 12, carbohydrates: 0, calories: 192),
+           Product(name: "Страусиное мясо", category: "Птица", proteins: 21.8, fats: 2.3, carbohydrates: 0, calories: 114),
+           Product(name: "Фазан, мясо и кожа", category: "Птица", proteins: 22.7, fats: 9.3, carbohydrates: 0, calories: 181),
+           Product(name: "Фазан, грудка", category: "Птица", proteins: 24.3, fats: 3.2, carbohydrates: 0, calories: 133),
        ],
-       "Свинина": [
-           Product(name: "Свинина жирная", category: "Свинина", proteins: 11.7, fats: 49.3, carbohydrates: 0, calories: 491),
-           Product(name: "Свинина мясная", category: "Свинина", proteins: 14.3, fats: 33.3, carbohydrates: 0, calories: 357),
-           Product(name: "Свинина, вырезка", category: "Свинина", proteins: 19.4, fats: 7.1, carbohydrates: 0, calories: 142)
-       ],
-       "Баранина": [
-           Product(name: "Баранина 1 категории", category: "Баранина", proteins: 15.6, fats: 16.3, carbohydrates: 0, calories: 209),
-           Product(name: "Баранина 2 категории", category: "Баранина", proteins: 19.8, fats: 9.6, carbohydrates: 0, calories: 166)
-       ],
-       "Конина": [
-           Product(name: "Конина", category: "Конина", proteins: 20.2, fats: 7, carbohydrates: 0, calories: 187)
-       ],
-       "Язык": [
-           Product(name: "Язык говяжий", category: "Язык", proteins: 16, fats: 12.1, carbohydrates: 2.2, calories: 173),
-           Product(name: "Язык свиной", category: "Язык", proteins: 15.9, fats: 16, carbohydrates: 2.1, calories: 208)
-       ],
-       "Печень": [
-           Product(name: "Печень говяжья", category: "Печень", proteins: 17.9, fats: 3.7, carbohydrates: 5.3, calories: 127),
-           Product(name: "Печень свиная", category: "Печень", proteins: 18.8, fats: 3.8, carbohydrates: 4.7, calories: 109)
-       ],
-       "Курица": [
-           Product(name: "Бройлеры (цыплята) 1 кат.", category: "Курица", proteins: 18.7, fats: 16.1, carbohydrates: 0, calories: 220),
-           Product(name: "Бройлеры (цыплята) 2 кат.", category: "Курица", proteins: 19.7, fats: 11.2, carbohydrates: 0, calories: 180),
-           Product(name: "Курица 1 кат.", category: "Курица", proteins: 18.2, fats: 18.4, carbohydrates: 0, calories: 238),
-           Product(name: "Курица 2 кат.", category: "Курица", proteins: 21.2, fats: 8.2, carbohydrates: 0, calories: 159),
-           Product(name: "Куриная грудка", category: "Курица", proteins: 23.6, fats: 1.9, carbohydrates: 0, calories: 113),
-           Product(name: "Куриные окорочка", category: "Курица", proteins: 16.8, fats: 10.2, carbohydrates: 0, calories: 158),
-           Product(name: "Куриная печень", category: "Курица", proteins: 19.1, fats: 6.3, carbohydrates: 0.6, calories: 136),
-           Product(name: "Куриное сердце", category: "Курица", proteins: 15.8, fats: 10.3, carbohydrates: 0.8, calories: 159)
-       ],
-       "Индейка": [
-           Product(name: "Индейка", category: "Индейка", proteins: 19.5, fats: 22, carbohydrates: 0, calories: 276),
-           Product(name: "Индейка, грудка", category: "Индейка", proteins: 23.6, fats: 1.5, carbohydrates: 0, calories: 114),
-           Product(name: "Индейка, фарш", category: "Индейка", proteins: 20, fats: 8, carbohydrates: 0.5, calories: 161)
-       ],
-       "Утка": [
-           Product(name: "Утка домашняя, мясо и кожа", category: "Утка", proteins: 15.8, fats: 38, carbohydrates: 0, calories: 405),
-           Product(name: "Утка дикая, мясо и кожа", category: "Утка", proteins: 17.4, fats: 15.2, carbohydrates: 0, calories: 211),
-           Product(name: "Утка дикая, мясо", category: "Утка", proteins: 19.8, fats: 4.3, carbohydrates: 0, calories: 123)
-       ],
-       "Перепел": [
-           Product(name: "Перепел, мясо и кожа", category: "Перепел", proteins: 19.6, fats: 12, carbohydrates: 0, calories: 192)
-       ],
-       "Страусиное мясо": [
-           Product(name: "Страусиное мясо", category: "Страусиное мясо", proteins: 21.8, fats: 2.3, carbohydrates: 0, calories: 114)
-       ],
-       "Фазан": [
-           Product(name: "Фазан, мясо и кожа", category: "Фазан", proteins: 22.7, fats: 9.3, carbohydrates: 0, calories: 181),
-           Product(name: "Фазан, грудка", category: "Фазан", proteins: 24.3, fats: 3.2, carbohydrates: 0, calories: 133)
-       ],
-       "Кролик": [
-           Product(name: "Кролик", category: "Кролик", proteins: 21.2, fats: 11, carbohydrates: 0, calories: 183)
-       ],
-       "Кабан": [
-           Product(name: "Кабан", category: "Кабан", proteins: 21.5, fats: 3.3, carbohydrates: 0, calories: 122)
-       ],
-       "Лось": [
-           Product(name: "Лось", category: "Лось", proteins: 23, fats: 1.5, carbohydrates: 0, calories: 111)
-       ],
-       "Оленина": [
-           Product(name: "Оленина", category: "Оленина", proteins: 19.5, fats: 8.5, carbohydrates: 0, calories: 155)
-       ],
-    "Колбаса вареная": [
-           Product(name: "Диетическая", category: "Колбаса вареная", proteins: 12.1, fats: 13.5, carbohydrates: 0, calories: 170),
-           Product(name: "Докторская", category: "Колбаса вареная", proteins: 12.8, fats: 22.2, carbohydrates: 1.5, calories: 257),
-           Product(name: "Любительская", category: "Колбаса вареная", proteins: 12.2, fats: 28, carbohydrates: 0.1, calories: 301),
-           Product(name: "Молочная", category: "Колбаса вареная", proteins: 11.7, fats: 22.8, carbohydrates: 0.2, calories: 252),
-           Product(name: "Московская", category: "Колбаса вареная", proteins: 11.5, fats: 21.8, carbohydrates: 2, calories: 250),
-           Product(name: "Русская", category: "Колбаса вареная", proteins: 11.5, fats: 27.9, carbohydrates: 1.7, calories: 302)
-       ],
-       "Колбаса варено-копченая": [
-           Product(name: "Московская", category: "Колбаса варено-копченая", proteins: 19.1, fats: 36.6, carbohydrates: 0.2, calories: 406),
-           Product(name: "Сервелат", category: "Колбаса варено-копченая", proteins: 16.1, fats: 40.1, carbohydrates: 0, calories: 425)
-       ],
-       "Колбаса полукопченая": [
-           Product(name: "Краковская", category: "Колбаса полукопченая", proteins: 16.2, fats: 44.6, carbohydrates: 0, calories: 466),
-           Product(name: "Одесская", category: "Колбаса полукопченая", proteins: 14.8, fats: 38.1, carbohydrates: 0.3, calories: 402)
-       ],
-       "Колбаса сырокопченая": [
-           Product(name: "Брауншвейгская", category: "Колбаса сырокопченая", proteins: 27.7, fats: 42.2, carbohydrates: 0.2, calories: 491),
-           Product(name: "Московская", category: "Колбаса сырокопченая", proteins: 24.8, fats: 41.5, carbohydrates: 0, calories: 473),
-           Product(name: "Свиная", category: "Колбаса сырокопченая", proteins: 13, fats: 57, carbohydrates: 0.2, calories: 566),
-           Product(name: "Зернистая", category: "Колбаса сырокопченая", proteins: 9.9, fats: 62.8, carbohydrates: 0.3, calories: 606)
-       ],
-       "Колбаса ливерная": [
-           Product(name: "Ливерная", category: "Колбаса ливерная", proteins: 14.4, fats: 28.5, carbohydrates: 2.2, calories: 326)
-       ],
-       "Грудинка сырокопченая": [
-           Product(name: "Грудинка", category: "Грудинка сырокопченая", proteins: 8.9, fats: 63.3, carbohydrates: 0, calories: 605)
-       ],
-       "Корейка сырокопченая": [
-           Product(name: "Корейка", category: "Корейка сырокопченая", proteins: 10.5, fats: 47.4, carbohydrates: 0, calories: 469)
-       ],
-       "Ветчина рубленая": [
-           Product(name: "Рубленая", category: "Ветчина рубленая", proteins: 16.3, fats: 20.7, carbohydrates: 1.8, calories: 263)
-       ],
-       "Сосиски": [
-           Product(name: "Молочные", category: "Сосиски", proteins: 11, fats: 23.9, carbohydrates: 0.4, calories: 261),
-           Product(name: "Говяжьи", category: "Сосиски", proteins: 10.4, fats: 20.1, carbohydrates: 0.8, calories: 226),
-           Product(name: "Свиные", category: "Сосиски", proteins: 9.5, fats: 34.3, carbohydrates: 0, calories: 342),
-           Product(name: "Куриные", category: "Сосиски", proteins: 10.8, fats: 22.4, carbohydrates: 4.2, calories: 259)
-       ],
-       "Сардельки": [
-           Product(name: "Говяжьи", category: "Сардельки", proteins: 11.4, fats: 18.2, carbohydrates: 1.3, calories: 215),
-           Product(name: "Свиные", category: "Сардельки", proteins: 10.1, fats: 31.6, carbohydrates: 1.8, calories: 322)
-       ],
-       "Шпикачки": [
-           Product(name: "Шпикачки", category: "Шпикачки", proteins: 10, fats: 33, carbohydrates: 0, calories: 337)
-       ],
-       "Говядина тушеная консервированная": [
-           Product(name: "Говядина тушеная", category: "Говядина тушеная консервированная", proteins: 16.8, fats: 17, carbohydrates: 0.2, calories: 220)
-       ],
-       "Свинина тушеная консервированная": [
-           Product(name: "Свинина тушеная", category: "Свинина тушеная консервированная", proteins: 14.9, fats: 32.2, carbohydrates: 0.2, calories: 349)
-       ],
+    
+        "Колбаса, сосиски, копченности": [
+            Product(name: "Колбаса вареная Диетическая", category: "Колбаса, сосиски, копченности", proteins: 12.1, fats: 13.5, carbohydrates: 0, calories: 170),
+            Product(name: "Колбаса вареная Докторская", category: "Колбаса, сосиски, копченности", proteins: 12.8, fats: 22.2, carbohydrates: 1.5, calories: 257),
+            Product(name: "Колбаса вареная Любительская", category: "Колбаса, сосиски, копченности", proteins: 12.2, fats: 28, carbohydrates: 0.1, calories: 301),
+            Product(name: "Колбаса вареная Молочная", category: "Колбаса, сосиски, копченности", proteins: 11.7, fats: 22.8, carbohydrates: 0.2, calories: 252),
+            Product(name: "Колбаса вареная Московская", category: "Колбаса, сосиски, копченности", proteins: 11.5, fats: 21.8, carbohydrates: 2, calories: 250),
+            Product(name: "Колбаса вареная Русская", category: "Колбаса, сосиски, копченности", proteins: 11.5, fats: 27.9, carbohydrates: 1.7, calories: 302),
+            Product(name: "Колбаса варено-копченая Московская", category: "Колбаса, сосиски, копченности", proteins: 19.1, fats: 36.6, carbohydrates: 0.2, calories: 406),
+            Product(name: "Колбаса варено-копченая Сервелат", category: "Колбаса, сосиски, копченности", proteins: 16.1, fats: 40.1, carbohydrates: 0, calories: 425),
+            Product(name: "Колбаса полукопченая Краковская", category: "Колбаса, сосиски, копченности", proteins: 16.2, fats: 44.6, carbohydrates: 0, calories: 466),
+            Product(name: "Колбаса полукопченая Одесская", category: "Колбаса, сосиски, копченности", proteins: 14.8, fats: 38.1, carbohydrates: 0.3, calories: 402),
+            Product(name: "Колбаса сырокопченая Брауншвейгская", category: "Колбаса, сосиски, копченности", proteins: 27.7, fats: 42.2, carbohydrates: 0.2, calories: 491),
+            Product(name: "Колбаса сырокопченая Московская", category: "Колбаса, сосиски, копченности", proteins: 24.8, fats: 41.5, carbohydrates: 0, calories: 473),
+            Product(name: "Колбаса сырокопченая Свиная", category: "Колбаса, сосиски, копченности", proteins: 13, fats: 57, carbohydrates: 0.2, calories: 566),
+            Product(name: "Колбаса сырокопченая Зернистая", category: "Колбаса, сосиски, копченности", proteins: 9.9, fats: 62.8, carbohydrates: 0.3, calories: 606),
+            Product(name: "Колбаса ливерная Ливерная", category: "Колбаса, сосиски, копченности", proteins: 14.4, fats: 28.5, carbohydrates: 2.2, calories: 326),
+            Product(name: "Грудинка сырокопченая", category: "Колбаса, сосиски, копченности", proteins: 8.9, fats: 63.3, carbohydrates: 0, calories: 605),
+            Product(name: "Корейка сырокопченая", category: "Колбаса, сосиски, копченности", proteins: 10.5, fats: 47.4, carbohydrates: 0, calories: 469),
+            Product(name: "Ветчина Рубленая", category: "Колбаса, сосиски, копченности", proteins: 16.3, fats: 20.7, carbohydrates: 1.8, calories: 263),
+            Product(name: "Сосиски Молочные", category: "Колбаса, сосиски, копченности", proteins: 11, fats: 23.9, carbohydrates: 0.4, calories: 261),
+            Product(name: "Сосиски Говяжьи", category: "Колбаса, сосиски, копченности", proteins: 10.4, fats: 20.1, carbohydrates: 0.8, calories: 226),
+            Product(name: "Сосиски Свиные", category: "Колбаса, сосиски, копченности", proteins: 9.5, fats: 34.3, carbohydrates: 0, calories: 342),
+            Product(name: "Сосиски Куриные", category: "Колбаса, сосиски, копченности", proteins: 10.8, fats: 22.4, carbohydrates: 4.2, calories: 259),
+            Product(name: "Сардельки Говяжьи", category: "Колбаса, сосиски, копченности", proteins: 11.4, fats: 18.2, carbohydrates: 1.3, calories: 215),
+            Product(name: "Сардельки Свиные", category: "Колбаса, сосиски, копченности", proteins: 10.1, fats: 31.6, carbohydrates: 1.8, calories: 322),
+            Product(name: "Шпикачки", category: "Колбаса, сосиски, копченности", proteins: 10, fats: 33, carbohydrates: 0, calories: 337),
+            Product(name: "Говядина тушеная консервированная", category: "Колбаса, сосиски, копченности", proteins: 16.8, fats: 17, carbohydrates: 0.2, calories: 220),
+            Product(name: "Свинина тушеная консервированная", category: "Колбаса, сосиски, копченности", proteins: 14.9, fats: 32.2, carbohydrates: 0.2, calories: 349)
+        ],
+
     "Рыба и морепродукты": [
         Product(name: "Аргентина", category: "Рыба и морепродукты", proteins: 17.6, fats: 2, carbohydrates: 0, calories: 88),
         Product(name: "Амур белый", category: "Рыба и морепродукты", proteins: 18.6, fats: 5.3, carbohydrates: 0, calories: 134),

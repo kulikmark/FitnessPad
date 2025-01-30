@@ -15,7 +15,7 @@ class WorkoutViewModel: ObservableObject {
     @Published var allDefaultExercises: [DefaultExercise] = []
     @Published var foodDaysCache: [Date: FoodDay] = [:]
     @Published var meals: [Meal] = []
-    @Published var daySummary: DaySummary?
+    @Published var selectedDate: Date = Date()
     
     let viewContext = PersistenceController.shared.container.viewContext
     
@@ -25,7 +25,6 @@ class WorkoutViewModel: ObservableObject {
         fetchWorkoutDays()
         fetchFoodDays()
         fetchMeals()
-        fetchDaySummary()
     }
     
     // MARK: - Core Data Operations
@@ -129,7 +128,7 @@ class WorkoutViewModel: ObservableObject {
         let foodDay = self.foodDay(for: date) ?? FoodDay(context: context)
         foodDay.id = UUID()
         foodDay.date = Calendar.current.startOfDay(for: date)
-        
+
         let newMeal = Meal(context: context)
         newMeal.id = UUID()
         newMeal.name = name
@@ -139,22 +138,12 @@ class WorkoutViewModel: ObservableObject {
         newMeal.carbohydrates = carbohydrates
         newMeal.calories = calories
         newMeal.foodDay = foodDay
-        
-        if let meals = foodDay.meals?.allObjects as? [Meal], !meals.isEmpty {
-            if let lastMeal = meals.max(by: { $0.count < $1.count }) {
-                newMeal.count = lastMeal.count + 1
-            } else {
-                newMeal.count = 1
-            }
-        } else {
-            newMeal.count = 1
-        }
-        
+
         foodDay.addToMeals(newMeal)
         saveContext()
         fetchFoodDays()
         fetchMeals()
-        updateDaySummary(for: foodDay)
+        objectWillChange.send()
         print("Meal saved: \(newMeal.name ?? "Unknown")")
     }
     
@@ -165,7 +154,11 @@ class WorkoutViewModel: ObservableObject {
         meal.proteins = proteins
         meal.fats = fats
         meal.carbohydrates = carbohydrates
+        
         saveContext()
+        fetchFoodDays()
+        fetchMeals()
+        objectWillChange.send()
     }
     
     func deleteMeal(_ meal: Meal) {
@@ -180,61 +173,43 @@ class WorkoutViewModel: ObservableObject {
             }
             saveContext()
         }
-        
-        if let meals = foodDay.meals?.allObjects as? [Meal], meals.isEmpty {
-            if let daySummary = foodDay.daySummary {
-                viewContext.delete(daySummary)
-                foodDay.daySummary = nil
-                saveContext()
-                print("DaySummary deleted because no meals are left.")
-            }
-        } else {
-            updateDaySummary(for: foodDay)
-        }
+            
+        objectWillChange.send()
     }
     
     // MARK: - Day Summary Management
-    func fetchDaySummary() {
-        let request: NSFetchRequest<DaySummary> = DaySummary.fetchRequest()
-        request.predicate = NSPredicate(format: "date == %@", Date() as CVarArg)
-        
-        do {
-            daySummary = try viewContext.fetch(request).first
-            if let summary = daySummary {
-                print("DaySummary: \(summary.totalCalories) calories, \(summary.totalProteins) proteins")
-            } else {
-                print("No DaySummary found for today")
+    // Вычисляемые свойства для сводной информации
+        func totalCalories(for date: Date) -> Double {
+            guard let foodDay = foodDay(for: date),
+                  let meals = foodDay.meals?.allObjects as? [Meal] else {
+                return 0
             }
-        } catch {
-            print("Failed to fetch day summary: \(error)")
+            return meals.reduce(0) { $0 + $1.calories }
         }
-    }
-    
-    func updateDaySummary(for foodDay: FoodDay) {
-        let totalCalories = foodDay.meals?.reduce(0) { $0 + (($1 as? Meal)?.calories ?? 0.0) } ?? 0
-        let totalProteins = foodDay.meals?.reduce(0) { $0 + (($1 as? Meal)?.proteins ?? 0.0) } ?? 0
-        let totalFats = foodDay.meals?.reduce(0) { $0 + (($1 as? Meal)?.fats ?? 0.0) } ?? 0
-        let totalCarbohydrates = foodDay.meals?.reduce(0) { $0 + (($1 as? Meal)?.carbohydrates ?? 0.0) } ?? 0
-        
-        if let summary = foodDay.daySummary {
-            summary.totalCalories = totalCalories
-            summary.totalProteins = totalProteins
-            summary.totalFats = totalFats
-            summary.totalCarbohydrates = totalCarbohydrates
-        } else {
-            let newSummary = DaySummary(context: viewContext)
-            newSummary.id = UUID()
-            newSummary.totalCalories = totalCalories
-            newSummary.totalProteins = totalProteins
-            newSummary.totalFats = totalFats
-            newSummary.totalCarbohydrates = totalCarbohydrates
-            newSummary.date = foodDay.date ?? Date()
-            foodDay.daySummary = newSummary
+
+        func totalProteins(for date: Date) -> Double {
+            guard let foodDay = foodDay(for: date),
+                  let meals = foodDay.meals?.allObjects as? [Meal] else {
+                return 0
+            }
+            return meals.reduce(0) { $0 + $1.proteins }
         }
-        
-        saveContext()
-        print("DaySummary updated for FoodDay: \(foodDay.date ?? Date())")
-    }
+
+        func totalFats(for date: Date) -> Double {
+            guard let foodDay = foodDay(for: date),
+                  let meals = foodDay.meals?.allObjects as? [Meal] else {
+                return 0
+            }
+            return meals.reduce(0) { $0 + $1.fats }
+        }
+
+        func totalCarbohydrates(for date: Date) -> Double {
+            guard let foodDay = foodDay(for: date),
+                  let meals = foodDay.meals?.allObjects as? [Meal] else {
+                return 0
+            }
+            return meals.reduce(0) { $0 + $1.carbohydrates }
+        }
     
     // MARK: - Body Weight Management
       func saveBodyWeight(for date: Date, weight: Double) {

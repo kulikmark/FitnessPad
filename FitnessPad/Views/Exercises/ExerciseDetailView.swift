@@ -107,22 +107,28 @@ struct ExerciseDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
+            
             // Заголовок с названием упражнения
-            if isEditing {
-                TextField("Exercise Name", text: $exerciseName)
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(Color("TextColor"))
-                    .padding()
-                    .background(Color("BackgroundColor").opacity(0.1))
-                    .cornerRadius(8)
-            } else {
-                Text(exercise.name ?? "Unknown exercise")
-                    .font(.system(size: 24))
-                    .fontWeight(.bold)
-                    .foregroundColor(Color("TextColor"))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+            HStack {
+                if isEditing {
+                    TextField("Exercise Name", text: $exerciseName)
+                        .font(.system(size: 24))
+                        .fontWeight(.medium)
+                        .foregroundColor(Color("TextColor"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color("BackgroundColor").opacity(0.1))
+                        .cornerRadius(8)
+                } else {
+                    Text(exercise.name ?? "Unknown exercise")
+                        .font(.system(size: 24))
+                        .fontWeight(.medium)
+                        .foregroundColor(Color("TextColor"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                CloseButtonCircle()
             }
+            .padding()
             
             // Категория упражнения
             if let category = exercise.categories {
@@ -270,9 +276,6 @@ struct ExerciseDetailView: View {
         }
         .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
         .navigationBarBackButtonHidden(true)
-        .overlay(alignment: .topTrailing) {
-            CloseButtonCircle()
-        }
         .sheet(isPresented: $isShowingImagePicker) {
             ImagePickerWithCrop(selectedImage: $exerciseImage, isImagePicked: .constant(true))
         }

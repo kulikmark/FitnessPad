@@ -23,7 +23,7 @@ struct FoodDayView: View {
             // Календарь с вкладками месяцев
             CalendarTabs(selectedDate: $selectedDate, currentMonth: $currentMonth)
                 .environmentObject(viewModel)
-                .frame(height: 80)
+                .frame(height: 75)
                 .padding(.horizontal, 10)
                 .background(Color("BackgroundColor"))
             
@@ -93,8 +93,7 @@ struct CalendarTabs: View {
 struct CalendarStrip: View {
     @Binding var selectedDate: Date
     var currentMonth: Date
-    @EnvironmentObject var viewModel: WorkoutViewModel // Добавляем EnvironmentObject
-
+    @EnvironmentObject var viewModel: WorkoutViewModel
     @State private var days: [Date] = []
     @State private var isDataLoaded: Bool = false
 
@@ -149,26 +148,30 @@ struct CalendarStrip: View {
 struct CalendarDayView: View {
     var date: Date
     var isSelected: Bool
-    @EnvironmentObject var viewModel: WorkoutViewModel // Добавляем EnvironmentObject для доступа к данным
+    @EnvironmentObject var viewModel: WorkoutViewModel
 
     var body: some View {
-        VStack(spacing: 5) {
-            Text(getDayOfWeek(from: date)) // День недели
-                .font(.caption)
-                .foregroundColor(isSelected ? Color("ButtonTextColor") : .gray)
+        VStack {
+                Text(getDayOfWeek(from: date)) // День недели
+                    .font(.caption)
+                    .foregroundColor(isSelected ? Color("ButtonTextColor") : .gray)
+                
+                
+                Text(getDay(from: date)) // Число
+                    .font(.title2)
+                    .fontWeight(isSelected ? .bold : .regular)
+                    .foregroundColor(isSelected ? Color("ButtonTextColor") : .primary)
             
-            Text(getDay(from: date)) // Число
-                .font(.title2)
-                .fontWeight(isSelected ? .bold : .regular)
-                .foregroundColor(isSelected ? Color("ButtonTextColor") : .primary)
+            Spacer()
             
             // Отображаем точку, если есть meals для этой даты
             if hasMeals(for: date) {
                 Circle()
-                    .fill(isSelected ? Color("ButtonTextColor") : Color("TextColor")) // Цвет точки
+                    .fill(isSelected ? Color("ButtonTextColor") : Color("TextColor"))
                     .frame(width: 5, height: 5)
             }
         }
+        .frame(width: 30, height: 50)
         .padding(10)
         .background(isSelected ? Color("ButtonColor") : Color.clear)
         .cornerRadius(10)
@@ -212,22 +215,30 @@ struct FoodDayContentView: View {
     var body: some View {
         VStack {
             // Проверяем, есть ли данные для выбранной даты
-           let foodDay = viewModel.foodDay(for: selectedDate)
-                // Отображение сводной информации
-            DaySummaryView(daySummary: foodDay?.daySummary)
-                
-                // Список приемов пищи
-                MealListView(
-                    meals: foodDay?.meals?.allObjects as? [Meal] ?? [],
-                    onDelete: deleteMeal,
-                    onEdit: editMeal
-                )
+                      let foodDay = viewModel.foodDay(for: selectedDate)
+                      let meals = foodDay?.meals?.allObjects as? [Meal] ?? []
+                      
+                      // Отображаем сводную информацию только если есть meals
+                      if !meals.isEmpty {
+                          DaySummaryView(
+                              totalCalories: viewModel.totalCalories(for: selectedDate),
+                              totalProteins: viewModel.totalProteins(for: selectedDate),
+                              totalFats: viewModel.totalFats(for: selectedDate),
+                              totalCarbohydrates: viewModel.totalCarbohydrates(for: selectedDate)
+                          )
+                      }
             
+            // Список приемов пищи
+            MealListView(
+                meals: foodDay?.meals?.allObjects as? [Meal] ?? [],
+                onDelete: deleteMeal,
+                onEdit: editMeal
+            )
+            
+            // Кнопка для добавления приема пищи
+            AddMealButton(isAddingMeal: $isAddingMeal, selectedDate: selectedDate, viewModel: _viewModel)
         }
         .padding(.horizontal)
-        
-        // Кнопка для добавления приема пищи
-        AddMealButton(isAddingMeal: $isAddingMeal, selectedDate: selectedDate, viewModel: _viewModel)
         
         // Обработка редактирования и добавления приемов пищи
         .fullScreenCover(isPresented: $isAddingMeal) {
@@ -262,25 +273,26 @@ struct FoodDayContentView: View {
 
 // MARK: - Компонент для сводной информации
 struct DaySummaryView: View {
-    var daySummary: DaySummary?
-    
+    var totalCalories: Double
+    var totalProteins: Double
+    var totalFats: Double
+    var totalCarbohydrates: Double
+
     var body: some View {
-        if let daySummary = daySummary {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Total for day:")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(Color("TextColor"))
-                
-                NutritionInfoRow(label: "Calories", value: daySummary.totalCalories, unit: "kcal")
-                NutritionInfoRow(label: "Proteins", value: daySummary.totalProteins, unit: "g")
-                NutritionInfoRow(label: "Fats", value: daySummary.totalFats, unit: "g")
-                NutritionInfoRow(label: "Carbohydrates", value: daySummary.totalCarbohydrates, unit: "g")
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(Color("ViewColor").opacity(0.3))
-            .cornerRadius(10)
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Total for day:")
+                .font(.system(size: 16, weight: .regular))
+                .foregroundColor(Color("TextColor"))
+
+            NutritionInfoRow(label: "Calories", value: totalCalories, unit: "kcal")
+            NutritionInfoRow(label: "Proteins", value: totalProteins, unit: "g")
+            NutritionInfoRow(label: "Fats", value: totalFats, unit: "g")
+            NutritionInfoRow(label: "Carbohydrates", value: totalCarbohydrates, unit: "g")
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(8)
+        .background(Color("ViewColor").opacity(0.2))
+        .cornerRadius(8)
     }
 }
 
@@ -293,11 +305,11 @@ struct NutritionInfoRow: View {
     var body: some View {
         HStack {
             Text(label)
-                .font(.system(size: 16))
+                .font(.system(size: 14))
                 .foregroundColor(Color("TextColor"))
             Spacer()
             Text("\(value, specifier: "%.1f") \(unit)")
-                .font(.system(size: 16))
+                .font(.system(size: 14))
                 .foregroundColor(.gray)
         }
     }
@@ -346,14 +358,11 @@ struct MealRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(meal.name ?? "Unknown Meal")
-                .font(.system(size: 18, weight: .medium))
+                .font(.system(size: 16, weight: .medium))
                 .foregroundColor(Color("TextColor"))
-            
             NutritionInfoRow(label: "Calories", value: meal.calories, unit: "kcal")
-            NutritionInfoRow(label: "Proteins", value: meal.proteins, unit: "g")
-            NutritionInfoRow(label: "Fats", value: meal.fats, unit: "g")
-            NutritionInfoRow(label: "Carbohydrates", value: meal.carbohydrates, unit: "g")
         }
+        .frame(maxWidth: .infinity)
         .padding()
         .background(Color("ViewColor"))
         .cornerRadius(10)
@@ -418,16 +427,9 @@ struct FoodDayView_Previews: PreviewProvider {
         let viewModel = WorkoutViewModel()
         let context = PersistenceController.shared.container.viewContext
         
-        // Создаем mock FoodDay и DaySummary
+        // Создаем mock FoodDay
         let foodDay = FoodDay(context: context)
         foodDay.date = Date()
-        
-        let daySummary = DaySummary(context: context)
-        daySummary.totalCalories = 2000
-        daySummary.totalProteins = 150
-        daySummary.totalFats = 70
-        daySummary.totalCarbohydrates = 250
-        foodDay.daySummary = daySummary
         
         // Создаем mock Meal
         let meal1 = Meal(context: context)

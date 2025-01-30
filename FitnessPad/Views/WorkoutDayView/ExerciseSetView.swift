@@ -15,14 +15,15 @@ struct ExerciseSetView: View {
     var body: some View {
         ZStack {
             VStack {
-                // Заголовок с названием упражнения
-                Text(exercise.name ?? "Unknown Exercise")
-                    .font(.title)
-                    .foregroundStyle(Color("TextColor"))
-                    .bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                  
-                
+                HStack {
+                    // Заголовок с названием упражнения
+                    Text(exercise.name ?? "Unknown Exercise")
+                        .font(.system(size: 24))
+                        .fontWeight(.medium)
+                        .foregroundColor(Color("TextColor"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    CloseButtonCircle()
+                }
                 listView(for: exercise)
             }
             .frame(maxWidth: .infinity)
@@ -33,9 +34,6 @@ struct ExerciseSetView: View {
                     viewModel.addSet(to: exercise)
                 }
             }
-        }
-        .overlay(alignment: .topTrailing) {
-            CloseButtonCircle()
         }
         .simultaneousGesture(TapGesture().onEnded {
             UIApplication.shared.endEditing(true)

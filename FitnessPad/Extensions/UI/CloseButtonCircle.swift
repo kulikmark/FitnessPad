@@ -21,8 +21,8 @@ struct CloseButtonCircle: View {
                 .padding(8)
                 .background(Circle().fill(Color("ViewColor")))
         }
-        .padding(.trailing, 16)
-        .padding(.top, 16)
+//        .padding(.trailing, 16)
+//        .padding(.top, 16)
     }
 }
 

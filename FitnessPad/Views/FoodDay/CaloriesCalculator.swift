@@ -35,14 +35,16 @@ struct CaloriesCalculator: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            // Custom header
-            Text("Calories Calculator")
-                .font(.system(size: 24))
-                .fontWeight(.medium)
-                .foregroundColor(Color("TextColor"))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-            
+            HStack {
+                // Custom header
+                Text("Calories Calculator")
+                    .font(.system(size: 24))
+                    .fontWeight(.medium)
+                    .foregroundColor(Color("TextColor"))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                CloseButtonCircle()
+            }
+            .padding()
             // Form
             Form {
                 Section {
@@ -155,9 +157,6 @@ struct CaloriesCalculator: View {
             .padding()
         }
         .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
-        .overlay(alignment: .topTrailing) {
-            CloseButtonCircle()
-        }
         .onTapGesture {
             UIApplication.shared.endEditing(true)
         }

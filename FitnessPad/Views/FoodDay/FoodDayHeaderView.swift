@@ -18,9 +18,7 @@ struct FoodDayHeaderView: View {
     
     var body: some View {
         HStack {
-            
             // Заголовок с месяцем и годом
-            
             Text(currentMonth, formatter: monthYearFormatter)
                 .font(.title2)
                 .fontWeight(.bold)

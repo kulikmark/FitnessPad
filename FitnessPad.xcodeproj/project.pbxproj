@@ -292,8 +292,8 @@
 				6DF2CFF52D3FC27600DCFC9C /* FoodDayView.swift */,
 				6D55DB322D479D8F00A642C5 /* FoodDayHeaderView.swift */,
 				6DF2CFF82D40085100DCFC9C /* MealFormView.swift */,
-				6D55DB8D2D4A328100A642C5 /* Product.swift */,
 				6D55DB8F2D4A32B700A642C5 /* ProductSelectionView.swift */,
+				6D55DB8D2D4A328100A642C5 /* Product.swift */,
 				6D55DB2C2D46CCA400A642C5 /* CaloriesCalculator.swift */,
 			);
 			path = FoodDay;
