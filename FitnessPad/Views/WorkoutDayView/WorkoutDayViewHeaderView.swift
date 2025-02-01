@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct WorkoutDayViewHeaderView: View {
     
     @EnvironmentObject var viewModel: WorkoutViewModel
@@ -21,13 +19,13 @@ struct WorkoutDayViewHeaderView: View {
     var body: some View {
         HStack {
             HStack {
-                Text("Weight:")
+                Text(NSLocalizedString("weight_label", comment: "Weight label"))
                     .font(.system(size: 16))
                     .foregroundColor(Color("TextColor"))
                     .lineLimit(1)
                     .padding(.leading, 20)
                 
-                TextField("0 kg", text: $bodyWeightString)
+                TextField(NSLocalizedString("weight_placeholder", comment: "Weight placeholder"), text: $bodyWeightString)
                     .font(.system(size: 16))
                     .foregroundColor(Color("TextColor"))
                     .frame(minWidth: 40, maxWidth: 50)
@@ -43,7 +41,7 @@ struct WorkoutDayViewHeaderView: View {
                         saveWeight()
                         isWeightFieldFocused = false
                     }) {
-                        Text("Save")
+                        Text(NSLocalizedString("save_button_title", comment: "Save button"))
                             .font(.system(size: 16))
                             .foregroundColor(Color("ButtonTextColor"))
                             .padding(8)
@@ -55,7 +53,7 @@ struct WorkoutDayViewHeaderView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
  
-            HStack (spacing: 20) {
+            HStack(spacing: 20) {
                 addExerciseButton
             }
             .padding(.trailing, 20)
@@ -82,8 +80,8 @@ struct WorkoutDayViewHeaderView: View {
     }
 
     private var addExerciseButton: some View {
-        HStack (spacing: 10) {
-            Text("Add\nExercise")
+        HStack(spacing: 10) {
+            Text(NSLocalizedString("add_exercise_label", comment: "Add exercise"))
                 .font(.system(size: 8))
                 .foregroundColor(Color("TextColor"))
             Button(action: {
@@ -107,11 +105,8 @@ struct WorkoutDayViewHeaderView: View {
         }
         isWeightFieldFocused = false
     }
-    
-    func hideKeyboard() {
-        UIApplication.shared.endEditing(true)
-    }
 }
+
 //#Preview {
 //    HeaderView()
 //}

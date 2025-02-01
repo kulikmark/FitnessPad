@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SwiftUI
+
 struct MealFormView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.dismiss) private var dismiss
@@ -13,7 +15,10 @@ struct MealFormView: View {
     @State private var mealName: String
     @State private var selectedProducts: [SelectedProduct] = []
     @State private var isProductSelectionPresented: Bool = false
-    
+    @State private var isGramPickerPresented: Bool = false
+    @State private var selectedProductForEditing: SelectedProduct? = nil
+    @State private var selectedGrams: Int = 0 // Состояние для выбора граммовки
+
     var isSaveButtonDisabled: Bool {
         mealName.isEmpty || selectedProducts.isEmpty
     }
@@ -44,7 +49,7 @@ struct MealFormView: View {
             self._selectedProducts = State(initialValue: [])
         }
     }
-
+    
     var totalProteins: Double {
         selectedProducts.reduce(0) { $0 + $1.totalProteins }
     }
@@ -75,7 +80,7 @@ struct MealFormView: View {
                     addProductButton
                     CloseButtonCircle()
                 }
-                    .padding(.trailing, 20)
+                .padding(.trailing, 20)
             }
             
             Form {
@@ -84,42 +89,19 @@ struct MealFormView: View {
                 }
 
                 Section(header: Text("Selected Products")) {
-                    ForEach(selectedProducts) { selectedProduct in
+                    ForEach($selectedProducts) { $selectedProduct in
                         HStack {
                             Text(selectedProduct.product.name)
                             Spacer()
 
-                            // Кнопка уменьшения количества
-                            Button(action: {
-                                updateQuantity(for: selectedProduct, increment: -50)
-                            }) {
-                                Image(systemName: "minus")
-                                    .foregroundColor(Color("ButtonTextColor"))
-                                    .font(.system(size: 14))
-                                    .frame(width: 30, height: 30) // Фиксированный размер для фона
-                            }
-                            .background(Color("ButtonColor"))
-                            .clipShape(Circle())
-                            .buttonStyle(PlainButtonStyle())
-                            .contentShape(Rectangle())
-                            .padding(.horizontal, 4)
-                            
-                            Text("\(selectedProduct.quantity, specifier: "%.0f") g")
-                            
-                            // Кнопка увеличения количества
-                            Button(action: {
-                                updateQuantity(for: selectedProduct, increment: 50)
-                            }) {
-                                Image(systemName: "plus")
-                                    .foregroundColor(Color("ButtonTextColor"))
-                                    .font(.system(size: 14))
-                                    .frame(width: 30, height: 30)
-                            }
-                            .background(Color("ButtonColor"))
-                            .clipShape(Circle())
-                            .buttonStyle(PlainButtonStyle())
-                            .contentShape(Rectangle())
-                            .padding(.horizontal, 4)
+                            // Текстовое поле для выбора граммовки
+                            Text(formatGrams(selectedProduct.quantity))
+                                .frame(minWidth: 40, maxWidth: 60)
+                                .onTapGesture {
+                                    selectedProductForEditing = selectedProduct
+                                    selectedGrams = Int(selectedProduct.quantity)
+                                    isGramPickerPresented = true
+                                }
                         }
                         .contentShape(Rectangle())
                     }
@@ -137,16 +119,16 @@ struct MealFormView: View {
             }
 
             Button("Save Changes") {
-                        saveMeal()
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                    .foregroundColor(Color("ButtonTextColor"))
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(isSaveButtonDisabled ? Color.gray : Color("ButtonColor"))
-                    .cornerRadius(10)
-                    .padding(.horizontal, 20)
-                    .disabled(isSaveButtonDisabled)
+                saveMeal()
+                presentationMode.wrappedValue.dismiss()
+            }
+            .foregroundColor(Color("ButtonTextColor"))
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(isSaveButtonDisabled ? Color.gray : Color("ButtonColor"))
+            .cornerRadius(10)
+            .padding(.horizontal, 20)
+            .disabled(isSaveButtonDisabled)
         }
         .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
         .fullScreenCover(isPresented: $isProductSelectionPresented) {
@@ -156,7 +138,68 @@ struct MealFormView: View {
                     selectedProducts = newProducts.map { SelectedProduct(product: $0) }
                 }
             ))
+        }
+        .sheet(isPresented: $isGramPickerPresented) {
+            gramPickerView() // Вызываем функцию для отображения пикера граммовки
+        }
+    }
 
+    // Функция для отображения пикера граммовки
+    private func gramPickerView() -> some View {
+        ZStack {
+            // Фон для всего sheet
+            Color("BackgroundColor")
+                .edgesIgnoringSafeArea(.all)
+
+            VStack(spacing: 20) {
+                // Заголовок
+                Text("Select Grams")
+                    .font(.title2)
+                    .foregroundStyle(Color("TextColor"))
+                    .bold()
+                    .padding(.top, 10)
+
+                // Пикер для выбора граммовки
+                Picker("Grams", selection: $selectedGrams) {
+                    ForEach(Array(stride(from: 0, through: 5000, by: 10)), id: \.self) { grams in
+                        Text("\(grams) g")
+                            .tag(grams)
+                            .foregroundStyle(Color("TextColor"))
+                    }
+                }
+                .pickerStyle(WheelPickerStyle())
+                .frame(height: 150)
+                .clipped()
+                .padding(.horizontal, 20)
+
+                // Кнопка для подтверждения выбора
+                Button(action: {
+                    if let selectedProduct = selectedProductForEditing,
+                       let index = selectedProducts.firstIndex(where: { $0.id == selectedProduct.id }) {
+                        selectedProducts[index].quantity = Double(selectedGrams)
+                    }
+                    isGramPickerPresented = false
+                }) {
+                    Text("Done")
+                        .font(.headline)
+                        .foregroundColor(Color("ButtonTextColor"))
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color("ButtonColor"))
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 40)
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
+        .onAppear {
+            // Инициализируем selectedGrams при открытии пикера
+            if let selectedProduct = selectedProductForEditing {
+                selectedGrams = Int(selectedProduct.quantity)
+            }
         }
     }
 
@@ -173,11 +216,6 @@ struct MealFormView: View {
                     .foregroundColor(Color("TextColor"))
             }
         }
-    }
-
-    private func updateQuantity(for selectedProduct: SelectedProduct, increment: Double) {
-        guard let index = selectedProducts.firstIndex(where: { $0.id == selectedProduct.id }) else { return }
-        selectedProducts[index].quantity = max(0, selectedProducts[index].quantity + increment)
     }
 
     private func saveMeal() {
@@ -203,6 +241,15 @@ struct MealFormView: View {
                 calories: totalCalories,
                 date: selectedDate
             )
+        }
+    }
+    
+    private func formatGrams(_ grams: Double) -> String {
+        if grams >= 1000 {
+            let kilograms = grams / 1000
+            return String(format: "%.2f kg", kilograms) // Используем два знака после запятой
+        } else {
+            return String(format: "%.0f g", grams)
         }
     }
 }

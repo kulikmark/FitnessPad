@@ -79,14 +79,13 @@ struct ExercisesView: View {
                 .fontWeight(.medium)
                 .foregroundColor(Color("TextColor"))
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
             
             Spacer()
             resetDefaultsButton
             heartButton
             addButton
         }
-        .padding(.trailing, 20)
+        .padding(.horizontal)
     }
     
     // MARK: - Exercises List View

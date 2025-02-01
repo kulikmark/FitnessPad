@@ -37,7 +37,7 @@ struct TabBarView: View {
                                 .foregroundStyle(selectedTab == item.tabItem ? Color("TextColor") : Color.gray)
                                 .font(.system(size: 12))
                         }
-                        .padding(.horizontal, 10)
+                        .padding(.horizontal, 5)
                     }
                 }
             }

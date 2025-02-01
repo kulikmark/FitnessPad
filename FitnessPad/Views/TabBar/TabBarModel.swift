@@ -14,15 +14,13 @@ struct TabItem: Identifiable {
     var tabItem: Tab
 }
 
-
 var tabItems = [
-    TabItem(text: "Workouts", image: "duffle.bag", tabItem: .workoutDays),
-    TabItem(text: "Food Days", image: "fork.knife", tabItem: .foodDays),
-    TabItem(text: "Exercises", image: "figure.strengthtraining.traditional", tabItem: .exercises),
-    TabItem(text: "Progress", image: "medal", tabItem: .progress),
-    TabItem(text: "Settings", image: "gearshape", tabItem: .settings)
+    TabItem(text: NSLocalizedString("tab_workouts", comment: ""), image: "duffle.bag", tabItem: .workoutDays),
+    TabItem(text: NSLocalizedString("tab_food_days", comment: ""), image: "fork.knife", tabItem: .foodDays),
+    TabItem(text: NSLocalizedString("tab_exercises", comment: ""), image: "figure.strengthtraining.traditional", tabItem: .exercises),
+    TabItem(text: NSLocalizedString("tab_progress", comment: ""), image: "medal", tabItem: .progress),
+    TabItem(text: NSLocalizedString("tab_settings", comment: ""), image: "gearshape", tabItem: .settings)
 ]
-
 
 enum Tab: String {
     case workoutDays

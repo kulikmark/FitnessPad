@@ -13,12 +13,10 @@ struct FoodDayView: View {
     @State private var selectedDate: Date = Date()
     @State private var currentMonth: Date = Date()
    
-    
     var body: some View {
         VStack(spacing: 0) {
-
-            FoodDayHeaderView(selectedDate: $selectedDate, currentMonth: $currentMonth)
-                    .environmentObject(viewModel)
+            FoodDayHeaderView(currentMonth: $currentMonth)
+                .environmentObject(viewModel)
             
             // Календарь с вкладками месяцев
             CalendarTabs(selectedDate: $selectedDate, currentMonth: $currentMonth)
@@ -26,6 +24,9 @@ struct FoodDayView: View {
                 .frame(height: 75)
                 .padding(.horizontal, 10)
                 .background(Color("BackgroundColor"))
+            
+            FoodDayWeightWaterView(selectedDate: $selectedDate)
+                .padding(.top, 15)
             
             Spacer()
             
@@ -50,27 +51,12 @@ struct CalendarTabs: View {
     var body: some View {
         TabView(selection: $currentMonth) {
             ForEach(getMonths(), id: \.self) { month in
-                // Используем GeometryReader для анимации перелистывания
-                GeometryReader { geometry in
-                    HStack(spacing: 0) {
-                        CalendarStrip(selectedDate: $selectedDate, currentMonth: month)
-                    }
-                    // Анимация перелистывания
-                    .offset(x: calculateOffset(for: month, in: geometry))
-                }
-                .tag(month)
+                CalendarStrip(selectedDate: $selectedDate, currentMonth: month)
+                    .tag(month)
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         .background(Color("BackgroundColor"))
-    }
-    
-    // Вычисляем смещение для анимации
-    private func calculateOffset(for month: Date, in geometry: GeometryProxy) -> CGFloat {
-        let currentIndex = getMonths().firstIndex(of: currentMonth) ?? 0
-        let monthIndex = getMonths().firstIndex(of: month) ?? 0
-        let offset = CGFloat(monthIndex - currentIndex) * geometry.size.width
-        return offset
     }
     
     // Генерируем список месяцев

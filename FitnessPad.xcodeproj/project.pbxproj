@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6D0655602C58F7B20015CB6B /* FitnessPad.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D06555E2C58F7B20015CB6B /* FitnessPad.xcdatamodeld */; };
+		6D1526D02D4CFB600064BF75 /* FoodDayWeightWaterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1526CF2D4CFB600064BF75 /* FoodDayWeightWaterView.swift */; };
+		6D1526D82D4EC1C70064BF75 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D1526D72D4EC1C70064BF75 /* Localizable.strings */; };
 		6D26F10E27EF6909002D5F4F /* WorkoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D26F10D27EF6909002D5F4F /* WorkoutViewModel.swift */; };
 		6D37D0FA2C638FD5004AB4DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DAEA1A527E5EA0F0001EDF7 /* Assets.xcassets */; };
 		6D37D0FC2C639AEC004AB4DD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D0FB2C639AEC004AB4DD /* ImagePicker.swift */; };
@@ -59,6 +61,9 @@
 /* Begin PBXFileReference section */
 		6D06555F2C58F7B20015CB6B /* FitnessPad.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FitnessPad.xcdatamodel; sourceTree = "<group>"; };
 		6D06558D2C5D90D30015CB6B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		6D1526CF2D4CFB600064BF75 /* FoodDayWeightWaterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDayWeightWaterView.swift; sourceTree = "<group>"; };
+		6D1526D62D4EC1C70064BF75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6D1526D92D4EC20C0064BF75 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6D26F10D27EF6909002D5F4F /* WorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutViewModel.swift; sourceTree = "<group>"; };
 		6D37D0F52C638C03004AB4DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D37D0FB2C639AEC004AB4DD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -220,6 +225,7 @@
 		6DAEA19527E5EA0D0001EDF7 = {
 			isa = PBXGroup;
 			children = (
+				6D1526D72D4EC1C70064BF75 /* Localizable.strings */,
 				6D37D0F52C638C03004AB4DD /* Info.plist */,
 				6D06555E2C58F7B20015CB6B /* FitnessPad.xcdatamodeld */,
 				6DAEA1A527E5EA0F0001EDF7 /* Assets.xcassets */,
@@ -291,6 +297,7 @@
 			children = (
 				6DF2CFF52D3FC27600DCFC9C /* FoodDayView.swift */,
 				6D55DB322D479D8F00A642C5 /* FoodDayHeaderView.swift */,
+				6D1526CF2D4CFB600064BF75 /* FoodDayWeightWaterView.swift */,
 				6DF2CFF82D40085100DCFC9C /* MealFormView.swift */,
 				6D55DB8F2D4A32B700A642C5 /* ProductSelectionView.swift */,
 				6D55DB8D2D4A328100A642C5 /* Product.swift */,
@@ -364,6 +371,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 6DAEA19527E5EA0D0001EDF7;
 			productRefGroup = 6DAEA19F27E5EA0D0001EDF7 /* Products */;
@@ -380,6 +388,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D1526D82D4EC1C70064BF75 /* Localizable.strings in Resources */,
 				6D37D0FA2C638FD5004AB4DD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,6 +405,7 @@
 				6D55DB8E2D4A328100A642C5 /* Product.swift in Sources */,
 				6D55DB902D4A32B700A642C5 /* ProductSelectionView.swift in Sources */,
 				6D6259B72D37CFD40082FC4B /* SettingsView.swift in Sources */,
+				6D1526D02D4CFB600064BF75 /* FoodDayWeightWaterView.swift in Sources */,
 				6D536B752C6961B800835D3C /* BackButton.swift in Sources */,
 				6DADFDDC28044BE100A122E0 /* WorkoutDayView.swift in Sources */,
 				6D8DED5827EA257A00A1B6B9 /* TabBarModel.swift in Sources */,
@@ -442,12 +452,25 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		6D1526D72D4EC1C70064BF75 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6D1526D62D4EC1C70064BF75 /* en */,
+				6D1526D92D4EC20C0064BF75 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		6DAEA1AF27E5EA0F0001EDF7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -511,6 +534,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -575,11 +599,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to allow you to select images for your exercises.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -606,11 +632,13 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to allow you to select images for your exercises.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

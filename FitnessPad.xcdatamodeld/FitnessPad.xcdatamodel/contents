@@ -55,6 +55,7 @@
     <entity name="FoodDay" representedClassName="FoodDay" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="water" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="bodyWeight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BodyWeight" inverseName="foodDay" inverseEntity="BodyWeight"/>
         <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="foodDay" inverseEntity="Meal"/>
     </entity>

@@ -124,12 +124,11 @@ class WorkoutViewModel: ObservableObject {
     }
     
     func addMeal(name: String, products: String, proteins: Double, fats: Double, carbohydrates: Double, calories: Double, date: Date) {
-        let context = PersistenceController.shared.container.viewContext
-        let foodDay = self.foodDay(for: date) ?? FoodDay(context: context)
+        let foodDay = self.foodDay(for: date) ?? FoodDay(context: viewContext)
         foodDay.id = UUID()
         foodDay.date = Calendar.current.startOfDay(for: date)
 
-        let newMeal = Meal(context: context)
+        let newMeal = Meal(context: viewContext)
         newMeal.id = UUID()
         newMeal.name = name
         newMeal.products = products
@@ -260,6 +259,29 @@ class WorkoutViewModel: ObservableObject {
         } catch {
             print("Failed to fetch body weights: \(error)")
             return []
+        }
+    }
+    
+    func updateWaterIntake(for date: Date, newWaterIntake: Double) {
+        let context = viewContext
+        let fetchRequest: NSFetchRequest<FoodDay> = FoodDay.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "date == %@", date as CVarArg)
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            let foodDay = results.first ?? FoodDay(context: context)
+            foodDay.date = date
+            foodDay.water = newWaterIntake
+            try context.save()
+            
+            // Обновляем кэш
+            if let index = foodDaysCache.keys.firstIndex(where: { Calendar.current.isDate($0, inSameDayAs: date) }) {
+                foodDaysCache[foodDaysCache.keys[index]]?.water = newWaterIntake
+            } else {
+                foodDaysCache[date] = foodDay
+            }
+        } catch {
+            print("Failed to update water intake: \(error)")
         }
     }
     
@@ -441,7 +463,7 @@ class WorkoutViewModel: ObservableObject {
         newExercise.id = UUID()
         newExercise.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         newExercise.categories = category
-        newExercise.image = image?.jpegData(compressionQuality: 1.0)
+        newExercise.image = image?.jpegData(compressionQuality: 0.5)
         newExercise.isDefault = isDefault
         
         for attribute in attributes {

@@ -1,0 +1,90 @@
+//
+//  Localizable.strings
+//  FitnessPad
+//
+//  Created by Марк Кулик on 01.02.2025.
+//
+
+// MARK: - Exercises Names
+// Categories
+"category_arms" = "Arms";
+"category_chest" = "Chest";
+"category_back" = "Back";
+"category_cardio" = "Cardio";
+"category_abs" = "ABS";
+"category_shoulders" = "Shoulders";
+"category_legs" = "Legs";
+
+// Attributes
+"attribute_weight" = "Weight";
+"attribute_reps" = "Reps";
+"attribute_time" = "Time";
+"attribute_distance" = "Distance";
+
+// Exercises
+"bicep_curls_name" = "Bicep Curls";
+"bicep_curls_description" = "Bicep curls are a classic arm exercise that targets the biceps muscles. Use dumbbells or a barbell for this exercise.";
+
+"bench_press_name" = "Bench Press";
+"bench_press_description" = "The bench press is a compound exercise that targets the chest, shoulders, and triceps. Perform it on a flat bench with a barbell.";
+
+"dumbbell_row_name" = "Dumbbell Row";
+"dumbbell_row_description" = "Dumbbell rows are great for strengthening the back muscles. Use a bench for support and perform the exercise with one arm at a time.";
+
+"hammer_curls_name" = "Hammer Curls";
+"hammer_curls_description" = "Hammer curls target the biceps and forearms. Hold the dumbbells with a neutral grip (palms facing each other) for this variation.";
+
+"outside_running_name" = "Outside Running";
+"outside_running_description" = "Running outdoors is an excellent cardio exercise. It improves cardiovascular health and burns calories effectively.";
+
+"plank_name" = "Plank";
+"plank_description" = "The plank is a core-strengthening exercise. Maintain a straight body position while holding the plank for the desired time.";
+
+"pike_push_ups_name" = "Pike Push-Ups";
+"pike_push_ups_description" = "Pike push-ups target the shoulders and triceps. Elevate your hips to form a pike position and perform the push-ups.";
+
+"pistol_squats_name" = "Pistol Squats";
+"pistol_squats_description" = "Pistol squats are a challenging leg exercise that improves balance and strength. Perform them on one leg at a time.";
+
+"pull_ups_name" = "Pull-Ups";
+"pull_ups_description" = "Pull-ups are a great upper body exercise that targets the back, shoulders, and arms. Use a pull-up bar for this exercise.";
+
+"push_ups_name" = "Push-Ups";
+"push_ups_description" = "Push-ups are a classic bodyweight exercise that targets the chest, shoulders, and triceps. Perform them with proper form.";
+
+"treadmill_running_name" = "Treadmill Running";
+"treadmill_running_description" = "Running on a treadmill is a convenient way to perform cardio indoors. Adjust the speed and incline to match your fitness level.";
+
+"shoulder_press_name" = "Shoulder Press";
+"shoulder_press_description" = "The shoulder press targets the deltoid muscles. Use dumbbells or a barbell to perform this exercise.";
+
+"squat_name" = "Squat";
+"squat_description" = "Squats are a fundamental lower body exercise that targets the quads, hamstrings, and glutes. Use a barbell or bodyweight.";
+
+"swimming_name" = "Swimming";
+"swimming_description" = "Swimming is a full-body cardio exercise that improves endurance and strength. Swim laps in a pool for the best results.";
+
+// MARK: - Tabbar
+"tab_workouts" = "Workouts";
+"tab_food_days" = "Food Days";
+"tab_exercises" = "Exercises";
+"tab_progress" = "Progress";
+"tab_settings" = "Settings";
+
+// MARK: - WokroutDayView
+"unknown_date" = "Unknown Date";
+"tap_to_open_calendar" = "Tap to open Calendar";
+
+// MARK: - Calendar
+"create_workout_button" = "Create workout and add exercises";
+"add_exercises_button" = "Add exercises";
+
+
+// MARK: - EmptyWorkoutDayView
+"no_workout_found_message" = "No workout found for %@. Create one and add exercises in the calendar.";
+
+// MARK: - WorkoutDayViewHeaderView
+"weight_label" = "Body weight:";
+"add_exercise_label" = "Add\nExercise";
+"weight_placeholder" = "0 kg";
+"save_button_title" = "Save";

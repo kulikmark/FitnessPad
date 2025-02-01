@@ -59,10 +59,6 @@ struct WorkoutDayView: View {
             selectedDate = Calendar.current.startOfDay(for: Date())
             updateSelectedIndex(for: selectedDate) // Инициализация индекса при старте
         }
-//        .onChange(of: selectedDate) { _, newDate in
-//            viewModel.fetchWorkoutDays() // Обновляем данные при изменении даты
-//            updateSelectedIndex(for: newDate) // Обновляем индекс при изменении даты
-//        }
         .onChange(of: selectedDate) { _, newDate in
             if let index = viewModel.sortedWorkoutDays.firstIndex(where: { $0.date == newDate }) {
                 selectedIndex = index // Обновляем индекс при изменении даты
@@ -109,7 +105,7 @@ struct WorkoutDayView: View {
                     .onChange(of: selectedIndex) { _, newIndex in
                         if newIndex < viewModel.sortedWorkoutDays.count {
                             let selectedWorkoutDay = viewModel.sortedWorkoutDays[newIndex]
-                            selectedDate = selectedWorkoutDay.date ?? Date() // Обновляем выбранную дату
+                            selectedDate = selectedWorkoutDay.date ?? Date()
                         }
                     }
 
@@ -142,7 +138,7 @@ struct WorkoutDayView: View {
                 Spacer()
                 
                 HStack(alignment: .center, spacing: 4) {
-                    Text(workoutDay.date?.formattedDate() ?? "Unknown Date")
+                    Text(workoutDay.date?.formattedDate() ?? NSLocalizedString("unknown_date", comment: ""))
                         .font(.system(size: 16))
                         .foregroundColor(Color("ButtonTextColor"))
                     Text(workoutDay.date?.formattedDayOfWeek() ?? "N/A")
@@ -160,7 +156,7 @@ struct WorkoutDayView: View {
         
         func emptyTabView() -> some View {
             HStack {
-                Text("Tap to open Calendar")
+                Text(NSLocalizedString("tap_to_open_calendar", comment: ""))
                     .font(.system(size: 16))
                     .foregroundColor(.text)
                     .padding()
