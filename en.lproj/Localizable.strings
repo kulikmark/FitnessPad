@@ -18,8 +18,13 @@
 // Attributes
 "attribute_weight" = "Weight";
 "attribute_reps" = "Reps";
-"attribute_time" = "Time";
 "attribute_distance" = "Distance";
+"attribute_time" = "Time";
+// Attributes View
+"select_time" = "Select Time";
+"hours" = "Hours";
+"minutes" = "Minutes";
+"done" = "Done";
 
 // Exercises
 "bicep_curls_name" = "Bicep Curls";
@@ -75,7 +80,7 @@
 "unknown_date" = "Unknown Date";
 "tap_to_open_calendar" = "Tap to open Calendar";
 
-// MARK: - Calendar
+// MARK: - WorkoutDay Calendar
 "create_workout_button" = "Create workout and add exercises";
 "add_exercises_button" = "Add exercises";
 
@@ -88,3 +93,396 @@
 "add_exercise_label" = "Add\nExercise";
 "weight_placeholder" = "0 kg";
 "save_button_title" = "Save";
+
+// MARK: - FoodDayView
+
+"nutrition_summary_label" = "Nutrition Summary";
+"proteins_label" = "Proteins";
+"fats_label" = "Fats";
+"carbohydrates_label" = "Carbohydrates";
+"calories_label" = "Calories";
+"total_for_day_label" = "Total for day:";
+"add_meal_button" = "Add Meal";
+"no_meals_yet" = "No meals added yet.";
+"delete_button_label" = "Delete";
+
+
+// MARK: - FoodDayHeaderView
+"calculate_calories_label" = "Calculate\nCalories";
+
+// MARK: - FoodDayWeightWaterView
+"weight_label" = "Body Weight";
+"weight_placeholder" = "0 kg";
+"save_button" = "Save";
+"water_label" = "Water Intake";
+"minus_button" = "Decrease";
+"plus_button" = "Increase";
+"kg" = "kg";
+"liters" = "l";
+"milliliters" = "ml";
+"no_data" = "No data";
+
+
+// MARK: - Adding, Editing Meal Screen
+"add_product_label" = "Add Product";
+"enter_grams_label" = "Enter Grams";
+"grams_placeholder" = "Grams";
+"done_label" = "Done";
+"add_meal_label" = "Add Meal";
+"edit_meal_label" = "Edit Meal";
+"meal_name_placeholder" = "Meal Name";
+"selected_products_label" = "Selected Products";
+"nutrition_summary_label" = "Nutrition Summary";
+"proteins_label" = "Proteins";
+"fats_label" = "Fats";
+"carbohydrates_label" = "Carbohydrates";
+"calories_label" = "Calories";
+"save_changes_label" = "Save Changes";
+
+"meal_grams" = "g";
+"meal_kilograms" = "kg";
+"meal_calories" = "kcal";
+
+
+// MARK: - Product View Screen
+"product_search_placeholder" = "Search Products";
+"save_changes_label" = "Save Changes";
+"category_grid_title" = "Categories";
+"category_button_format" = "%@"; // Для категорий
+"search_placeholder" = "Search Products";
+"selected_products_section" = "Selected Products";
+"proteins_label" = "P: %.1f g";
+"fats_label" = "F: %.1f g";
+"carbs_label" = "C: %.1f g";
+"calories_label" = "%.0f kcal";
+
+
+// MARK: - Product
+"category_baked_goods" = "Baked Goods";
+"product_wheat_bread_premium" = "Wheat bread from premium flour";
+"product_wheat_bread_first_grade" = "Wheat bread from first-grade flour";
+"product_rye_wheat_bread" = "Rye-wheat flour bread";
+"product_rye_bread" = "Rye bread";
+"product_borodinsky_bread" = "Borodinsky bread";
+"product_grain_bread" = "Grain bread (premium wheat flour, crushed grain)";
+"product_whole_grain_bread" = "Whole grain bread from a mix of cereals";
+"product_dr_korner_seven_grains_crisps" = "Dr.Körner 'Seven Grains' crisps";
+"product_dr_korner_borodinsky_crisps" = "Dr.Körner 'Borodinsky' crisps";
+"product_dr_korner_buckwheat_crisps" = "Dr.Körner 'Buckwheat' crisps with vitamins";
+"product_dr_korner_rice_crisps" = "Dr.Körner 'Rice' crisps with vitamins";
+"product_pastries" = "Pastries";
+"product_wheat_flour_rusks" = "Wheat flour rusks";
+
+"product_pasta_durum_wheat_premium" = "Durum wheat pasta, premium";
+"product_pasta_durum_wheat_premium_cooked" = "Durum wheat pasta, premium, cooked";
+"product_pasta_premium" = "Pasta, premium";
+"product_pasta_premium_cooked" = "Pasta, premium, cooked";
+"product_buckwheat_kernel" = "Buckwheat kernel";
+"product_buckwheat_cooked" = "Cooked buckwheat";
+"product_buckwheat_prodel" = "Buckwheat prodel";
+"product_buckwheat_green_mistral" = "Green buckwheat (Mistral)";
+"product_rice_white_polished" = "White polished rice";
+"product_rice_white_polished_cooked" = "White polished rice, cooked";
+"product_rice_long_grain_unpolished" = "Long-grain unpolished rice";
+"product_rice_unpolished_cooked" = "Unpolished rice, cooked";
+"product_rice_red_unpolished" = "Red unpolished rice";
+"product_rice_wild_black" = "Wild black rice";
+"product_rice_wild_black_cooked" = "Wild black rice, cooked";
+"product_millet" = "Millet";
+"product_millet_cooked" = "Cooked millet";
+"product_oat_groat" = "Oat groat";
+"product_oat_flakes" = "Oat flakes";
+"product_oat_flakes_porridge_water" = "Oat flakes porridge (water)";
+"product_oat_flakes_porridge_milk" = "Oat flakes porridge (milk)";
+"product_oat_tolokno" = "Oat tolokno";
+"product_barley_pearl" = "Pearl barley";
+"product_barley_pearl_cooked" = "Pearl barley, cooked";
+"product_barley_groat" = "Barley groat";
+"product_barley_groat_cooked" = "Barley groat, cooked";
+"product_wheat_groat_poltavskaya" = "Poltavskaya wheat groat";
+"product_wheat_groat_poltavskaya_cooked" = "Poltavskaya wheat groat, cooked";
+"product_corn_grain" = "Corn grain";
+"product_corn_groat" = "Corn groat";
+"product_semolina" = "Semolina";
+"product_semolina_porridge_water" = "Semolina porridge (water)";
+"product_semolina_porridge_milk" = "Semolina porridge (milk)";
+
+"product_peas_grain" = "Peas, grain";
+"product_peas_whole_polished" = "Whole polished peas";
+"product_peas_split" = "Split peas";
+"product_peas_cooked" = "Cooked peas";
+"product_green_peas_fresh" = "Fresh green peas";
+"product_mung_bean" = "Mung bean";
+"product_mung_bean_cooked" = "Cooked mung bean";
+"product_chickpeas" = "Chickpeas";
+"product_chickpeas_cooked" = "Cooked chickpeas";
+"product_soybean_grain" = "Soybean grain";
+"product_soybean_beans" = "Soybeans";
+"product_soybean_beans_cooked" = "Cooked soybeans";
+"product_red_beans_common" = "Common red beans";
+"product_red_beans_cooked" = "Cooked red beans";
+"product_green_beans" = "Green beans";
+"product_lentils" = "Lentils";
+"product_lentils_cooked" = "Cooked lentils";
+"product_red_lentils" = "Red lentils";
+"product_red_lentils_split_persian_mistral" = "Red lentils, split Persian (Mistral)";
+"product_amaranth_grain" = "Amaranth grain";
+"product_amaranth_cooked" = "Cooked amaranth";
+"product_quinoa_grain" = "Quinoa grain";
+"product_quinoa_cooked" = "Cooked quinoa";
+
+"product_skim_milk" = "Skim milk";
+"product_milk_1_5_fat" = "Milk 1.5% fat";
+"product_milk_2_5_fat" = "Milk 2.5% fat";
+"product_milk_3_2_fat" = "Milk 3.2% fat";
+"product_cream_10_fat" = "Cream 10% fat";
+"product_cream_20_fat" = "Cream 20% fat";
+"product_low_fat_cottage_cheese" = "Low-fat cottage cheese";
+"product_cottage_cheese_5_fat" = "Cottage cheese 5% fat";
+"product_cottage_cheese_9_fat" = "Cottage cheese 9% fat";
+"product_cottage_cheese_18_fat" = "Cottage cheese 18% fat";
+"product_sour_cream_10_fat" = "Sour cream 10% fat";
+"product_sour_cream_20_fat" = "Sour cream 20% fat";
+"product_sour_cream_30_fat" = "Sour cream 30% fat";
+"product_low_fat_kefir" = "Low-fat kefir";
+"product_kefir_1_fat" = "Kefir 1% fat";
+"product_kefir_2_5_fat" = "Kefir 2.5% fat";
+"product_kefir_3_2_fat" = "Kefir 3.2% fat";
+"product_cow_milk_cheese" = "Cow milk cheese";
+"product_adyghe_cheese" = "Adyghe cheese";
+"product_gouda_cheese" = "Gouda cheese";
+"product_dutch_block_cheese" = "Dutch block cheese";
+"product_dutch_round_cheese" = "Dutch round cheese";
+"product_lamber_cheese" = "Lamber cheese";
+"product_lamber_cream_cheese" = "Lamber cream cheese";
+"product_maasdam_cheese" = "Maasdam cheese";
+"product_mozzarella_whole_milk" = "Mozzarella (whole milk)";
+"product_parmesan_cheese" = "Parmesan cheese";
+"product_russian_cheese" = "Russian cheese";
+"product_ricotta_whole_milk" = "Ricotta (whole milk)";
+"product_suluguni_cheese" = "Suluguni cheese";
+"product_tilsit_cheese" = "Tilsit cheese";
+"product_feta_cheese" = "Feta cheese";
+"product_edam_cheese" = "Edam cheese";
+"product_processed_cheese" = "Processed cheese";
+"product_viola_cheese" = "Viola cheese";
+"product_activia_yogurt" = "Activia yogurt";
+"product_greek_yogurt" = "Greek yogurt";
+"product_actimel" = "Actimel";
+
+"product_beef_1st_grade" = "Beef, 1st grade";
+"product_beef_2nd_grade" = "Beef, 2nd grade";
+"product_beef_tenderloin" = "Beef tenderloin";
+"product_veal_1st_grade" = "Veal, 1st grade";
+"product_fatty_pork" = "Fatty pork";
+"product_lean_pork" = "Lean pork";
+"product_pork_tenderloin" = "Pork tenderloin";
+"product_lamb_1st_grade" = "Lamb, 1st grade";
+"product_lamb_2nd_grade" = "Lamb, 2nd grade";
+"product_horse_meat" = "Horse meat";
+"product_beef_tongue" = "Beef tongue";
+"product_pork_tongue" = "Pork tongue";
+"product_beef_liver" = "Beef liver";
+"product_pork_liver" = "Pork liver";
+"product_rabbit" = "Rabbit";
+"product_wild_boar" = "Wild boar";
+"product_elk" = "Elk";
+"product_venison" = "Venison";
+
+"product_broiler_chicken_1st_grade" = "Broiler chicken, 1st grade";
+"product_broiler_chicken_2nd_grade" = "Broiler chicken, 2nd grade";
+"product_chicken_1st_grade" = "Chicken, 1st grade";
+"product_chicken_2nd_grade" = "Chicken, 2nd grade";
+"product_chicken_breast" = "Chicken breast";
+"product_chicken_drumsticks" = "Chicken drumsticks";
+"product_chicken_liver" = "Chicken liver";
+"product_chicken_heart" = "Chicken heart";
+"product_turkey" = "Turkey";
+"product_turkey_breast" = "Turkey breast";
+"product_turkey_mince" = "Turkey mince";
+"product_duck_meat_and_skin" = "Duck, meat and skin";
+"product_wild_duck_meat_and_skin" = "Wild duck, meat and skin";
+"product_wild_duck_meat" = "Wild duck, meat";
+"product_quail_meat_and_skin" = "Quail, meat and skin";
+"product_ostrich_meat" = "Ostrich meat";
+"product_pheasant_meat_and_skin" = "Pheasant, meat and skin";
+"product_pheasant_breast" = "Pheasant breast";
+
+"product_diet_sausage" = "Diet Sausage";
+"product_doctor_sausage" = "Doctor's Sausage";
+"product_amateur_sausage" = "Amateur Sausage";
+"product_milk_sausage" = "Milk Sausage";
+"product_moscow_sausage" = "Moscow Sausage";
+"product_russian_sausage" = "Russian Sausage";
+"product_smoked_moscow_sausage" = "Smoked Moscow Sausage";
+"product_servelat_sausage" = "Servelat Sausage";
+"product_krakow_sausage" = "Krakow Sausage";
+"product_odessa_sausage" = "Odessa Sausage";
+"product_braunschweig_sausage" = "Braunschweig Sausage";
+"product_pork_smoked_sausage" = "Pork Smoked Sausage";
+"product_grain_smoked_sausage" = "Grain Smoked Sausage";
+"product_liver_sausage" = "Liver Sausage";
+"product_smoked_brisket" = "Smoked Brisket";
+"product_smoked_loin" = "Smoked Loin";
+"product_chopped_ham" = "Chopped Ham";
+"product_milk_sausages" = "Milk Sausages";
+"product_beef_sausages" = "Beef Sausages";
+"product_pork_sausages" = "Pork Sausages";
+"product_chicken_sausages" = "Chicken Sausages";
+"product_beef_frankfurters" = "Beef Frankfurters";
+"product_pork_frankfurters" = "Pork Frankfurters";
+"product_shpikachki" = "Shpikachki";
+"product_canned_beef" = "Canned Beef";
+"product_canned_pork" = "Canned Pork";
+
+"product_argentina_fish" = "Argentina Fish";
+"product_white_amur" = "White Amur";
+"product_bullhead_fish" = "Bullhead Fish";
+"product_vobla_fish" = "Vobla Fish";
+"product_pink_salmon" = "Pink Salmon";
+"product_dorado_fish" = "Dorado Fish";
+"product_spotted_wolffish" = "Spotted Wolffish";
+"product_squid" = "Squid";
+"product_far_east_flounder" = "Far East Flounder";
+"product_crucian_carp" = "Crucian Carp";
+"product_carp" = "Carp";
+"product_chum_salmon" = "Chum Salmon";
+"product_mullet" = "Mullet";
+"product_coho_salmon" = "Coho Salmon";
+"product_baltic_sprat" = "Baltic Sprat";
+"product_caspian_sprat" = "Caspian Sprat";
+"product_whale_meat" = "Whale Meat";
+"product_kamchatka_crab_meat" = "Kamchatka Crab Meat";
+"product_shrimp" = "Shrimp";
+"product_lobster" = "Lobster";
+"product_boiled_lobster" = "Boiled Lobster";
+"product_ice_fish" = "Ice Fish";
+"product_lemongrass_fish" = "Lemongrass Fish";
+"product_bream" = "Bream";
+"product_lobster_tail" = "Lobster Tail";
+"product_atlantic_salmon" = "Atlantic Salmon";
+"product_salmon" = "Salmon";
+"product_macrourus_fish" = "Macrourus Fish";
+"product_mussels" = "Mussels";
+"product_pollock" = "Pollock";
+"product_spring_capelin" = "Spring Capelin";
+"product_autumn_capelin" = "Autumn Capelin";
+"product_fish_milt" = "Fish Milt";
+"product_scallop" = "Scallop";
+"product_navaga_fish" = "Navaga Fish";
+"product_burbot" = "Burbot";
+"product_red_salmon" = "Red Salmon";
+"product_sea_bass" = "Sea Bass";
+"product_river_perch" = "River Perch";
+"product_lobster_boiled" = "Boiled Lobster";
+"product_caspian_sturgeon" = "Caspian Sturgeon";
+"product_sturgeon" = "Sturgeon";
+"product_halibut" = "Halibut";
+"product_pangasius" = "Pangasius";
+"product_petrushka_fish" = "Petrushka Fish";
+"product_pikul_fish" = "Pikul Fish";
+
+"product_dried_vobla" = "Dried Vobla";
+"product_hot_smoked_pink_salmon" = "Hot Smoked Pink Salmon";
+"product_salted_pink_salmon" = "Salted Pink Salmon";
+"product_dried_squid" = "Dried Squid";
+"product_salted_chum_salmon" = "Salted Chum Salmon";
+"product_hot_smoked_baltic_sprat" = "Hot Smoked Baltic Sprat";
+"product_salted_baltic_sprat" = "Salted Baltic Sprat";
+"product_spiced_salted_sprat" = "Spiced Salted Sprat";
+"product_crab_sticks" = "Crab Sticks";
+"product_red_salmon_caviar" = "Red Salmon Caviar";
+"product_pollock_caviar" = "Pollock Caviar";
+"product_santa_bremor_capelin_caviar" = "Santa Bremor Capelin Caviar";
+"product_herring_caviar" = "Herring Caviar";
+"product_black_sturgeon_caviar" = "Black Sturgeon Caviar";
+"product_pressed_sturgeon_caviar" = "Pressed Sturgeon Caviar";
+"product_pike_caviar" = "Pike Caviar";
+"product_salted_salmon" = "Salted Salmon";
+"product_dried_bream" = "Dried Bream";
+"product_hot_smoked_bream" = "Hot Smoked Bream";
+"product_cold_smoked_bream" = "Cold Smoked Bream";
+"product_smoked_butterfish" = "Smoked Butterfish";
+"product_smoked_capelin" = "Smoked Capelin";
+"product_hot_smoked_sea_bass" = "Hot Smoked Sea Bass";
+"product_cold_smoked_sturgeon" = "Cold Smoked Sturgeon";
+"product_smoked_sprat" = "Smoked Sprat";
+"product_hot_smoked_herring" = "Hot Smoked Herring";
+"product_medium_salted_atlantic_herring" = "Medium Salted Atlantic Herring";
+"product_medium_salted_pacific_herring" = "Medium Salted Pacific Herring";
+"product_salted_herring" = "Salted Herring";
+"product_salted_salmon_with_head" = "Salted Salmon with Head";
+"product_smoked_salmon" = "Smoked Salmon";
+"product_hot_smoked_mackerel" = "Hot Smoked Mackerel";
+"product_cold_smoked_mackerel" = "Cold Smoked Mackerel";
+"product_smoked_trout" = "Smoked Trout";
+"product_lightly_salted_trout" = "Lightly Salted Trout";
+"product_fatty_lightly_salted_trout" = "Fatty Lightly Salted Trout";
+"product_salted_anchovy" = "Salted Anchovy";
+
+
+"product_bullheads_in_tomato_sauce" = "Bullheads in Tomato Sauce";
+"product_natural_pink_salmon" = "Natural Pink Salmon";
+"product_pink_salmon_in_tomato_sauce" = "Pink Salmon in Tomato Sauce";
+"product_squid_canned" = "Squid";
+"product_sprats_in_tomato_sauce" = "Sprats in Tomato Sauce";
+"product_crabs_canned" = "Crabs";
+"product_salmon_canned" = "Salmon";
+"product_mussels_canned" = "Mussels";
+"product_seaweed_canned" = "Seaweed";
+"product_pollock_liver_canned" = "Pollock Liver";
+"product_cod_liver_canned" = "Cod Liver";
+"product_saury_in_oil" = "Saury Blanched in Oil";
+"product_sardines_with_oil" = "Sardines with Added Oil";
+"product_sardines_in_oil" = "Sardines in Oil";
+"product_sardines_in_tomato_sauce" = "Sardines in Tomato Sauce";
+"product_herring_canned" = "Herring";
+"product_herring_in_vegetable_oil" = "Herring in Vegetable Oil";
+"product_natural_mackerel" = "Natural Mackerel";
+"product_mackerel_in_oil" = "Mackerel in Oil";
+"product_horse_mackerel_in_oil" = "Horse Mackerel in Oil";
+"product_horse_mackerel_in_tomato_sauce" = "Horse Mackerel in Tomato Sauce";
+"product_natural_tuna" = "Natural Tuna";
+"product_tuna_in_oil" = "Tuna in Oil";
+"product_sprats_in_oil" = "Sprats in Oil";
+"product_sprat_pate" = "Sprat Pate";
+
+"product_chicken_egg" = "Chicken Egg";
+"product_egg_white" = "Egg White";
+"product_egg_yolk" = "Egg Yolk";
+"product_boiled_chicken_egg" = "Boiled Chicken Egg";
+"product_fried_chicken_egg_no_oil" = "Fried Chicken Egg (No Oil)";
+"product_quail_egg" = "Quail Egg";
+"product_goose_egg" = "Goose Egg";
+"product_duck_egg" = "Duck Egg";
+"product_ostrich_egg" = "Ostrich Egg";
+"product_melange" = "Melange";
+"product_egg_powder" = "Egg Powder";
+
+// MARK: - Exercises View
+"exercises_search_placeholder" = "Search Exercises";
+"exercises_list_title" = "Exercises List";
+"restore_exercises_button" = "Restore\nExercises";
+"add_exercise_button" = "New\nExercise";
+"favourites_only_button" = "Favourite";
+"exercise_category_title" = "Exercise Category";
+"add_new_category_button" = "+ Add New Category";
+"create_new_category_title" = "Create New Category";
+"add_exercise_picture_title" = "Add Exercise Picture";
+"select_image_button" = "Select Image";
+"select_attributes_title" = "Select Attributes for Exercise";
+"create_exercise_button" = "Create Exercise";
+"save_changes_button" = "Save Changes";
+"delete_exercise_warning_title" = "Warning";
+"delete_exercise_warning_message" = "This will remove the exercise from all workout days and reset your progress. Are you sure you want to delete it?";
+"delete_button" = "Delete";
+"cancel_button" = "Cancel";
+"default_exercise_alert_title" = "Locked Operation";
+"default_exercise_alert_message" = "You cannot delete or edit the default exercise.";
+"exercise_already_added_title" = "Exercise Already Added";
+"exercise_already_added_message" = "This exercise is already added to your workout day.";
+"reset_exercises_title" = "Reset Exercises";
+"reset_exercises_message" = "All exercises will be reset to their original state. This action cannot be undone.";
+"continue_button" = "Continue";
+"error_title" = "Error";
+"error_message" = "Something went wrong.";

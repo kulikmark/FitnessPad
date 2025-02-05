@@ -10,9 +10,22 @@
 		6D0655602C58F7B20015CB6B /* FitnessPad.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D06555E2C58F7B20015CB6B /* FitnessPad.xcdatamodeld */; };
 		6D1526D02D4CFB600064BF75 /* FoodDayWeightWaterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1526CF2D4CFB600064BF75 /* FoodDayWeightWaterView.swift */; };
 		6D1526D82D4EC1C70064BF75 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D1526D72D4EC1C70064BF75 /* Localizable.strings */; };
-		6D26F10E27EF6909002D5F4F /* WorkoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D26F10D27EF6909002D5F4F /* WorkoutViewModel.swift */; };
+		6D15274A2D5122530064BF75 /* ExerciseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1527492D5122530064BF75 /* ExerciseService.swift */; };
+		6D15274C2D5122620064BF75 /* FoodService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D15274B2D5122620064BF75 /* FoodService.swift */; };
+		6D15274E2D51226E0064BF75 /* BodyWeightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D15274D2D51226E0064BF75 /* BodyWeightService.swift */; };
+		6D1527522D5122AE0064BF75 /* WorkoutDayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1527512D5122AE0064BF75 /* WorkoutDayService.swift */; };
+		6D1527542D515A440064BF75 /* ExerciseCategoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1527532D515A440064BF75 /* ExerciseCategoryService.swift */; };
+		6D1527582D516ABC0064BF75 /* OldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1527572D516ABC0064BF75 /* OldViewModel.swift */; };
+		6D15275A2D520C510064BF75 /* FoodDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1527592D520C510064BF75 /* FoodDayViewModel.swift */; };
+		6D15275D2D5273890064BF75 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D15275C2D5273890064BF75 /* ExerciseViewModel.swift */; };
+		6D15275F2D5274720064BF75 /* WorkoutDayExerciseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D15275E2D5274720064BF75 /* WorkoutDayExerciseService.swift */; };
+		6D1527612D5278280064BF75 /* BodyWeightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1527602D5278280064BF75 /* BodyWeightViewModel.swift */; };
+		6D1527632D527A9D0064BF75 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1527622D527A9D0064BF75 /* CoreDataService.swift */; };
+		6D26F10E27EF6909002D5F4F /* WorkoutDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D26F10D27EF6909002D5F4F /* WorkoutDayViewModel.swift */; };
 		6D37D0FA2C638FD5004AB4DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DAEA1A527E5EA0F0001EDF7 /* Assets.xcassets */; };
 		6D37D0FC2C639AEC004AB4DD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D37D0FB2C639AEC004AB4DD /* ImagePicker.swift */; };
+		6D3C26172D53F9C000C3DD12 /* CategoryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3C26162D53F9C000C3DD12 /* CategoryTile.swift */; };
+		6D3C26192D53F9FA00C3DD12 /* ProductRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3C26182D53F9FA00C3DD12 /* ProductRow.swift */; };
 		6D536B752C6961B800835D3C /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D536B742C6961B800835D3C /* BackButton.swift */; };
 		6D538FF02C611B5D00478628 /* DeleteHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D538FEF2C611B5D00478628 /* DeleteHintView.swift */; };
 		6D55DB2B2D42E45300A642C5 /* CloseButtonCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D55DB2A2D42E45300A642C5 /* CloseButtonCircle.swift */; };
@@ -21,9 +34,7 @@
 		6D55DB312D46F9BC00A642C5 /* VideoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D55DB302D46F9BC00A642C5 /* VideoPicker.swift */; };
 		6D55DB332D479D8F00A642C5 /* FoodDayHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D55DB322D479D8F00A642C5 /* FoodDayHeaderView.swift */; };
 		6D55DB8E2D4A328100A642C5 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D55DB8D2D4A328100A642C5 /* Product.swift */; };
-		6D55DB902D4A32B700A642C5 /* ProductSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D55DB8F2D4A32B700A642C5 /* ProductSelectionView.swift */; };
 		6D567C5B27EA15290039FCAD /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D567C5A27EA15290039FCAD /* TabBarView.swift */; };
-		6D6259AC2D35CC330082FC4B /* swipeablePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6259AB2D35CC330082FC4B /* swipeablePanel.swift */; };
 		6D6259AF2D35D2B20082FC4B /* UIApplication+endEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6259AE2D35D2B20082FC4B /* UIApplication+endEditing.swift */; };
 		6D6259B12D35D2F90082FC4B /* WorkoutDayViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6259B02D35D2F90082FC4B /* WorkoutDayViewHeaderView.swift */; };
 		6D6259B32D3724810082FC4B /* WorkoutDay+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6259B22D3724810082FC4B /* WorkoutDay+DateFormatter.swift */; };
@@ -49,7 +60,25 @@
 		6DBAF97227E7E04E005B8EE4 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97127E7E04E005B8EE4 /* RoundedCorners.swift */; };
 		6DBAF97827E9288C005B8EE4 /* ExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97727E9288C005B8EE4 /* ExercisesView.swift */; };
 		6DBAF97A27E9289C005B8EE4 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAF97927E9289C005B8EE4 /* ProgressView.swift */; };
-		6DE2A56527F22846002008FE /* WorkoutDayDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE2A56427F22846002008FE /* WorkoutDayDetailsView.swift */; };
+		6DE6191B2D52BB1B0036BCDF /* ProductSelectionViewSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6191A2D52BB1A0036BCDF /* ProductSelectionViewSearchBar.swift */; };
+		6DE6191F2D52BC760036BCDF /* ExercisesViewSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6191E2D52BC760036BCDF /* ExercisesViewSearchBar.swift */; };
+		6DE619212D52CA020036BCDF /* LocalisedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619202D52CA020036BCDF /* LocalisedString.swift */; };
+		6DE619232D535D790036BCDF /* CalendarTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619222D535D790036BCDF /* CalendarTabs.swift */; };
+		6DE619252D535DD10036BCDF /* FoodDayContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619242D535DD10036BCDF /* FoodDayContentView.swift */; };
+		6DE6192C2D535F080036BCDF /* BMRInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6192B2D535F080036BCDF /* BMRInfoView.swift */; };
+		6DE619302D5361260036BCDF /* CalendarStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6192F2D5361260036BCDF /* CalendarStrip.swift */; };
+		6DE619322D5361430036BCDF /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619312D5361430036BCDF /* CalendarDayView.swift */; };
+		6DE619342D5370AA0036BCDF /* buttonWithLabelAndImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619332D5370AA0036BCDF /* buttonWithLabelAndImage.swift */; };
+		6DE619362D5377B60036BCDF /* SelectedProductModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619352D5377B60036BCDF /* SelectedProductModel.swift */; };
+		6DE619382D5377F10036BCDF /* GramInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619372D5377F10036BCDF /* GramInputView.swift */; };
+		6DE6193A2D5378780036BCDF /* NutritionInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619392D5378780036BCDF /* NutritionInfoRow.swift */; };
+		6DE6193D2D5378F00036BCDF /* MealFormViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6193C2D5378F00036BCDF /* MealFormViewExtension.swift */; };
+		6DE619402D53827F0036BCDF /* Text+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6193F2D53827F0036BCDF /* Text+Extension.swift */; };
+		6DE619422D53C70A0036BCDF /* CategoryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619412D53C70A0036BCDF /* CategoryGridView.swift */; };
+		6DE619442D53C7330036BCDF /* ProductListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619432D53C7330036BCDF /* ProductListView.swift */; };
+		6DE619462D53CD400036BCDF /* DaySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619452D53CD400036BCDF /* DaySummaryView.swift */; };
+		6DE619482D53CD7C0036BCDF /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619472D53CD7C0036BCDF /* MealListView.swift */; };
+		6DE6194A2D53CDA10036BCDF /* MealRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE619492D53CDA10036BCDF /* MealRowView.swift */; };
 		6DF2CFEC2D39B70100DCFC9C /* ExerciseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF2CFEB2D39B70100DCFC9C /* ExerciseFormView.swift */; };
 		6DF2CFEE2D39BBB200DCFC9C /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF2CFED2D39BBB200DCFC9C /* CustomTextField.swift */; };
 		6DF2CFF02D39BBD100DCFC9C /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF2CFEF2D39BBD100DCFC9C /* CustomButton.swift */; };
@@ -64,9 +93,22 @@
 		6D1526CF2D4CFB600064BF75 /* FoodDayWeightWaterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDayWeightWaterView.swift; sourceTree = "<group>"; };
 		6D1526D62D4EC1C70064BF75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6D1526D92D4EC20C0064BF75 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6D26F10D27EF6909002D5F4F /* WorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutViewModel.swift; sourceTree = "<group>"; };
+		6D1527492D5122530064BF75 /* ExerciseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseService.swift; sourceTree = "<group>"; };
+		6D15274B2D5122620064BF75 /* FoodService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodService.swift; sourceTree = "<group>"; };
+		6D15274D2D51226E0064BF75 /* BodyWeightService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyWeightService.swift; sourceTree = "<group>"; };
+		6D1527512D5122AE0064BF75 /* WorkoutDayService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayService.swift; sourceTree = "<group>"; };
+		6D1527532D515A440064BF75 /* ExerciseCategoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategoryService.swift; sourceTree = "<group>"; };
+		6D1527572D516ABC0064BF75 /* OldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldViewModel.swift; sourceTree = "<group>"; };
+		6D1527592D520C510064BF75 /* FoodDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDayViewModel.swift; sourceTree = "<group>"; };
+		6D15275C2D5273890064BF75 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
+		6D15275E2D5274720064BF75 /* WorkoutDayExerciseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayExerciseService.swift; sourceTree = "<group>"; };
+		6D1527602D5278280064BF75 /* BodyWeightViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyWeightViewModel.swift; sourceTree = "<group>"; };
+		6D1527622D527A9D0064BF75 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+		6D26F10D27EF6909002D5F4F /* WorkoutDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayViewModel.swift; sourceTree = "<group>"; };
 		6D37D0F52C638C03004AB4DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D37D0FB2C639AEC004AB4DD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		6D3C26162D53F9C000C3DD12 /* CategoryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTile.swift; sourceTree = "<group>"; };
+		6D3C26182D53F9FA00C3DD12 /* ProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductRow.swift; sourceTree = "<group>"; };
 		6D536B742C6961B800835D3C /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		6D538FEF2C611B5D00478628 /* DeleteHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteHintView.swift; sourceTree = "<group>"; };
 		6D55DB2A2D42E45300A642C5 /* CloseButtonCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButtonCircle.swift; sourceTree = "<group>"; };
@@ -75,9 +117,7 @@
 		6D55DB302D46F9BC00A642C5 /* VideoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPicker.swift; sourceTree = "<group>"; };
 		6D55DB322D479D8F00A642C5 /* FoodDayHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDayHeaderView.swift; sourceTree = "<group>"; };
 		6D55DB8D2D4A328100A642C5 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
-		6D55DB8F2D4A32B700A642C5 /* ProductSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSelectionView.swift; sourceTree = "<group>"; };
 		6D567C5A27EA15290039FCAD /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
-		6D6259AB2D35CC330082FC4B /* swipeablePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swipeablePanel.swift; sourceTree = "<group>"; };
 		6D6259AE2D35D2B20082FC4B /* UIApplication+endEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+endEditing.swift"; sourceTree = "<group>"; };
 		6D6259B02D35D2F90082FC4B /* WorkoutDayViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayViewHeaderView.swift; sourceTree = "<group>"; };
 		6D6259B22D3724810082FC4B /* WorkoutDay+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutDay+DateFormatter.swift"; sourceTree = "<group>"; };
@@ -106,7 +146,25 @@
 		6DBAF97127E7E04E005B8EE4 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 		6DBAF97727E9288C005B8EE4 /* ExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesView.swift; sourceTree = "<group>"; };
 		6DBAF97927E9289C005B8EE4 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
-		6DE2A56427F22846002008FE /* WorkoutDayDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDayDetailsView.swift; sourceTree = "<group>"; };
+		6DE6191A2D52BB1A0036BCDF /* ProductSelectionViewSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSelectionViewSearchBar.swift; sourceTree = "<group>"; };
+		6DE6191E2D52BC760036BCDF /* ExercisesViewSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesViewSearchBar.swift; sourceTree = "<group>"; };
+		6DE619202D52CA020036BCDF /* LocalisedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalisedString.swift; sourceTree = "<group>"; };
+		6DE619222D535D790036BCDF /* CalendarTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTabs.swift; sourceTree = "<group>"; };
+		6DE619242D535DD10036BCDF /* FoodDayContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDayContentView.swift; sourceTree = "<group>"; };
+		6DE6192B2D535F080036BCDF /* BMRInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMRInfoView.swift; sourceTree = "<group>"; };
+		6DE6192F2D5361260036BCDF /* CalendarStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarStrip.swift; sourceTree = "<group>"; };
+		6DE619312D5361430036BCDF /* CalendarDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayView.swift; sourceTree = "<group>"; };
+		6DE619332D5370AA0036BCDF /* buttonWithLabelAndImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = buttonWithLabelAndImage.swift; sourceTree = "<group>"; };
+		6DE619352D5377B60036BCDF /* SelectedProductModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedProductModel.swift; sourceTree = "<group>"; };
+		6DE619372D5377F10036BCDF /* GramInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GramInputView.swift; sourceTree = "<group>"; };
+		6DE619392D5378780036BCDF /* NutritionInfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionInfoRow.swift; sourceTree = "<group>"; };
+		6DE6193C2D5378F00036BCDF /* MealFormViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealFormViewExtension.swift; sourceTree = "<group>"; };
+		6DE6193F2D53827F0036BCDF /* Text+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Extension.swift"; sourceTree = "<group>"; };
+		6DE619412D53C70A0036BCDF /* CategoryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryGridView.swift; sourceTree = "<group>"; };
+		6DE619432D53C7330036BCDF /* ProductListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListView.swift; sourceTree = "<group>"; };
+		6DE619452D53CD400036BCDF /* DaySummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaySummaryView.swift; sourceTree = "<group>"; };
+		6DE619472D53CD7C0036BCDF /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
+		6DE619492D53CDA10036BCDF /* MealRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealRowView.swift; sourceTree = "<group>"; };
 		6DF2CFEB2D39B70100DCFC9C /* ExerciseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseFormView.swift; sourceTree = "<group>"; };
 		6DF2CFED2D39BBB200DCFC9C /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		6DF2CFEF2D39BBD100DCFC9C /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
@@ -134,32 +192,42 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6D15275B2D520C8F0064BF75 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				6D1527512D5122AE0064BF75 /* WorkoutDayService.swift */,
+				6D15275E2D5274720064BF75 /* WorkoutDayExerciseService.swift */,
+				6D15274B2D5122620064BF75 /* FoodService.swift */,
+				6D15274D2D51226E0064BF75 /* BodyWeightService.swift */,
+				6D1527532D515A440064BF75 /* ExerciseCategoryService.swift */,
+				6D1527492D5122530064BF75 /* ExerciseService.swift */,
+				6D1527622D527A9D0064BF75 /* CoreDataService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		6D26F10C27EF68CF002D5F4F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				6D26F10D27EF6909002D5F4F /* WorkoutViewModel.swift */,
+				6D26F10D27EF6909002D5F4F /* WorkoutDayViewModel.swift */,
+				6D1527592D520C510064BF75 /* FoodDayViewModel.swift */,
+				6D1527602D5278280064BF75 /* BodyWeightViewModel.swift */,
+				6D15275C2D5273890064BF75 /* ExerciseViewModel.swift */,
+				6D1527572D516ABC0064BF75 /* OldViewModel.swift */,
+				6D15275B2D520C8F0064BF75 /* Services */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		6D37D0EA2C62C03D004AB4DD /* WorkoutDayDetails */ = {
-			isa = PBXGroup;
-			children = (
-				6DE2A56427F22846002008FE /* WorkoutDayDetailsView.swift */,
-				6D6259AB2D35CC330082FC4B /* swipeablePanel.swift */,
-			);
-			path = WorkoutDayDetails;
-			sourceTree = "<group>";
-		};
-		6D37D0F32C63810A004AB4DD /* Progress */ = {
+		6D37D0F32C63810A004AB4DD /* Progress Screen */ = {
 			isa = PBXGroup;
 			children = (
 				6DBAF97927E9289C005B8EE4 /* ProgressView.swift */,
 			);
-			path = Progress;
+			path = "Progress Screen";
 			sourceTree = "<group>";
 		};
-		6D538FEA2C610D1000478628 /* WorkoutDayView */ = {
+		6D538FEA2C610D1000478628 /* Workout Day Screen */ = {
 			isa = PBXGroup;
 			children = (
 				6DADFDDB28044BE100A122E0 /* WorkoutDayView.swift */,
@@ -172,7 +240,7 @@
 				6D6259DB2D3863870082FC4B /* ExerciseAttributes.swift */,
 				6D538FEF2C611B5D00478628 /* DeleteHintView.swift */,
 			);
-			path = WorkoutDayView;
+			path = "Workout Day Screen";
 			sourceTree = "<group>";
 		};
 		6D6259AD2D35D2900082FC4B /* Helpers */ = {
@@ -182,16 +250,17 @@
 				6D8B486A2D351F9500516B7C /* NumberFormatter+Decimal+Integer.swift */,
 				6D6259AE2D35D2B20082FC4B /* UIApplication+endEditing.swift */,
 				6D6259B22D3724810082FC4B /* WorkoutDay+DateFormatter.swift */,
+				6DE619202D52CA020036BCDF /* LocalisedString.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		6D6259B82D37CFE70082FC4B /* SettingsView */ = {
+		6D6259B82D37CFE70082FC4B /* Settings Screen */ = {
 			isa = PBXGroup;
 			children = (
 				6D6259B62D37CFD40082FC4B /* SettingsView.swift */,
 			);
-			path = SettingsView;
+			path = "Settings Screen";
 			sourceTree = "<group>";
 		};
 		6D8B486C2D351FD900516B7C /* Data */ = {
@@ -210,6 +279,10 @@
 				6DBAF97127E7E04E005B8EE4 /* RoundedCorners.swift */,
 				6D536B742C6961B800835D3C /* BackButton.swift */,
 				6D55DB2A2D42E45300A642C5 /* CloseButtonCircle.swift */,
+				6DE619332D5370AA0036BCDF /* buttonWithLabelAndImage.swift */,
+				6DE6193F2D53827F0036BCDF /* Text+Extension.swift */,
+				6DF2CFED2D39BBB200DCFC9C /* CustomTextField.swift */,
+				6DF2CFEF2D39BBD100DCFC9C /* CustomButton.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -246,14 +319,9 @@
 		6DAEA1A027E5EA0D0001EDF7 /* FitnessPad */ = {
 			isa = PBXGroup;
 			children = (
-				6DAEA1A127E5EA0D0001EDF7 /* FitnessPadApp.swift */,
-				6DF2CFF32D39D67300DCFC9C /* LaunchScreenView.swift */,
-				6DAEA1A327E5EA0D0001EDF7 /* ContentView.swift */,
-				6DAEA1AA27E5EA0F0001EDF7 /* Persistence.swift */,
-				6DADFDB627FC711900A122E0 /* DefaultExercisesModel.swift */,
+				6DE6192D2D535FC60036BCDF /* Resources */,
 				6D26F10C27EF68CF002D5F4F /* ViewModel */,
 				6DAEA1B427E5F3EB0001EDF7 /* Views */,
-				6D6259B82D37CFE70082FC4B /* SettingsView */,
 				6DBAF97027E7E014005B8EE4 /* Extensions */,
 				6DAEA1A727E5EA0F0001EDF7 /* Preview Content */,
 			);
@@ -272,11 +340,11 @@
 			isa = PBXGroup;
 			children = (
 				6DF3A4D527EDDB96005260D0 /* TabBar */,
-				6D538FEA2C610D1000478628 /* WorkoutDayView */,
-				6D37D0EA2C62C03D004AB4DD /* WorkoutDayDetails */,
-				6DF2CFF72D3FC28000DCFC9C /* FoodDay */,
-				6DF3A4D127EDD2B9005260D0 /* Exercises */,
-				6D37D0F32C63810A004AB4DD /* Progress */,
+				6D538FEA2C610D1000478628 /* Workout Day Screen */,
+				6DF2CFF72D3FC28000DCFC9C /* Food Day Screen */,
+				6DF3A4D127EDD2B9005260D0 /* Exercises List Screen */,
+				6D37D0F32C63810A004AB4DD /* Progress Screen */,
+				6D6259B82D37CFE70082FC4B /* Settings Screen */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -292,32 +360,123 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		6DF2CFF72D3FC28000DCFC9C /* FoodDay */ = {
+		6DE619262D535E220036BCDF /* FoodDayView */ = {
 			isa = PBXGroup;
 			children = (
 				6DF2CFF52D3FC27600DCFC9C /* FoodDayView.swift */,
 				6D55DB322D479D8F00A642C5 /* FoodDayHeaderView.swift */,
 				6D1526CF2D4CFB600064BF75 /* FoodDayWeightWaterView.swift */,
-				6DF2CFF82D40085100DCFC9C /* MealFormView.swift */,
-				6D55DB8F2D4A32B700A642C5 /* ProductSelectionView.swift */,
-				6D55DB8D2D4A328100A642C5 /* Product.swift */,
-				6D55DB2C2D46CCA400A642C5 /* CaloriesCalculator.swift */,
+				6DE6192E2D5361110036BCDF /* FoodDayCalendarView */,
+				6DE6193B2D5378B40036BCDF /* FoodDayContent */,
 			);
-			path = FoodDay;
+			path = FoodDayView;
 			sourceTree = "<group>";
 		};
-		6DF3A4D127EDD2B9005260D0 /* Exercises */ = {
+		6DE619272D535E760036BCDF /* Adding, Editing Meal Screen */ = {
 			isa = PBXGroup;
 			children = (
+				6DE6193E2D537CC50036BCDF /* SelectedProductModel */,
+				6DF2CFF82D40085100DCFC9C /* MealFormView.swift */,
+				6DE619372D5377F10036BCDF /* GramInputView.swift */,
+				6DE6193C2D5378F00036BCDF /* MealFormViewExtension.swift */,
+			);
+			path = "Adding, Editing Meal Screen";
+			sourceTree = "<group>";
+		};
+		6DE619282D535E9C0036BCDF /* Product Selection Screen */ = {
+			isa = PBXGroup;
+			children = (
+				6DE619412D53C70A0036BCDF /* CategoryGridView.swift */,
+				6D3C26162D53F9C000C3DD12 /* CategoryTile.swift */,
+				6DE619432D53C7330036BCDF /* ProductListView.swift */,
+				6D3C26182D53F9FA00C3DD12 /* ProductRow.swift */,
+				6DE6191A2D52BB1A0036BCDF /* ProductSelectionViewSearchBar.swift */,
+				6DE619292D535EB20036BCDF /* Product Model */,
+			);
+			path = "Product Selection Screen";
+			sourceTree = "<group>";
+		};
+		6DE619292D535EB20036BCDF /* Product Model */ = {
+			isa = PBXGroup;
+			children = (
+				6D55DB8D2D4A328100A642C5 /* Product.swift */,
+			);
+			path = "Product Model";
+			sourceTree = "<group>";
+		};
+		6DE6192A2D535ED00036BCDF /* Calories Calculator Screen */ = {
+			isa = PBXGroup;
+			children = (
+				6D55DB2C2D46CCA400A642C5 /* CaloriesCalculator.swift */,
+				6DE6192B2D535F080036BCDF /* BMRInfoView.swift */,
+			);
+			path = "Calories Calculator Screen";
+			sourceTree = "<group>";
+		};
+		6DE6192D2D535FC60036BCDF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6DAEA1A127E5EA0D0001EDF7 /* FitnessPadApp.swift */,
+				6DF2CFF32D39D67300DCFC9C /* LaunchScreenView.swift */,
+				6DAEA1A327E5EA0D0001EDF7 /* ContentView.swift */,
+				6DAEA1AA27E5EA0F0001EDF7 /* Persistence.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6DE6192E2D5361110036BCDF /* FoodDayCalendarView */ = {
+			isa = PBXGroup;
+			children = (
+				6DE619222D535D790036BCDF /* CalendarTabs.swift */,
+				6DE6192F2D5361260036BCDF /* CalendarStrip.swift */,
+				6DE619312D5361430036BCDF /* CalendarDayView.swift */,
+			);
+			path = FoodDayCalendarView;
+			sourceTree = "<group>";
+		};
+		6DE6193B2D5378B40036BCDF /* FoodDayContent */ = {
+			isa = PBXGroup;
+			children = (
+				6DE619242D535DD10036BCDF /* FoodDayContentView.swift */,
+				6DE619452D53CD400036BCDF /* DaySummaryView.swift */,
+				6DE619472D53CD7C0036BCDF /* MealListView.swift */,
+				6DE619492D53CDA10036BCDF /* MealRowView.swift */,
+				6DE619392D5378780036BCDF /* NutritionInfoRow.swift */,
+			);
+			path = FoodDayContent;
+			sourceTree = "<group>";
+		};
+		6DE6193E2D537CC50036BCDF /* SelectedProductModel */ = {
+			isa = PBXGroup;
+			children = (
+				6DE619352D5377B60036BCDF /* SelectedProductModel.swift */,
+			);
+			path = SelectedProductModel;
+			sourceTree = "<group>";
+		};
+		6DF2CFF72D3FC28000DCFC9C /* Food Day Screen */ = {
+			isa = PBXGroup;
+			children = (
+				6DE619262D535E220036BCDF /* FoodDayView */,
+				6DE619272D535E760036BCDF /* Adding, Editing Meal Screen */,
+				6DE619282D535E9C0036BCDF /* Product Selection Screen */,
+				6DE6192A2D535ED00036BCDF /* Calories Calculator Screen */,
+			);
+			path = "Food Day Screen";
+			sourceTree = "<group>";
+		};
+		6DF3A4D127EDD2B9005260D0 /* Exercises List Screen */ = {
+			isa = PBXGroup;
+			children = (
+				6DADFDB627FC711900A122E0 /* DefaultExercisesModel.swift */,
 				6DBAF97727E9288C005B8EE4 /* ExercisesView.swift */,
+				6DE6191E2D52BC760036BCDF /* ExercisesViewSearchBar.swift */,
 				6D55DB2E2D46D9A700A642C5 /* ExerciseDetailView.swift */,
 				6DF2CFEB2D39B70100DCFC9C /* ExerciseFormView.swift */,
 				6D37D0FB2C639AEC004AB4DD /* ImagePicker.swift */,
 				6D55DB302D46F9BC00A642C5 /* VideoPicker.swift */,
-				6DF2CFED2D39BBB200DCFC9C /* CustomTextField.swift */,
-				6DF2CFEF2D39BBD100DCFC9C /* CustomButton.swift */,
 			);
-			path = Exercises;
+			path = "Exercises List Screen";
 			sourceTree = "<group>";
 		};
 		6DF3A4D527EDDB96005260D0 /* TabBar */ = {
@@ -400,22 +559,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DE619342D5370AA0036BCDF /* buttonWithLabelAndImage.swift in Sources */,
+				6DE6193A2D5378780036BCDF /* NutritionInfoRow.swift in Sources */,
 				6D55DB332D479D8F00A642C5 /* FoodDayHeaderView.swift in Sources */,
+				6D1527612D5278280064BF75 /* BodyWeightViewModel.swift in Sources */,
+				6D15275D2D5273890064BF75 /* ExerciseViewModel.swift in Sources */,
+				6DE619322D5361430036BCDF /* CalendarDayView.swift in Sources */,
+				6D1527542D515A440064BF75 /* ExerciseCategoryService.swift in Sources */,
 				6DF2CFF62D3FC27600DCFC9C /* FoodDayView.swift in Sources */,
 				6D55DB8E2D4A328100A642C5 /* Product.swift in Sources */,
-				6D55DB902D4A32B700A642C5 /* ProductSelectionView.swift in Sources */,
 				6D6259B72D37CFD40082FC4B /* SettingsView.swift in Sources */,
+				6DE6193D2D5378F00036BCDF /* MealFormViewExtension.swift in Sources */,
 				6D1526D02D4CFB600064BF75 /* FoodDayWeightWaterView.swift in Sources */,
+				6DE619232D535D790036BCDF /* CalendarTabs.swift in Sources */,
 				6D536B752C6961B800835D3C /* BackButton.swift in Sources */,
 				6DADFDDC28044BE100A122E0 /* WorkoutDayView.swift in Sources */,
 				6D8DED5827EA257A00A1B6B9 /* TabBarModel.swift in Sources */,
+				6DE619382D5377F10036BCDF /* GramInputView.swift in Sources */,
+				6D3C26192D53F9FA00C3DD12 /* ProductRow.swift in Sources */,
 				6D8B48632D351E9E00516B7C /* WokroutDay+ExercisesArray.swift in Sources */,
 				6D6259D82D38633F0082FC4B /* ExerciseRowView.swift in Sources */,
 				6D55DB2F2D46D9A700A642C5 /* ExerciseDetailView.swift in Sources */,
 				6D6259DC2D3863870082FC4B /* ExerciseAttributes.swift in Sources */,
 				6DF2CFF42D39D67300DCFC9C /* LaunchScreenView.swift in Sources */,
 				6DF2CFEE2D39BBB200DCFC9C /* CustomTextField.swift in Sources */,
+				6DE619442D53C7330036BCDF /* ProductListView.swift in Sources */,
 				6DBAF97827E9288C005B8EE4 /* ExercisesView.swift in Sources */,
+				6D1527522D5122AE0064BF75 /* WorkoutDayService.swift in Sources */,
+				6D1527632D527A9D0064BF75 /* CoreDataService.swift in Sources */,
+				6D1527582D516ABC0064BF75 /* OldViewModel.swift in Sources */,
+				6DE619402D53827F0036BCDF /* Text+Extension.swift in Sources */,
+				6D15275F2D5274720064BF75 /* WorkoutDayExerciseService.swift in Sources */,
 				6D567C5B27EA15290039FCAD /* TabBarView.swift in Sources */,
 				6DB8CF9B2D302DC8004404E1 /* CalendarView.swift in Sources */,
 				6D6259D62D38631A0082FC4B /* ExercisesListView.swift in Sources */,
@@ -424,29 +598,43 @@
 				6D8B48652D351EE600516B7C /* Exercise+SetsArray.swift in Sources */,
 				6D8B486B2D351F9500516B7C /* NumberFormatter+Decimal+Integer.swift in Sources */,
 				6D37D0FC2C639AEC004AB4DD /* ImagePicker.swift in Sources */,
+				6D15275A2D520C510064BF75 /* FoodDayViewModel.swift in Sources */,
 				6D55DB2B2D42E45300A642C5 /* CloseButtonCircle.swift in Sources */,
+				6D15274A2D5122530064BF75 /* ExerciseService.swift in Sources */,
 				6DADFDB727FC711900A122E0 /* DefaultExercisesModel.swift in Sources */,
-				6DE2A56527F22846002008FE /* WorkoutDayDetailsView.swift in Sources */,
 				6D0655602C58F7B20015CB6B /* FitnessPad.xcdatamodeld in Sources */,
 				6D6259AF2D35D2B20082FC4B /* UIApplication+endEditing.swift in Sources */,
+				6DE6192C2D535F080036BCDF /* BMRInfoView.swift in Sources */,
 				6DAEA1AB27E5EA0F0001EDF7 /* Persistence.swift in Sources */,
 				6DAEA1A427E5EA0D0001EDF7 /* ContentView.swift in Sources */,
 				6D55DB312D46F9BC00A642C5 /* VideoPicker.swift in Sources */,
+				6D3C26172D53F9C000C3DD12 /* CategoryTile.swift in Sources */,
 				6D8B485F2D32DF0800516B7C /* EmptyWorkoutDayView.swift in Sources */,
 				6DBAF97A27E9289C005B8EE4 /* ProgressView.swift in Sources */,
+				6DE619252D535DD10036BCDF /* FoodDayContentView.swift in Sources */,
 				6DBAF97227E7E04E005B8EE4 /* RoundedCorners.swift in Sources */,
-				6D26F10E27EF6909002D5F4F /* WorkoutViewModel.swift in Sources */,
+				6D26F10E27EF6909002D5F4F /* WorkoutDayViewModel.swift in Sources */,
 				6D6259DA2D38635D0082FC4B /* ExerciseSetView.swift in Sources */,
 				6D55DB2D2D46CCA400A642C5 /* CaloriesCalculator.swift in Sources */,
+				6DE619422D53C70A0036BCDF /* CategoryGridView.swift in Sources */,
+				6DE619212D52CA020036BCDF /* LocalisedString.swift in Sources */,
+				6DE6194A2D53CDA10036BCDF /* MealRowView.swift in Sources */,
 				6DF2CFF02D39BBD100DCFC9C /* CustomButton.swift in Sources */,
-				6D6259AC2D35CC330082FC4B /* swipeablePanel.swift in Sources */,
+				6DE619482D53CD7C0036BCDF /* MealListView.swift in Sources */,
+				6DE6191B2D52BB1B0036BCDF /* ProductSelectionViewSearchBar.swift in Sources */,
+				6D15274E2D51226E0064BF75 /* BodyWeightService.swift in Sources */,
+				6DE619302D5361260036BCDF /* CalendarStrip.swift in Sources */,
+				6D15274C2D5122620064BF75 /* FoodService.swift in Sources */,
 				6DF2CFEC2D39B70100DCFC9C /* ExerciseFormView.swift in Sources */,
 				6D8B48692D351F6000516B7C /* Array+EnumeratedArray.swift in Sources */,
 				6D538FF02C611B5D00478628 /* DeleteHintView.swift in Sources */,
 				6D8B486F2D3521C900516B7C /* PHPhotoLibrary+Permission.swift in Sources */,
+				6DE6191F2D52BC760036BCDF /* ExercisesViewSearchBar.swift in Sources */,
+				6DE619362D5377B60036BCDF /* SelectedProductModel.swift in Sources */,
 				6D8B48672D351F2B00516B7C /* Exercise+Attributes.swift in Sources */,
 				6DAEA1A227E5EA0D0001EDF7 /* FitnessPadApp.swift in Sources */,
 				6DF2CFF92D40085100DCFC9C /* MealFormView.swift in Sources */,
+				6DE619462D53CD400036BCDF /* DaySummaryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,7 +787,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to allow you to select images for your exercises.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -632,7 +819,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to allow you to select images for your exercises.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
