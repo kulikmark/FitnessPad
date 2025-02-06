@@ -26,24 +26,24 @@ struct Product: Identifiable {
 
 // Теперь категории можно определять отдельно
 let categories = [
-    Category(name: "Хлебобулочные изделия", icon: "leaf.fill"),
-    Category(name: "Макароны, крупы", icon: "fork.knife"),
-    Category(name: "Молочные продукты", icon: "drop.fill"),
-    Category(name: "Мясо", icon: "flame.fill"),
-    Category(name: "Птица", icon: "bird.fill"),
-    Category(name: "Колбаса, сосиски, копченности", icon: "smoke.fill"),
-    Category(name: "Рыба и морепродукты", icon: "fish.fill"),
-    Category(name: "Рыба соленая, копченая, вяленая, икра", icon: "fish"),
-    Category(name: "Консервы рыбные", icon: "can.fill"),
-    Category(name: "Яйцепродукты", icon: "egg.fill"),
-    Category(name: "Масла, жиры и жировые продукты", icon: "drop"),
-    Category(name: "Овощи, зелень, грибы", icon: "carrot.fill"),
-    Category(name: "Овощные консервы", icon: "can"),
-    Category(name: "Фрукты, ягоды, бахчевые", icon: "applelogo"),
-    Category(name: "Орехи, семена, сухофрукты", icon: "circle.fill"),
-    Category(name: "Сахар, сладкое и кондитерские изделия", icon: "heart.fill"),
-    Category(name: "Соки, напитки безалкогольные", icon: "mug.fill"),
-    Category(name: "Напитки алкогольные", icon: "wineglass.fill")
+    Category(name: "Хлебобулочные изделия", icon: "bread"),
+    Category(name: "Макароны, крупы", icon: "pasta"),
+    Category(name: "Молочные продукты", icon: "milk"),
+    Category(name: "Мясо", icon: "meat"),
+    Category(name: "Птица", icon: "chicken"),
+    Category(name: "Колбаса, сосиски, копченности", icon: "sausage"),
+    Category(name: "Рыба и морепродукты", icon: "fish"),
+    Category(name: "Рыба соленая, копченая, вяленая, икра", icon: "smoked fish"),
+    Category(name: "Консервы рыбные", icon: "can"),
+    Category(name: "Яйцепродукты", icon: "egg"),
+    Category(name: "Масла, жиры и жировые продукты", icon: "butter"),
+    Category(name: "Овощи, зелень, грибы", icon: "carrot"),
+    Category(name: "Овощные консервы", icon: "veg_can"),
+    Category(name: "Фрукты, ягоды, бахчевые", icon: "apple"),
+    Category(name: "Орехи, семена, сухофрукты", icon: "nut"),
+    Category(name: "Сахар, сладкое и кондитерские изделия", icon: "doughnut"),
+    Category(name: "Соки, напитки безалкогольные", icon: "juice"),
+    Category(name: "Напитки алкогольные", icon: "wine")
 ]
 
 let productsByCategory: [String: [Product]] = [

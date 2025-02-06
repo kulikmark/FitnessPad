@@ -15,14 +15,9 @@ struct CategoryGridView: View {
     @State private var isShowingCategoryFilter = false
     @State private var selectedTab: String = ""
     
-    // Получаем уникальные категории
-//    var categories: [String] {
-//        let allCategories = productsByCategory.flatMap { $0.value.map { $0.category } }
-//        return Array(Set(allCategories)).sorted()
-//    }
-    
     var categories: [Category] {
-        return Array(Set(productsByCategory.flatMap { $0.value.map { $0.category } }))
+        let uniqueCategories = Set(productsByCategory.flatMap { $0.value.map { $0.category } })
+        return Array(uniqueCategories).sorted { $0.name < $1.name }
     }
     
     // Определяем сетку для LazyVGrid
@@ -40,7 +35,6 @@ struct CategoryGridView: View {
                     HStack {
                         Text("Выбрано \(selectedProducts.count) позиций".localized)
                             .font(.system(size: 18))
-                            .fontWeight(.medium)
                             .foregroundColor(Color("TextColor"))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             
