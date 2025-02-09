@@ -54,7 +54,7 @@ struct WorkoutDayViewHeaderView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             
             // Add Exercise Button
-            buttonWithLabelAndImage(
+            ButtonWithLabelAndImage(
                 label: "add_exercise_label",
                 systemImageName: "plus",
                 labelColor: Color("TextColor"),

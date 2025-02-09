@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct CustomButton: View {
     var title: String
     var isEnabled: Bool
@@ -14,16 +13,16 @@ struct CustomButton: View {
     
     var body: some View {
         Button(action: action) {
-                Text(title)
-                    .font(.system(size: 16))
-                    .foregroundColor(.white)
-                    .padding()
-//                    .padding(.horizontal, 40)
-                    .background(isEnabled ? Color("ButtonColor") : Color.gray)
-                    .cornerRadius(10)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding()
+            Text(title)
+                .font(.system(size: 18))
+                .foregroundColor(Color("ButtonTextColor"))
+                .frame(maxWidth: .infinity) // Заполнение по ширине
+                .padding()
+                .background(isEnabled ? Color("ButtonColor") : Color.gray)
+                .cornerRadius(10)
         }
+        .padding(.horizontal)
         .disabled(!isEnabled)
     }
 }
+

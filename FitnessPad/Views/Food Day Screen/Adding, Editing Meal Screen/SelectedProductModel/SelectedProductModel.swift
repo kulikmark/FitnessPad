@@ -9,7 +9,7 @@ import Foundation
 
 struct SelectedProductModel: Identifiable {
     let id = UUID()
-    let product: Product
+    let product: ProductItem
     var quantity: Double = 100
     
     var totalProteins: Double {
