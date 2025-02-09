@@ -69,22 +69,7 @@ class FoodService: ObservableObject {
         return []
     }
     
-//    func updateWaterIntake(for date: Date, newWaterIntake: Double) {
-//        let fetchRequest: NSFetchRequest<FoodDay> = FoodDay.fetchRequest()
-//        let startOfDay = Calendar.current.startOfDay(for: date)
-//        fetchRequest.predicate = NSPredicate(format: "date == %@", startOfDay as CVarArg)
-//        
-//        do {
-//            let results = try context.fetch(fetchRequest)
-//            let foodDay = results.first ?? FoodDay(context: context)
-//            foodDay.date = startOfDay
-//            foodDay.water = newWaterIntake
-//            try context.save()
-//        } catch {
-//            print("Failed to update water intake: \(error)")
-//        }
-//    }
-    func updateWaterIntake(for date: Date, newWaterIntake: Double) -> FoodDay? {
+    func updateWaterIntake(for date: Date, newWaterIntake: Double) {
         let fetchRequest: NSFetchRequest<FoodDay> = FoodDay.fetchRequest()
         let startOfDay = Calendar.current.startOfDay(for: date)
         fetchRequest.predicate = NSPredicate(format: "date == %@", startOfDay as CVarArg)
@@ -94,21 +79,9 @@ class FoodService: ObservableObject {
             let foodDay = results.first ?? FoodDay(context: context)
             foodDay.date = startOfDay
             foodDay.water = newWaterIntake
-            
-            // Если вода равна 0 и нет приемов пищи, удаляем FoodDay
-            if newWaterIntake == 0 {
-                if let meals = foodDay.meals?.allObjects as? [Meal], meals.isEmpty {
-                    context.delete(foodDay)
-                    try context.save()
-                    return nil // Возвращаем nil, так как FoodDay был удален
-                }
-            }
-            
             try context.save()
-            return foodDay // Возвращаем созданный или обновленный FoodDay
         } catch {
             print("Failed to update water intake: \(error)")
-            return nil
         }
     }
 
@@ -158,21 +131,6 @@ class FoodService: ObservableObject {
         saveContext()
     }
 
-//    func deleteMeal(_ meal: Meal) {
-//        guard let foodDay = meal.foodDay else { return }
-//        
-//        // Удаляем meal
-//        context.delete(meal)
-//        saveContext()
-//        
-//        // Проверяем, остались ли еще meal в foodDay
-//        if let meals = foodDay.meals?.allObjects as? [Meal], meals.isEmpty {
-//            // Если meal больше нет, удаляем и foodDay
-//            context.delete(foodDay)
-//            saveContext()
-//        }
-//    }
-    
     func deleteMeal(_ meal: Meal) {
         guard let foodDay = meal.foodDay else { return }
         
@@ -180,13 +138,11 @@ class FoodService: ObservableObject {
         context.delete(meal)
         saveContext()
         
-        // Проверяем, остались ли еще meal в foodDay или есть вода
+        // Проверяем, остались ли еще meal в foodDay
         if let meals = foodDay.meals?.allObjects as? [Meal], meals.isEmpty {
-            // Если meal больше нет и вода равна 0, удаляем и foodDay
-            if foodDay.water == 0 {
-                context.delete(foodDay)
-                saveContext()
-            }
+            // Если meal больше нет, удаляем и foodDay
+            context.delete(foodDay)
+            saveContext()
         }
     }
     

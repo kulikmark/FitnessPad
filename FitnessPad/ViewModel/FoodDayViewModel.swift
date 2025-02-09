@@ -44,22 +44,12 @@ class FoodDayViewModel: ObservableObject {
         
     }
     
-//    func updateWaterIntake(for date: Date, newWaterIntake: Double) {
-//        foodService.updateWaterIntake(for: date, newWaterIntake: newWaterIntake)
-//        
-//        // Обновляем кэш в ViewModel после изменения данных
-//        if let foodDay = foodService.foodDay(for: date, in: foodDaysCache) {
-//            foodDaysCache[Calendar.current.startOfDay(for: date)] = foodDay
-//        }
-//    }
-    
     func updateWaterIntake(for date: Date, newWaterIntake: Double) {
-        if let foodDay = foodService.updateWaterIntake(for: date, newWaterIntake: newWaterIntake) {
-            // Если FoodDay был создан или обновлен, добавляем его в кэш
+        foodService.updateWaterIntake(for: date, newWaterIntake: newWaterIntake)
+        
+        // Обновляем кэш в ViewModel после изменения данных
+        if let foodDay = foodService.foodDay(for: date, in: foodDaysCache) {
             foodDaysCache[Calendar.current.startOfDay(for: date)] = foodDay
-        } else {
-            // Если FoodDay был удален, удаляем его из кэша
-            foodDaysCache.removeValue(forKey: Calendar.current.startOfDay(for: date))
         }
     }
     

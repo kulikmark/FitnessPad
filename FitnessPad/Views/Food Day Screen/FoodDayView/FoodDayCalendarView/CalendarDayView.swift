@@ -15,23 +15,26 @@ struct CalendarDayView: View {
 
     var body: some View {
         VStack {
-            // Анимированное изменение числа
-            Text(getDay(from: date))
-                .font(.title2)
-                .fontWeight(isSelected ? .bold : .regular)
-                .foregroundColor(isSelected ? Color("ButtonTextColor") : .primary)
-                .transition(.asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top)))
-//                .animation(.easeInOut(duration: 0.3), value: date) // Анимация при изменении даты
-
+//                Text(getDayOfWeek(from: date)) // День недели
+//                    .font(.caption)
+//                    .foregroundColor(isSelected ? Color("ButtonTextColor") : .gray)
+                
+                
+                Text(getDay(from: date)) // Число
+                    .font(.title2)
+                    .fontWeight(isSelected ? .bold : .regular)
+                    .foregroundColor(isSelected ? Color("ButtonTextColor") : .primary)
+            
             Spacer()
-
+            
             // Отображаем точку, если есть meals для этой даты
-            if hasMealsOrWater(for: date) {
+            if hasMeals(for: date) {
                 Circle()
                     .fill(isSelected ? Color("ButtonTextColor") : Color("TextColor"))
                     .frame(width: 5, height: 5)
             }
         }
+//        .frame(width: 30, height: 40)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(10)
         .background(isSelected ? Color("ButtonColor") : Color.clear)
@@ -53,25 +56,11 @@ struct CalendarDayView: View {
     }
 
     // Проверяем, есть ли meals для этой даты
-//    private func hasMeals(for date: Date) -> Bool {
-//        if let foodDay = foodDayViewModel.foodDay(for: date),
-//           let meals = foodDay.meals,
-//           !meals.allObjects.isEmpty {
-//            return true
-//        }
-//        return false
-//    }
-    // Проверяем, есть ли meals или вода для этой даты
-    private func hasMealsOrWater(for date: Date) -> Bool {
-        if let foodDay = foodDayViewModel.foodDay(for: date) {
-            // Проверяем, есть ли приемы пищи
-            if let meals = foodDay.meals, !meals.allObjects.isEmpty {
-                return true
-            }
-            // Проверяем, есть ли вода
-            if foodDay.water > 0 {
-                return true
-            }
+    private func hasMeals(for date: Date) -> Bool {
+        if let foodDay = foodDayViewModel.foodDay(for: date),
+           let meals = foodDay.meals,
+           !meals.allObjects.isEmpty {
+            return true
         }
         return false
     }

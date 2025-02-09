@@ -15,7 +15,7 @@ struct TabBarView: View {
         VStack {
             Spacer()
             
-            HStack (spacing: 25) {
+            HStack {
                 ForEach(tabItems) { item in
                     Button {
                         selectedTab = item.tabItem
@@ -28,14 +28,14 @@ struct TabBarView: View {
                             Image(systemName: item.image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 25, height: 25)
+                                .frame(width: 18, height: 18)
                                 .foregroundStyle(selectedTab == item.tabItem ? Color("TextColor") : Color.gray)
                                 .scaleEffect(animatingTab == item.tabItem ? 1.2 : 1.0)  // Увеличиваем только выбранный таб
                                 .animation(.spring(response: 0.3, dampingFraction: 0.5), value: animatingTab == item.tabItem)
                             
-//                            Text(item.text)
-//                                .foregroundStyle(selectedTab == item.tabItem ? Color("TextColor") : Color.gray)
-//                                .font(.system(size: 10))
+                            Text(item.text)
+                                .foregroundStyle(selectedTab == item.tabItem ? Color("TextColor") : Color.gray)
+                                .font(.system(size: 12))
                         }
                         .padding(.horizontal, 5)
                     }

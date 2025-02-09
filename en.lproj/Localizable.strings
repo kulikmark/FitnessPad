@@ -72,7 +72,6 @@
 // MARK: - Tabbar
 "tab_workouts" = "Workouts";
 "tab_food_days" = "Food Days";
-"tab_products" = "Products";
 "tab_exercises" = "Exercises";
 "tab_progress" = "Progress";
 "tab_settings" = "Settings";

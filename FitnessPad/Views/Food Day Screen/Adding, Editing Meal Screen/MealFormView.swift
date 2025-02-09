@@ -124,12 +124,12 @@ struct MealFormView: View {
         }
         .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
         .fullScreenCover(isPresented: $isProductSelectionPresented) {
-            CategoryGridView(selectedProducts: Binding<[ProductItem]>(
+            CategoryGridView(selectedProducts: Binding<[Product]>(
                 get: { selectedProducts.map { $0.product } },
                 set: { newProducts in
                     selectedProducts = newProducts.map { SelectedProductModel(product: $0) }
                 }
-            ),  selectedCategory: .constant(nil), isSelectingCategory: false)
+            ))
         }
         .sheet(isPresented: $isGramInputPresented) {
             GramInputView(selectedProducts: $selectedProducts, selectedProductForEditing: $selectedProductForEditing, isGramInputPresented: $isGramInputPresented)

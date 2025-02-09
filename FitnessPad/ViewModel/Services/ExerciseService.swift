@@ -54,14 +54,12 @@ class ExerciseService: ObservableObject {
 
    
     // MARK: - Exercises Core Data Management
-    func addExerciseToCoreData(name: String, exerciseDescription: String, category: ExerciseCategory?, image: UIImage?, video: Data?, attributes: Set<String>, isDefault: Bool = false) {
+    func addExerciseToCoreData(name: String, category: ExerciseCategory?, image: UIImage?, attributes: Set<String>, isDefault: Bool = false) {
         let newExercise = DefaultExercise(context: context)
         newExercise.id = UUID()
         newExercise.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        newExercise.exerciseDescription = exerciseDescription
         newExercise.categories = category
         newExercise.image = image?.jpegData(compressionQuality: 0.5)
-        newExercise.video = video
         newExercise.isDefault = isDefault
         
         for attribute in attributes {
@@ -73,13 +71,10 @@ class ExerciseService: ObservableObject {
         saveContext()
     }
     
-    func updateExerciseInCoreData(_ exercise: DefaultExercise, name: String, exerciseDescription: String, category: ExerciseCategory?, image: UIImage?,  video: Data?, attributes: Set<String>) {
+    func updateExerciseInCoreData(_ exercise: DefaultExercise, name: String, category: ExerciseCategory?, image: UIImage?, attributes: Set<String>) {
         exercise.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        exercise.exerciseDescription = exerciseDescription
         exercise.categories = category
         exercise.image = image?.jpegData(compressionQuality: 1.0)
-        // Обновляем видео
-        exercise.video = video
         
         let currentAttributes = exercise.attributes?.allObjects as? [ExerciseAttribute] ?? []
         for attribute in currentAttributes {
@@ -97,30 +92,18 @@ class ExerciseService: ObservableObject {
             }
         }
         saveContext()
-        // Отладочное сообщение
-            if video != nil {
-                print("Video data saved successfully.")
-            } else {
-                print("No video data to save.")
-            }
     }
     
     func deleteExerciseFromCoreData(_ exercise: DefaultExercise, workoutDaysCache: [Date: WorkoutDay]) {
         guard let exerciseId = exercise.id else {
-            print("Exercise ID is nil")
             return
         }
-        
-        // Удаление упражнения из связанных объектов
         workoutDaysCache.forEach { (_, workoutDay) in
             if let exercisesSet = workoutDay.exercises as? Set<Exercise> {
                 let filteredExercises = exercisesSet.filter { $0.id != exerciseId }
                 workoutDay.exercises = NSSet(set: filteredExercises)
             }
         }
-        
-        // Удаление самого упражнения
-        context.delete(exercise)
         saveContext()
     }
 

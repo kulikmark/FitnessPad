@@ -62,7 +62,6 @@ struct FitnessPadApp: App {
                 let workoutDayService = WorkoutDayService(context: persistenceController.container.viewContext)
                 let workoutDayExerciseService = WorkoutDayExerciseService(context: persistenceController.container.viewContext)
                 let foodService = FoodService(context: persistenceController.container.viewContext)
-                let productService = ProductService(context: persistenceController.container.viewContext)
                 let bodyWeightService = BodyWeightService(context: persistenceController.container.viewContext)
                 let exerciseService = ExerciseService(context: persistenceController.container.viewContext)
                 let exerciseCategoryService = ExerciseCategoryService(context: persistenceController.container.viewContext)
@@ -76,7 +75,6 @@ struct FitnessPadApp: App {
                     workoutDayExerciseService: workoutDayExerciseService
                 )
                 let foodDayViewModel = FoodDayViewModel(foodService: foodService)
-                let productViewModel = ProductViewModel(productService: productService)
                 let bodyWeightViewModel = BodyWeightViewModel(bodyWeightService: bodyWeightService)
                 let exerciseViewModel = ExerciseViewModel(
                     defaultExerciseService: exerciseService,
@@ -90,8 +88,6 @@ struct FitnessPadApp: App {
                     .environmentObject(workoutDayViewModel)
                     .environmentObject(foodDayViewModel)
                     .environmentObject(foodService)
-                    .environmentObject(productViewModel)
-                    .environmentObject(productService)
                     .environmentObject(bodyWeightViewModel)
                     .environmentObject(exerciseViewModel)
                     .environmentObject(coreDataService)

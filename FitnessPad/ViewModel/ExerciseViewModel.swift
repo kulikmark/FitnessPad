@@ -11,8 +11,6 @@ import CoreData
 class ExerciseViewModel: ObservableObject {
     @Published var allCategories: [ExerciseCategory] = []
     @Published var allDefaultExercises: [DefaultExercise] = []
-    @Published var selectedExercise: DefaultExercise?
-    @Published var isEditingExercise = false
  
     private let defaultExerciseService: ExerciseService
     private let exerciseCategoryService: ExerciseCategoryService
@@ -59,13 +57,13 @@ class ExerciseViewModel: ObservableObject {
     }
     
     // MARK: - Exercises Core Data Management
-    func addExerciseToCoreData(name: String, exerciseDescription: String, category: ExerciseCategory?, image: UIImage?, video: Data?, attributes: Set<String>, isDefault: Bool = false) {
-        defaultExerciseService.addExerciseToCoreData(name: name, exerciseDescription: exerciseDescription, category: category, image: image, video: video, attributes: attributes, isDefault: isDefault)
+    func addExerciseToCoreData(name: String, category: ExerciseCategory?, image: UIImage?, attributes: Set<String>, isDefault: Bool = false) {
+        defaultExerciseService.addExerciseToCoreData(name: name, category: category, image: image, attributes: attributes, isDefault: isDefault)
         loadDefaultExercises()
     }
     
-    func updateExerciseInCoreData(exercise: DefaultExercise, name: String, exerciseDescription: String, category: ExerciseCategory?, image: UIImage?, video: Data?, attributes: Set<String>) {
-        defaultExerciseService.updateExerciseInCoreData(exercise, name: name, exerciseDescription: exerciseDescription, category: category, image: image, video: video, attributes: attributes)
+    func updateExerciseInCoreData(exercise: DefaultExercise, name: String, category: ExerciseCategory?, image: UIImage?, attributes: Set<String>) {
+        defaultExerciseService.updateExerciseInCoreData(exercise, name: name, category: category, image: image, attributes: attributes)
         loadDefaultExercises()
     }
     
