@@ -25,7 +25,6 @@ struct CalendarTabs: View {
                        
                 }
             }
-//            .padding(.horizontal)
 
             TabView(selection: $currentWeekIndex) {
                 ForEach(0..<120, id: \.self) { index in
@@ -67,49 +66,3 @@ struct CalendarTabs: View {
         }
     }
 }
-
-
-
-
-//struct CalendarTabs: View {
-//    @Binding var selectedDate: Date
-//    @Binding var currentMonth: Date
-//    @Binding var currentMonthIndex: Int // Индекс текущего месяца
-//
-//    var body: some View {
-//        TabView(selection: $currentMonthIndex) {
-//            ForEach(getMonths(), id: \.self) { month in
-//                CalendarStrip(selectedDate: $selectedDate, currentMonth: month)
-//                    .tag(getMonths().firstIndex(of: month) ?? 0) // Присваиваем индекс месяца
-//            }
-//        }
-//        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-//        .background(Color("BackgroundColor"))
-//        .onAppear {
-//            // Прокручиваем к текущему месяцу при загрузке
-//            let today = Date()
-//            let months = getMonths()
-//            if let index = months.firstIndex(where: { Calendar.current.isDate($0, equalTo: today, toGranularity: .month) }) {
-//                currentMonthIndex = index
-//            }
-//        }
-//        .onChange(of: currentMonthIndex) { _, newIndex in
-//            currentMonth = getMonths()[newIndex]
-//        }
-//    }
-//
-//    // Генерируем список месяцев
-//    private func getMonths() -> [Date] {
-//        let calendar = Calendar.current
-//        var months: [Date] = []
-//        let startDate = calendar.date(from: DateComponents(year: 2025, month: 1, day: 1))!
-//        
-//        // Добавляем 120 месяцев (10 лет) для примера
-//        for i in 0..<120 {
-//            if let month = calendar.date(byAdding: .month, value: i, to: startDate) {
-//                months.append(month)
-//            }
-//        }
-//        return months
-//    }
-//}

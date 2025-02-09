@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func buttonWithLabelAndImage(
+    func ButtonWithLabelAndImage(
         label: String,
         systemImageName: String,
         labelFont: Font = .system(size: 8),

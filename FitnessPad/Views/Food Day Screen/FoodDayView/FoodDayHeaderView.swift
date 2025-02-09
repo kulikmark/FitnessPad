@@ -23,7 +23,7 @@ struct FoodDayHeaderView: View {
             Spacer()
             
             // Кнопка для открытия калькулятора калорий
-            buttonWithLabelAndImage(
+            ButtonWithLabelAndImage(
                           label: "calculate_calories_label",
                           systemImageName: "pencil.and.ruler",
                           labelColor: Color("TextColor"),
