@@ -142,8 +142,6 @@ struct CategoryGridView: View {
     }
 }
 
-
-
 struct CategoryGridView_Previews: PreviewProvider {
     static var previews: some View {
         // Создаем мок-ProductViewModel
