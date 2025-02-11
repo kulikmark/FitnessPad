@@ -30,16 +30,11 @@ struct WorkoutDayView: View {
                     EmptyWorkoutDayView(selectedDate: $selectedDate)
                 }
             }
-//            .simultaneousGesture(TapGesture().onEnded {
-//                UIApplication.shared.endEditing(true)
-//                viewModel.saveContext()
-//            })
-            
+
             VStack {
                 Spacer()
                 DaysMiniView(selectedDate: $selectedDate, selectedIndex: $selectedIndex)
-                    .padding(.bottom, 30)
-                    .background(Color("ViewColor"))
+                    .padding(.bottom, 50)
                     .onTapGesture {
                         isCalendarPresented.toggle()
                     }
@@ -96,7 +91,7 @@ struct WorkoutDayView: View {
                     TabView(selection: $selectedIndex) {
                         ForEach(viewModel.sortedWorkoutDays.indices, id: \.self) { index in
                             dayMiniViewItem(for: viewModel.sortedWorkoutDays[index])
-                                .padding(.horizontal, 20)
+                               
                                 .tag(index)
                         }
                     }
@@ -113,10 +108,7 @@ struct WorkoutDayView: View {
                     emptyTabView()
                 }
             }
-            .background(Color("ViewColor"))
-            .frame(height: 65)
-            .cornerRadius(15, corners: [.topLeft, .topRight])
-           
+            .frame(height: 60)
         }
         
         private func updateSelectedIndex(for date: Date) {
@@ -138,11 +130,14 @@ struct WorkoutDayView: View {
                 Spacer()
                 
                 HStack(alignment: .center, spacing: 4) {
+                    Text("Тренировка:")
+                        .font(.system(size: 14))
+                        .foregroundColor(Color("ButtonTextColor"))
                     Text(workoutDay.date?.formattedDate() ?? NSLocalizedString("unknown_date", comment: ""))
-                        .font(.system(size: 16))
+                        .font(.system(size: 14))
                         .foregroundColor(Color("ButtonTextColor"))
                     Text(workoutDay.date?.formattedDayOfWeek() ?? "N/A")
-                        .font(.system(size: 16))
+                        .font(.system(size: 14))
                         .foregroundColor(Color("ButtonTextColor"))
                 }
                 
@@ -152,21 +147,20 @@ struct WorkoutDayView: View {
             .frame(height: 50)
             .background(Color("ButtonColor"))
             .cornerRadius(10)
+            .padding(.horizontal)
         }
         
         func emptyTabView() -> some View {
             HStack {
                 Text(NSLocalizedString("tap_to_open_calendar", comment: ""))
                     .font(.system(size: 16))
-                    .foregroundColor(.text)
+                    .foregroundColor(Color("ButtonTextColor"))
+                    .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(15)
+                    .background(Color("ButtonColor"))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
             }
-            .frame(maxWidth: .infinity)
-            .background(Color("ViewColor"))
-            .frame(height: 60)
-            .cornerRadius(15, corners: [.topLeft, .topRight])
         }
     }
 }

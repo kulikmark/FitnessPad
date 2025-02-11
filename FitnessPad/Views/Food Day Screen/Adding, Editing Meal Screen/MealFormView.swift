@@ -86,16 +86,10 @@ struct MealFormView: View {
                             Spacer()
                             
                             // Текстовое поле для выбора граммовки
-                            Text(formatGrams(selectedProduct.quantity))
-                                .frame(minWidth: 40, maxWidth: 70)
-                                .padding(6)
-                                .background(.gray)
-                                .foregroundColor(Color("ButtonTextColor"))
-                                .cornerRadius(8)
-                                .onTapGesture {
-                                    selectedProductForEditing = selectedProduct
-                                    isGramInputPresented = true
-                                }
+                            GramTextView(grams: selectedProduct.quantity) {
+                                selectedProductForEditing = selectedProduct
+                                isGramInputPresented = true
+                            }
 
                         }
                         .contentShape(Rectangle())

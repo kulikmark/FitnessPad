@@ -98,7 +98,7 @@ struct CalendarView: View {
                 selectedDate: selectedDate
             )
                 .environmentObject(viewModel)
-                .padding(.top, 20)
+//                .padding(.top, 20)
         }
     }
     

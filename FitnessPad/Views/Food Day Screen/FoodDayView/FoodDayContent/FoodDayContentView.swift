@@ -81,6 +81,7 @@ struct FoodDayContentView: View {
             .foregroundColor(Color("ButtonTextColor"))
             .cornerRadius(10)
         }
+        .padding(.horizontal)
         .padding(.bottom, 50)
     }
     

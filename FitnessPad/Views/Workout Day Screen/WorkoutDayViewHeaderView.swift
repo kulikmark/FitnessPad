@@ -23,10 +23,9 @@ struct WorkoutDayViewHeaderView: View {
                     .font(.system(size: 16))
                     .foregroundColor(Color("TextColor"))
                     .lineLimit(1)
-                    .padding(.leading, 20)
                 
                 TextField(NSLocalizedString("weight_placeholder", comment: "Weight placeholder"), text: $bodyWeightString)
-                    .font(.system(size: 16))
+                    .font(.system(size: 14))
                     .foregroundColor(Color("TextColor"))
                     .frame(minWidth: 40, maxWidth: 50)
                     .padding(8)
@@ -42,7 +41,7 @@ struct WorkoutDayViewHeaderView: View {
                         isWeightFieldFocused = false
                     }) {
                         Text(NSLocalizedString("save_button_title", comment: "Save button"))
-                            .font(.system(size: 16))
+                            .font(.system(size: 14))
                             .foregroundColor(Color("ButtonTextColor"))
                             .padding(8)
                             .background(Color("ButtonColor"))
@@ -63,8 +62,9 @@ struct WorkoutDayViewHeaderView: View {
                     isShowingExercisesView = true
                 }
             )
-            .padding(.trailing, 20)
         }
+        .padding(.horizontal)
+        .padding(.top)
         .padding(.bottom, 20)
         .onAppear {
             if let bodyWeight = viewModel.fetchBodyWeight(for: selectedDate) {
@@ -83,10 +83,8 @@ struct WorkoutDayViewHeaderView: View {
                 isFromWokroutDayView: true,
                 selectedDate: selectedDate
             )
-                .background(Color("BackgroundColor"))
-                .edgesIgnoringSafeArea(.all)
-                .transition(.opacity)
-                .padding(.top, 20)
+            .edgesIgnoringSafeArea(.all)
+            .transition(.opacity)
         }
     }
     

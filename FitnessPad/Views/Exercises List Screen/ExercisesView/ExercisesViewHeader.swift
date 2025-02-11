@@ -29,5 +29,6 @@ struct ExercisesViewHeader: View {
             }
         }
         .padding(.horizontal)
+        .padding(.top, 20)
     }
 }

@@ -7,27 +7,27 @@
 
 import SwiftUI
 
-//struct FavoritesView: View {
-//    @EnvironmentObject var productViewModel: ProductViewModel
-//    
-//    var body: some View {
-//        List {
-//            ForEach(productViewModel.favoriteProducts) { product in
-//                Text(product.name)
-//            }
-//        }
-//        .navigationTitle("Избранное")
-//    }
-//}
-
-import SwiftUI
-
 struct FavoritesView: View {
     @EnvironmentObject var productViewModel: ProductViewModel
     @Binding var selectedProducts: [SelectedProductModel] // Для хранения выбранных продуктов
     let isFromFoodDayView: Bool // Определяет, открыт ли экран для выбора продуктов
 
     var body: some View {
+        VStack {
+            // Добавляем кнопку "Назад"
+            HStack {
+                CustomBackButtonView()
+                
+                Text("favorites_view_title".localized)
+                    .font(.system(size: 24))
+                    .fontWeight(.medium)
+                    .foregroundColor(Color("TextColor"))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.top)
+        
         List {
             ForEach(productViewModel.favoriteProducts) { product in
                 ProductRow(
@@ -41,7 +41,7 @@ struct FavoritesView: View {
                 )
             }
         }
-        .navigationTitle("Избранное")
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             productViewModel.fetchFavoriteProducts() // Загружаем избранные при появлении
         }

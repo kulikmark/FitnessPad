@@ -35,7 +35,8 @@ struct FoodDayHeaderView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal)
-        .padding(.bottom)
+        .padding(.top)
+        .padding(.bottom, 30)
         .fullScreenCover(isPresented: $showCaloriesCalculator) {
             CaloriesCalculator()
                 .environmentObject(viewModel)

@@ -157,6 +157,9 @@
 "carbs_label" = "C: %.1f g";
 "calories_label" = "%.0f kcal";
 
+// MARK: - Favorites View Screen
+"favorites_view_title" = "Favorite Products";
+
 
 // MARK: - Product
 "category_baked_goods" = "Baked Goods";

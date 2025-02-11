@@ -71,16 +71,11 @@ struct ProductListView: View {
                         HStack {
                             Text(selectedProduct.product.name)
                             Spacer()
-                            Text(formatGrams(selectedProduct.quantity))
-                                .frame(minWidth: 40, maxWidth: 70)
-                                .padding(6)
-                                .background(.gray)
-                                .foregroundColor(Color("ButtonTextColor"))
-                                .cornerRadius(8)
-                                .onTapGesture {
-                                    selectedProductForEditing = selectedProduct
-                                    isGramInputPresented = true
-                                }
+                            
+                            GramTextView(grams: selectedProduct.quantity) {
+                                selectedProductForEditing = selectedProduct
+                                isGramInputPresented = true
+                            }
                         }
                     }
                 }

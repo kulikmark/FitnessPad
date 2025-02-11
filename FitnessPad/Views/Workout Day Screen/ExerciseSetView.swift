@@ -28,7 +28,8 @@ struct ExerciseSetView: View {
                 listView(for: exercise)
             }
             .frame(maxWidth: .infinity)
-            .padding()
+            .padding(.horizontal)
+            .padding(.top, 20)
             .background(Color("BackgroundColor"))
             .onAppear {
                 if exercise.setsArray.isEmpty {

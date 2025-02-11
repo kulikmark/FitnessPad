@@ -45,6 +45,7 @@ struct CaloriesCalculator: View {
                 CloseButtonCircle()
             }
             .padding(.horizontal)
+            .padding(.top)
             // Form
             Form {
                 Section {

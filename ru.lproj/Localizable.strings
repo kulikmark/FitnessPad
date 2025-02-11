@@ -155,7 +155,8 @@
 "carbs_label" = "У: %.1f г";
 "calories_label" = "%.0f ккал";
 
-
+// MARK: - Favorites View Screen
+"favorites_view_title" = "Любимые продукты";
 
 // MARK: - Product
 "category_baked_goods" = "Хлебобулочные изделия";

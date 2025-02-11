@@ -40,6 +40,7 @@ struct CategoryGridView: View {
     var body: some View {
         NavigationStack {
             VStack {
+                
                 if searchText.isEmpty {
                     categoryGridViewTitle
                 }
@@ -84,33 +85,12 @@ struct CategoryGridView: View {
         }
     }
     
-//    var categoryGridViewTitle: some View {
-//        HStack {
-//            Text("category_grid_title".localized)
-//                .font(.system(size: 24))
-//                .fontWeight(.medium)
-//                .foregroundColor(Color("TextColor"))
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//            
-//            Spacer()
-//            HStack(spacing: 20) {
-//                NavigationLink(
-//                    destination: FavoritesView(
-//                        selectedProducts: $selectedProducts, // Передаем выбранные продукты
-//                        isFromFoodDayView: isFromFoodDayView // Передаем флаг isFromFoodDayView
-//                    )
-//                ) {
-//                    Image(systemName: "heart")
-//                }
-//                NavigationLink(destination: CategoryFormView(productViewModel: productViewModel)) {
-//                    Image(systemName: "plus")
-//                }
-//            }
-//        }
-//        .padding(.horizontal)
-//    }
     var categoryGridViewTitle: some View {
         HStack {
+            if isFromFoodDayView {
+                CustomBackButtonView()
+            }
+            
             Text("category_grid_title".localized)
                 .font(.system(size: 24))
                 .fontWeight(.medium)
@@ -125,13 +105,13 @@ struct CategoryGridView: View {
                     selectedProducts: $selectedProducts,
                     isFromFoodDayView: isFromFoodDayView
                 )) {
-                    Text("Избранные\nпродукты")
-                        .font(.system(size: 8)) // Размер текста 8
+                    Text("Любимые\nпродукты")
+                        .font(.system(size: 8))
                         .foregroundColor(Color("TextColor"))
                         .multilineTextAlignment(.center)
                     
                         Image(systemName: "heart")
-                            .font(.system(size: 17)) // Размер иконки 17
+                            .font(.system(size: 17))
                             .foregroundColor(Color("TextColor")) 
                 }
 
@@ -140,17 +120,18 @@ struct CategoryGridView: View {
                     productViewModel: productViewModel
                 )) {
                     Text("Добавить\nкатегорию")
-                        .font(.system(size: 8)) // Размер текста 8
+                        .font(.system(size: 8))
                         .foregroundColor(Color("TextColor"))
                         .multilineTextAlignment(.center)
                     
                         Image(systemName: "plus")
-                            .font(.system(size: 17)) // Размер иконки 17
+                            .font(.system(size: 17))
                             .foregroundColor(Color("TextColor"))
                 }
             }
         }
         .padding(.horizontal)
+        .padding(.top)
     }
     
     var selectedProductsSection: some View {

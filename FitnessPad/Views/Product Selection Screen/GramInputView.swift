@@ -70,4 +70,3 @@ struct GramInputView: View {
         .presentationDragIndicator(.visible)
     }
 }
-
