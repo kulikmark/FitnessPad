@@ -11,6 +11,7 @@ import SwiftUI
 struct FoodDayContentView: View {
     @Binding var selectedDate: Date
     @EnvironmentObject var foodDayViewModel: FoodDayViewModel
+    @EnvironmentObject var productViewModel: ProductViewModel
     @EnvironmentObject var foodService: FoodService
     
     @State private var isAddingMeal: Bool = false
@@ -47,30 +48,41 @@ struct FoodDayContentView: View {
         
         // Обработка редактирования и добавления приемов пищи
         .fullScreenCover(isPresented: $isAddingMeal) {
-            MealFormView(selectedDate: selectedDate, foodDayViewModel: foodDayViewModel)
+            MealFormView(
+                selectedDate: selectedDate,
+                foodDayViewModel: foodDayViewModel,
+                productViewModel: productViewModel,
+                isFromFoodDayView: true
+            )
         }
         .fullScreenCover(item: $editingMeal) { meal in
-            MealFormView(meal: meal, selectedDate: selectedDate, foodDayViewModel: foodDayViewModel)
+            MealFormView(
+                meal: meal,
+                selectedDate: selectedDate,
+                foodDayViewModel: foodDayViewModel,
+                productViewModel: productViewModel,
+                isFromFoodDayView: true
+            )
         }
     }
     
     // Функция для создания кнопки добавления приема пищи
-      private func addMealButton() -> some View {
-          Button(action: {
-              isAddingMeal = true
-          }) {
-              HStack {
-                  Image(systemName: "plus")
-                  Text("Add Meal".localized)
-              }
-              .padding()
-              .frame(maxWidth: .infinity)
-              .background(Color("ButtonColor"))
-              .foregroundColor(Color("ButtonTextColor"))
-              .cornerRadius(10)
-          }
-          .padding(.bottom, 50)
-      }
+    private func addMealButton() -> some View {
+        Button(action: {
+            isAddingMeal = true
+        }) {
+            HStack {
+                Image(systemName: "plus")
+                Text("Add Meal".localized)
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color("ButtonColor"))
+            .foregroundColor(Color("ButtonTextColor"))
+            .cornerRadius(10)
+        }
+        .padding(.bottom, 50)
+    }
     
     // Удаление приема пищи
     private func deleteMeal(at offsets: IndexSet) {

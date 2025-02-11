@@ -7,25 +7,34 @@
 
 import SwiftUI
 
+// ProductListView.swift
+
 struct ProductListView: View {
     @Environment(\.managedObjectContext) private var context
-    @Environment(\.dismiss) private var dismiss
-    let category: Category // Используем Category вместо String
-    @Binding var selectedProducts: [ProductItem]
+    @Environment(\.presentationMode) var presentationMode
+    let category: Category
+    @Binding var selectedProducts: [SelectedProductModel]
     
     @ObservedObject var productViewModel: ProductViewModel
     
     @State private var isShowingProductForm = false
+    @State private var isGramInputPresented: Bool = false
+    @State private var selectedProductForEditing: SelectedProductModel? = nil
     
-    // Добавляем параметр searchText
-    var searchText: String = ""
+    @State private var isShowingEditView = false
+    
+    var isFromSearch: Bool = false
+    @Binding var searchText: String
+    
+    let isFromFoodDayView: Bool
+    
+    var productToEdit: CustomProduct?
     
     var body: some View {
         VStack {
             List {
                 selectedProductsSection
                 productsSection
-                customProductsSection
             }
             
             addProductButton
@@ -33,7 +42,7 @@ struct ProductListView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Text(category.name) // Используем category.name
+                Text(category.name)
                     .font(.system(size: 20))
                     .fontWeight(.medium)
                     .foregroundColor(Color("TextColor"))
@@ -42,54 +51,72 @@ struct ProductListView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .onDisappear {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
+        .sheet(isPresented: $isGramInputPresented) {
+            GramInputView(
+                selectedProducts: $selectedProducts,
+                selectedProductForEditing: $selectedProductForEditing,
+                isGramInputPresented: $isGramInputPresented
+            )
+        }
     }
     
-    // Секция с выбранными продуктами
     private var selectedProductsSection: some View {
         Group {
             if !selectedProducts.isEmpty {
                 Section(header: Text(LocalizedStringKey("selected_products_section"))) {
-                    ForEach(selectedProducts) { product in
-                        ProductRow(product: product, isSelected: true) {
-                            selectedProducts.removeAll { $0.id == product.id }
+                    ForEach($selectedProducts) { $selectedProduct in
+                        HStack {
+                            Text(selectedProduct.product.name)
+                            Spacer()
+                            Text(formatGrams(selectedProduct.quantity))
+                                .frame(minWidth: 40, maxWidth: 70)
+                                .padding(6)
+                                .background(.gray)
+                                .foregroundColor(Color("ButtonTextColor"))
+                                .cornerRadius(8)
+                                .onTapGesture {
+                                    selectedProductForEditing = selectedProduct
+                                    isGramInputPresented = true
+                                }
                         }
                     }
                 }
             }
         }
     }
+
     
-    // Секция с предустановленными продуктами
     private var productsSection: some View {
         Section {
-            ForEach(filteredProducts) { product in
-                ProductRow(product: product, isSelected: selectedProducts.contains { $0.id == product.id }) {
-                    toggleProductSelection(product)
+            if category.name == "Избранное" {
+                // Отображаем избранные продукты
+                ForEach(productViewModel.favoriteProducts) { product in
+                    ProductRow(
+                        product: product,
+                        isSelected: selectedProducts.contains { $0.product.id == product.id },
+                        action: {
+                            toggleProductSelection(product)
+                        }
+                    )
+                }
+            } else {
+                // Отображаем обычные продукты
+                ForEach(filteredProducts) { product in
+                    ProductRow(
+                        product: product,
+                        isSelected: selectedProducts.contains { $0.product.id == product.id },
+                        action: {
+                            toggleProductSelection(product)
+                        }
+                    )
                 }
             }
         }
     }
     
-    // Секция с пользовательскими продуктами
-    private var customProductsSection: some View {
-        Section {
-            ForEach(productViewModel.customProducts.filter { $0.category?.name == category.name }, id: \.id) { customProduct in
-                let product = ProductItem(
-                    name: customProduct.name ?? "",
-                    category: Category(name: customProduct.category?.name ?? "", categoryImage: ""),
-                    proteins: customProduct.proteins,
-                    fats: customProduct.fats,
-                    carbohydrates: customProduct.carbohydrates,
-                    calories: customProduct.calories
-                )
-                ProductRow(product: product, isSelected: selectedProducts.contains { $0.name == customProduct.name }) {
-                    toggleCustomProductSelection(customProduct)
-                }
-            }
-        }
-    }
-    
-    // Кнопка "+" для добавления продукта
     private var addProductButton: some View {
         Group {
             if let customCategory = productViewModel.customCategories.first(where: { $0.name == category.name }) {
@@ -103,16 +130,22 @@ struct ProductListView: View {
                         .clipShape(Circle())
                 }
                 .sheet(isPresented: $isShowingProductForm) {
-                    ProductFormView(productViewModel: productViewModel, category: customCategory)
+                    ProductFormView(
+                        productViewModel: productViewModel,
+                        category: customCategory,
+                        productToEdit: productToEdit)
                 }
             }
         }
     }
     
-    // Кнопка сохранения
     private var saveButton: some View {
         Button("save_changes_label".localized) {
-            dismiss() // Используем dismiss из Environment
+            if isFromSearch {
+                searchText = ""
+            } else {
+                presentationMode.wrappedValue.dismiss()
+            }
         }
         .foregroundColor(Color("ButtonTextColor"))
         .frame(maxWidth: .infinity)
@@ -122,15 +155,24 @@ struct ProductListView: View {
         .padding(.horizontal)
     }
     
-    // Отфильтрованные продукты
-    private var filteredProducts: [ProductItem] {
+    private var filteredProducts: [Product] {
         if category.name == "Поиск" {
-            // Если это категория "Поиск", фильтруем все продукты
-            let allProducts = Array(productsByCategory.values.flatMap { $0 })
+            // Combine all products (both standard and custom) into one array
+            let allProducts = productsByCategory.values
+                .flatMap { $0.map { Product(from: $0) } } +
+                productViewModel.customProducts.map { Product(from: $0) }
+            
+            // Filter by search text
             return allProducts.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         } else {
-            // Иначе фильтруем продукты по выбранной категории
-            let allProducts = productsByCategory[category] ?? []
+            // For non-search categories, include both standard and custom products
+            let standardProducts = productsByCategory[category]?.map { Product(from: $0) } ?? []
+            let customProducts = productViewModel.customProducts
+                .filter { $0.category?.name == category.name }
+                .map { Product(from: $0) }
+            
+            let allProducts = standardProducts + customProducts
+            
             if searchText.isEmpty {
                 return allProducts
             } else {
@@ -139,29 +181,25 @@ struct ProductListView: View {
         }
     }
     
-    // Переключение выбора продукта
-    private func toggleProductSelection(_ product: ProductItem) {
-        if selectedProducts.contains(where: { $0.id == product.id }) {
-            selectedProducts.removeAll { $0.id == product.id }
+    private func toggleProductSelection(_ product: Product) {
+        if let index = selectedProducts.firstIndex(where: { $0.product.id == product.id }) {
+            selectedProducts.remove(at: index)
         } else {
-            selectedProducts.append(product)
+            if isFromFoodDayView {
+                let newSelectedProduct = SelectedProductModel(product: product, quantity: 100)
+                selectedProducts.append(newSelectedProduct)
+                selectedProductForEditing = newSelectedProduct
+                isGramInputPresented = true // Открываем окно ввода граммов
+            }
         }
     }
-    
-    // Переключение выбора пользовательского продукта
-    private func toggleCustomProductSelection(_ customProduct: CustomProduct) {
-        let product = ProductItem(
-            name: customProduct.name ?? "",
-            category: Category(name: customProduct.category?.name ?? "", categoryImage: ""),
-            proteins: customProduct.proteins,
-            fats: customProduct.fats,
-            carbohydrates: customProduct.carbohydrates,
-            calories: customProduct.calories
-        )
-        if selectedProducts.contains(where: { $0.name == customProduct.name }) {
-            selectedProducts.removeAll { $0.name == customProduct.name }
+
+    private func formatGrams(_ grams: Double) -> String {
+        if grams >= 1000 {
+            let kilograms = grams / 1000
+            return String(format: "%.2f kg", kilograms)
         } else {
-            selectedProducts.append(product)
+            return String(format: "%.0f g", grams)
         }
     }
 }

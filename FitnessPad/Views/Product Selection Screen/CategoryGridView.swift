@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
+// CategoryGridView.swift
 
 struct CategoryGridView: View {
     @EnvironmentObject var productViewModel: ProductViewModel
-    @Binding var selectedProducts: [ProductItem]
+    @Binding var selectedProducts: [SelectedProductModel]
     @Binding var selectedCategory: String?
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) var presentationMode
     @State private var selectedCategories: Set<String> = []
     @State private var isShowingCategoryFilter = false
@@ -24,6 +24,8 @@ struct CategoryGridView: View {
     let searchCategory = Category(name: "Поиск", categoryImage: "search")
     
     var isSelectingCategory: Bool
+    
+    let isFromFoodDayView: Bool
     
     var categories: [Category] {
         let staticCategories = Set(productsByCategory.flatMap { $0.value.map { $0.category } })
@@ -38,26 +40,30 @@ struct CategoryGridView: View {
     var body: some View {
         NavigationStack {
             VStack {
+                if searchText.isEmpty {
+                    categoryGridViewTitle
+                }
                 
-                // Если текст поиска не пустой, показываем ProductListView
+                ProductSelectionViewSearchBar(text: $searchText)
+                
                 if !searchText.isEmpty {
                     ProductListView(
-                        category: searchCategory, // Используем временную категорию
+                        category: Category(
+                            name: "Поиск",
+                            categoryImage: "search"),
                         selectedProducts: $selectedProducts,
                         productViewModel: productViewModel,
-                        searchText: searchText // Передаем searchText
+                        isFromSearch: true,
+                        searchText: $searchText,
+                        isFromFoodDayView: isFromFoodDayView
                     )
                 } else {
-                    // Иначе показываем стандартный экран категорий
                     ScrollView {
-                        categoryGridViewTitle
+                       
                         
-                        if !selectedProducts.isEmpty {
+                        if !selectedProducts.isEmpty && isFromFoodDayView {
                             selectedProductsSection
                         }
-                        
-                        // Поле поиска
-                        ProductSelectionViewSearchBar(text: $searchText)
                         
                         categoriesGrid
                     }
@@ -78,7 +84,31 @@ struct CategoryGridView: View {
         }
     }
     
-    // Заголовок экрана
+//    var categoryGridViewTitle: some View {
+//        HStack {
+//            Text("category_grid_title".localized)
+//                .font(.system(size: 24))
+//                .fontWeight(.medium)
+//                .foregroundColor(Color("TextColor"))
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//            
+//            Spacer()
+//            HStack(spacing: 20) {
+//                NavigationLink(
+//                    destination: FavoritesView(
+//                        selectedProducts: $selectedProducts, // Передаем выбранные продукты
+//                        isFromFoodDayView: isFromFoodDayView // Передаем флаг isFromFoodDayView
+//                    )
+//                ) {
+//                    Image(systemName: "heart")
+//                }
+//                NavigationLink(destination: CategoryFormView(productViewModel: productViewModel)) {
+//                    Image(systemName: "plus")
+//                }
+//            }
+//        }
+//        .padding(.horizontal)
+//    }
     var categoryGridViewTitle: some View {
         HStack {
             Text("category_grid_title".localized)
@@ -88,19 +118,41 @@ struct CategoryGridView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             Spacer()
-            HStack(spacing: 20) {
-                NavigationLink(destination: FavoritesView()) {
-                    Image(systemName: "heart")
+            
+            HStack(spacing: 15) {
+                // Кнопка "Избранные продукты"
+                NavigationLink(destination: FavoritesView(
+                    selectedProducts: $selectedProducts,
+                    isFromFoodDayView: isFromFoodDayView
+                )) {
+                    Text("Избранные\nпродукты")
+                        .font(.system(size: 8)) // Размер текста 8
+                        .foregroundColor(Color("TextColor"))
+                        .multilineTextAlignment(.center)
+                    
+                        Image(systemName: "heart")
+                            .font(.system(size: 17)) // Размер иконки 17
+                            .foregroundColor(Color("TextColor")) 
                 }
-                NavigationLink(destination: CategoryFormView(productViewModel: productViewModel)) {
-                    Image(systemName: "plus")
+
+                // Кнопка "Добавить категорию"
+                NavigationLink(destination: CategoryFormView(
+                    productViewModel: productViewModel
+                )) {
+                    Text("Добавить\nкатегорию")
+                        .font(.system(size: 8)) // Размер текста 8
+                        .foregroundColor(Color("TextColor"))
+                        .multilineTextAlignment(.center)
+                    
+                        Image(systemName: "plus")
+                            .font(.system(size: 17)) // Размер иконки 17
+                            .foregroundColor(Color("TextColor"))
                 }
             }
         }
         .padding(.horizontal)
     }
     
-    // Секция с выбранными продуктами
     var selectedProductsSection: some View {
         HStack {
             Text("Выбрано \(selectedProducts.count) позиций".localized)
@@ -122,13 +174,19 @@ struct CategoryGridView: View {
         .padding(.horizontal)
     }
     
-    // Сетка категорий
     var categoriesGrid: some View {
         LazyVGrid(columns: columns, spacing: 16) {
             ForEach(categories, id: \.name) { category in
                 let isCustom = productViewModel.customCategories.contains { $0.name == category.name }
-                // Вместо передачи строки передаем Category
-                NavigationLink(destination: ProductListView(category: category, selectedProducts: $selectedProducts, productViewModel: productViewModel)) {
+                NavigationLink(destination:
+                                ProductListView(
+                    category: category,
+                    selectedProducts: $selectedProducts,
+                    productViewModel: productViewModel,
+                    searchText: $searchText,
+                    isFromFoodDayView: isFromFoodDayView
+                                )
+                ) {
                     CategoryTile(category: category, isCustom: isCustom) {
                         if isCustom, let customCategory = productViewModel.customCategories.first(where: { $0.name == category.name }) {
                             categoryToDelete = customCategory
@@ -147,13 +205,14 @@ struct CategoryGridView_Previews: PreviewProvider {
         // Создаем мок-ProductViewModel
         let productService = ProductService(context: PersistenceController.shared.container.viewContext)
         let mockProductViewModel = ProductViewModel(productService: productService)
-
+        
         
         // Возвращаем CategoryGridView с мок-данными
         CategoryGridView(
             selectedProducts: .constant([]), // Пустой массив выбранных продуктов
             selectedCategory: .constant(nil), // Никакая категория не выбрана
-            isSelectingCategory: false // Пример значения
+            isSelectingCategory: false,
+            isFromFoodDayView: true // Пример значения
         )
         .environmentObject(mockProductViewModel)
         .previewLayout(.sizeThatFits)

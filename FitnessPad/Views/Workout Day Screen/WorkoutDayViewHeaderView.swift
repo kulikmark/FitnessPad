@@ -79,7 +79,10 @@ struct WorkoutDayViewHeaderView: View {
             }
         }
         .sheet(isPresented: $isShowingExercisesView) {
-            ExercisesView(isFromWokroutDayView: true, selectedDate: selectedDate)
+            ExercisesView(
+                isFromWokroutDayView: true,
+                selectedDate: selectedDate
+            )
                 .background(Color("BackgroundColor"))
                 .edgesIgnoringSafeArea(.all)
                 .transition(.opacity)

@@ -24,9 +24,10 @@ struct ProductFormView: View {
     var productToEdit: CustomProduct?
     @ObservedObject var productViewModel: ProductViewModel
     
-    init(productViewModel: ProductViewModel, category: CustomCategory) {
+    init(productViewModel: ProductViewModel, category: CustomCategory, productToEdit: CustomProduct?) {
         self.productViewModel = productViewModel
         self._category = State(initialValue: category)
+        self.productToEdit = productToEdit
     }
     
     var body: some View {
@@ -39,9 +40,16 @@ struct ProductFormView: View {
                         set: { category.name = $0 }
                     ))
                     TextField("Proteins", text: $proteins)
+                        .keyboardType(.decimalPad) // Клавиатура с цифрами и точкой
+                    
                     TextField("Fats", text: $fats)
+                        .keyboardType(.decimalPad) // Клавиатура с цифрами и точкой
+                    
                     TextField("Carbohydrates", text: $carbohydrates)
+                        .keyboardType(.decimalPad) // Клавиатура с цифрами и точкой
+                    
                     TextField("Calories", text: $calories)
+                        .keyboardType(.decimalPad) // Клавиатура с цифрами и точкой
                 }
             }
             .navigationTitle(productToEdit == nil ? "Add Product" : "Edit Product")
@@ -54,13 +62,23 @@ struct ProductFormView: View {
                 }
             }
         }
+        .onAppear {
+            if let productToEdit = productToEdit {
+                // Заполняем поля данными продукта
+                name = productToEdit.name ?? ""
+                proteins = String(productToEdit.proteins) // Преобразуем Double в String
+                fats = String(productToEdit.fats) // Преобразуем Double в String
+                carbohydrates = String(productToEdit.carbohydrates) // Преобразуем Double в String
+                calories = String(productToEdit.calories) // Преобразуем Double в String
+            }
+        }
     }
     
     private func saveProduct() {
-        let proteinsValue = Double(proteins) ?? 0
-        let fatsValue = Double(fats) ?? 0
-        let carbohydratesValue = Double(carbohydrates) ?? 0
-        let caloriesValue = Double(calories) ?? 0
+        let proteinsValue = Double(proteins.replacingOccurrences(of: ",", with: ".")) ?? 0
+        let fatsValue = Double(fats.replacingOccurrences(of: ",", with: ".")) ?? 0
+        let carbohydratesValue = Double(carbohydrates.replacingOccurrences(of: ",", with: ".")) ?? 0
+        let caloriesValue = Double(calories.replacingOccurrences(of: ",", with: ".")) ?? 0
         
         if let product = productToEdit {
             productViewModel.updateProduct(

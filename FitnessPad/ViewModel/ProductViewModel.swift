@@ -11,7 +11,7 @@ import CoreData
 class ProductViewModel: ObservableObject {
     @Published var customCategories: [CustomCategory] = []
     @Published var customProducts: [CustomProduct] = []
-    @Published var favoriteProducts: [ProductItem] = []
+    @Published var favoriteProducts: [Product] = []
     
     private let productService: ProductService
     
@@ -22,6 +22,7 @@ class ProductViewModel: ObservableObject {
         self.productService = productService
         fetchCustomCategories()
         fetchCustomProducts()
+        fetchFavoriteProducts()
     }
     
     // Загрузка пользовательских категорий
@@ -82,15 +83,30 @@ class ProductViewModel: ObservableObject {
         fetchCustomProducts() // Обновляем список продуктов
     }
     
-    // Добавление продукта в избранное
-       func addToFavorites(_ product: ProductItem) {
-           if !favoriteProducts.contains(where: { $0.id == product.id }) {
-               favoriteProducts.append(product)
-           }
-       }
-       
-       // Удаление продукта из избранного
-       func removeFromFavorites(_ product: ProductItem) {
-           favoriteProducts.removeAll { $0.id == product.id }
-       }
+    // В ProductViewModel
+    func addToFavorites(_ product: Product) {
+        productService.addFavoriteProduct(product)
+        fetchFavoriteProducts() // Обновляем список избранных
+    }
+
+    func removeFromFavorites(_ product: Product) {
+        productService.removeFavoriteProduct(product)
+        fetchFavoriteProducts() // Обновляем список избранных
+    }
+
+    func fetchFavoriteProducts() {
+        let favoriteProductsFromCoreData = productService.fetchFavoriteProducts()
+        favoriteProducts = favoriteProductsFromCoreData.map { favoriteProduct in
+            Product(
+                id: favoriteProduct.id ?? UUID(),
+                name: favoriteProduct.name ?? "",
+                category: Category(name: "", categoryImage: ""), // Укажите категорию, если нужно
+                proteins: favoriteProduct.proteins,
+                fats: favoriteProduct.fats,
+                carbohydrates: favoriteProduct.carbohydrates,
+                calories: favoriteProduct.calories
+            )
+        }
+    }
+
 }

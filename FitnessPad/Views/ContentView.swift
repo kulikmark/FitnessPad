@@ -18,7 +18,7 @@ struct ContentView: View {
     @EnvironmentObject var productService: ProductService
     @EnvironmentObject var coreDataService: CoreDataService
     
-    @State private var selectedProducts: [ProductItem] = []
+    @State private var selectedProducts: [SelectedProductModel] = []
     @State private var selectedCategory: String? = nil
     @State private var isSelectingCategory: Bool = false
 
@@ -44,7 +44,8 @@ struct ContentView: View {
                     CategoryGridView(
                         selectedProducts: $selectedProducts,
                         selectedCategory: $selectedCategory,
-                        isSelectingCategory: isSelectingCategory
+                        isSelectingCategory: isSelectingCategory,
+                        isFromFoodDayView: false
                     )
                     .environmentObject(productViewModel)
                     .environmentObject(productService)

@@ -10,11 +10,14 @@ import SwiftUI
 struct MealFormView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var foodDayViewModel: FoodDayViewModel
+    @ObservedObject var productViewModel: ProductViewModel
     @State private var mealName: String
     @State var selectedProducts: [SelectedProductModel] = []
     @State private var isProductSelectionPresented: Bool = false
     @State private var isGramInputPresented: Bool = false
     @State private var selectedProductForEditing: SelectedProductModel? = nil
+    
+    let isFromFoodDayView: Bool
     
     var isSaveButtonDisabled: Bool {
         mealName.isEmpty || selectedProducts.isEmpty
@@ -23,11 +26,13 @@ struct MealFormView: View {
     var meal: Meal?
     var selectedDate: Date
     
-    init(meal: Meal? = nil, selectedDate: Date, foodDayViewModel: FoodDayViewModel) {
+    init(meal: Meal? = nil, selectedDate: Date, foodDayViewModel: FoodDayViewModel, productViewModel: ProductViewModel, isFromFoodDayView: Bool) {
         self.meal = meal
         self.selectedDate = selectedDate
         self.foodDayViewModel = foodDayViewModel
+        self.productViewModel = productViewModel
         _mealName = State(initialValue: meal?.name ?? "")
+        self.isFromFoodDayView = isFromFoodDayView
         
         if let productString = meal?.products {
             let productEntries = productString.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
@@ -36,7 +41,15 @@ struct MealFormView: View {
                 let components = entry.split(separator: ":")
                 if components.count == 2, let quantity = Double(components[1]) {
                     let productName = String(components[0])
-                    if let product = productsByCategory.values.flatMap({ $0 }).first(where: { $0.name == productName }) {
+                    
+                    // Search for the product in `productsByCategory` (ProductItem)
+                    if let productItem = productsByCategory.values.flatMap({ $0 }).first(where: { $0.name == productName }) {
+                        let product = Product(from: productItem) // Convert ProductItem to Product
+                        products.append(SelectedProductModel(product: product, quantity: quantity))
+                    }
+                    // Search for the product in `productViewModel.customProducts` (CustomProduct)
+                    else if let customProduct = productViewModel.customProducts.first(where: { $0.name == productName }) {
+                        let product = Product(from: customProduct) // Convert CustomProduct to Product
                         products.append(SelectedProductModel(product: product, quantity: quantity))
                     }
                 }
@@ -50,7 +63,7 @@ struct MealFormView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(meal == nil ? "add_meal_label".localized : "edit_meal_label".localized) // Локализованный текст
+                Text(meal == nil ? "add_meal_label".localized : "edit_meal_label".localized)
                     .font(.system(size: 24))
                     .fontWeight(.medium)
                     .foregroundColor(Color("TextColor"))
@@ -63,10 +76,10 @@ struct MealFormView: View {
             
             Form {
                 Section {
-                    TextField("meal_name_placeholder".localized, text: $mealName) // Локализованный текст
+                    TextField("meal_name_placeholder".localized, text: $mealName)
                 }
                 
-                Section(header: Text("selected_products_label".localized)) { // Локализованный текст
+                Section(header: Text("selected_products_label".localized)) {
                     ForEach($selectedProducts) { $selectedProduct in
                         HStack {
                             Text(selectedProduct.product.name)
@@ -74,11 +87,16 @@ struct MealFormView: View {
                             
                             // Текстовое поле для выбора граммовки
                             Text(formatGrams(selectedProduct.quantity))
-                                .frame(minWidth: 40, maxWidth: 60)
+                                .frame(minWidth: 40, maxWidth: 70)
+                                .padding(6)
+                                .background(.gray)
+                                .foregroundColor(Color("ButtonTextColor"))
+                                .cornerRadius(8)
                                 .onTapGesture {
                                     selectedProductForEditing = selectedProduct
                                     isGramInputPresented = true
                                 }
+
                         }
                         .contentShape(Rectangle())
                     }
@@ -92,7 +110,7 @@ struct MealFormView: View {
                     }) {
                         HStack {
                             Image(systemName: "plus")
-                            Text("add_product_label".localized) // Локализованный текст
+                            Text("add_product_label".localized)
                         }
                         .foregroundColor(Color("ButtonTextColor"))
                         .frame(maxWidth: .infinity)
@@ -110,7 +128,7 @@ struct MealFormView: View {
                 }
             }
             
-            Button("save_changes_label".localized) { // Локализованный текст
+            Button("save_changes_label".localized) {
                 saveMeal()
                 presentationMode.wrappedValue.dismiss()
             }
@@ -124,18 +142,17 @@ struct MealFormView: View {
         }
         .background(Color("BackgroundColor").edgesIgnoringSafeArea(.all))
         .fullScreenCover(isPresented: $isProductSelectionPresented) {
-            CategoryGridView(selectedProducts: Binding<[ProductItem]>(
-                get: { selectedProducts.map { $0.product } },
-                set: { newProducts in
-                    selectedProducts = newProducts.map { SelectedProductModel(product: $0) }
-                }
-            ),  selectedCategory: .constant(nil), isSelectingCategory: false)
+            CategoryGridView(
+                selectedProducts: $selectedProducts,
+                selectedCategory: .constant(nil),
+                isSelectingCategory: false, isFromFoodDayView: true
+                )
         }
         .sheet(isPresented: $isGramInputPresented) {
             GramInputView(selectedProducts: $selectedProducts, selectedProductForEditing: $selectedProductForEditing, isGramInputPresented: $isGramInputPresented)
         }
     }
-
+    
     private func saveMeal() {
         let productEntries = selectedProducts.map { "\($0.product.name):\($0.quantity)" }.joined(separator: ", ")
         
@@ -156,7 +173,7 @@ struct MealFormView: View {
                 proteins: totalProteins,
                 fats: totalFats,
                 carbohydrates: totalCarbohydrates,
-                calories: totalCalories,      
+                calories: totalCalories,
                 date: selectedDate
             )
         }
@@ -171,48 +188,3 @@ struct MealFormView: View {
         }
     }
 }
-
-
-//struct MealFormView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        // Создаем моковый ViewModel для превью
-//        let viewModel = FitnessPadViewModel()
-//
-//        // Создаем моковую дату
-//        let selectedDate = Date()
-//
-//        // Создаем моковый объект Meal
-//        let meal = createMockMeal()
-//
-//        // Отображаем MealFormView в превью
-//        Group {
-//            // Превью для добавления нового приема пищи
-//            MealFormView(selectedDate: selectedDate, viewModel: viewModel)
-//                .previewDisplayName("Add Meal")
-//
-//            // Превью для редактирования существующего приема пищи
-//            MealFormView(meal: meal, selectedDate: selectedDate, viewModel: viewModel)
-//                .previewDisplayName("Edit Meal")
-//        }
-//    }
-//
-//    // Метод для создания мокового объекта Meal
-//    static func createMockMeal() -> Meal {
-//        let context = PersistenceController.shared.container.viewContext
-//        let meal = Meal(context: context)
-//        meal.name = "Sample Meal"
-//        meal.calories = 500
-//        meal.proteins = 30
-//        meal.fats = 20
-//        meal.carbohydrates = 50
-//
-//        // Сохраняем изменения в контексте
-//        do {
-//            try context.save()
-//        } catch {
-//            print("Failed to save mock meal: \(error)")
-//        }
-//
-//        return meal
-//    }
-//}

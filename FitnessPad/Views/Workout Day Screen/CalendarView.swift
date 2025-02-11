@@ -93,7 +93,10 @@ struct CalendarView: View {
         .sheet(isPresented: $isShowingExercisesView, onDismiss: {
             presentationMode.wrappedValue.dismiss()
         }) {
-            ExercisesView(isFromWokroutDayView: true, selectedDate: selectedDate) // Передаем selectedDate
+            ExercisesView(
+                isFromWokroutDayView: true,
+                selectedDate: selectedDate
+            )
                 .environmentObject(viewModel)
                 .padding(.top, 20)
         }
