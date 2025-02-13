@@ -32,23 +32,14 @@ struct ProductListView: View {
     
     var body: some View {
         VStack {
+            productListViewHeader
+            
             List {
-                selectedProductsSection
+//                selectedProductsSection
                 productsSection
             }
-            
             addProductButton
             saveButton
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Text(category.name)
-                    .font(.system(size: 20))
-                    .fontWeight(.medium)
-                    .foregroundColor(Color("TextColor"))
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(2)
-            }
         }
         .navigationBarBackButtonHidden(true)
         .onDisappear {
@@ -63,25 +54,48 @@ struct ProductListView: View {
         }
     }
     
-    private var selectedProductsSection: some View {
-        Group {
-            if !selectedProducts.isEmpty {
-                Section(header: Text(LocalizedStringKey("selected_products_section"))) {
-                    ForEach($selectedProducts) { $selectedProduct in
-                        HStack {
-                            Text(selectedProduct.product.name)
-                            Spacer()
-                            
-                            GramTextView(grams: selectedProduct.quantity) {
-                                selectedProductForEditing = selectedProduct
-                                isGramInputPresented = true
-                            }
-                        }
-                    }
-                }
-            }
+    var productListViewHeader: some View {
+        HStack {
+            CustomBackButtonView()
+        
+        Text(category.name)
+            .font(.system(size: 24))
+            .fontWeight(.medium)
+            .foregroundColor(Color("TextColor"))
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .padding(.horizontal)
     }
+    
+//    private var selectedProductsSection: some View {
+//        Group {
+//            if !selectedProducts.isEmpty {
+//                Section(header: Text(LocalizedStringKey("selected_products_section"))) {
+//                    ForEach($selectedProducts) { $selectedProduct in
+//                        HStack {
+//                            Text(selectedProduct.product.name)
+//                            Spacer()
+//                            
+//                            GramTextView(grams: selectedProduct.quantity) {
+//                                selectedProductForEditing = selectedProduct
+//                                isGramInputPresented = true
+//                            }
+//                        }
+//                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+//                            Button(role: .destructive) {
+//                                // Удаляем продукт из списка выбранных
+//                                if let index = selectedProducts.firstIndex(where: { $0.id == selectedProduct.id }) {
+//                                    selectedProducts.remove(at: index)
+//                                }
+//                            } label: {
+//                                Label("Удалить", systemImage: "trash")
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     
     private var productsSection: some View {

@@ -27,6 +27,11 @@ struct CategoryGridView: View {
     
     let isFromFoodDayView: Bool
     
+    @State private var isGramInputPresented: Bool = false
+    @State private var selectedProductForEditing: SelectedProductModel? = nil
+    
+    @State private var isSelectedProductsExpanded: Bool = false
+    
     var categories: [Category] {
         let staticCategories = Set(productsByCategory.flatMap { $0.value.map { $0.category } })
         let customCategories = productViewModel.customCategories.map { Category(name: $0.name ?? "", categoryImage: "") }
@@ -42,7 +47,7 @@ struct CategoryGridView: View {
             VStack {
                 
                 if searchText.isEmpty {
-                    categoryGridViewTitle
+                    categoryGridViewHeader
                 }
                 
                 ProductSelectionViewSearchBar(text: $searchText)
@@ -59,13 +64,54 @@ struct CategoryGridView: View {
                         isFromFoodDayView: isFromFoodDayView
                     )
                 } else {
-                    ScrollView {
-                       
-                        
-                        if !selectedProducts.isEmpty && isFromFoodDayView {
-                            selectedProductsSection
+                    if !selectedProducts.isEmpty && isFromFoodDayView {
+                     
+                        HStack {
+                            HStack {
+                            Text("Выбрано \(selectedProducts.count) позиций".localized)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color("TextColor"))
+                                
+                            
+                            // Кнопка с стрелочкой
+                            Button(action: {
+                                isSelectedProductsExpanded.toggle()
+                            }) {
+                                Image(systemName: isSelectedProductsExpanded ? "chevron.down" : "chevron.right")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(Color.gray)
+                                    .padding(8)
+                                    .background(Circle().fill(Color.gray.opacity(0.2)))
+                            }
                         }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Button(action: {
+                                presentationMode.wrappedValue.dismiss()
+                            }) {
+                                Text("save_button".localized)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(Color("ButtonTextColor"))
+                                    .padding(8)
+                                    .background(Color("ButtonColor"))
+                                    .cornerRadius(10)
+                            }
+                        }
+                        .padding()
                         
+                        if isSelectedProductsExpanded {
+                           
+                                SelectedProductsSection(
+                                    selectedProducts: $selectedProducts,
+                                    selectedProductForEditing: $selectedProductForEditing,
+                                    isGramInputPresented: $isGramInputPresented
+                                )
+                            
+                         
+                        }
+                    }
+                    
+                    ScrollView {
                         categoriesGrid
                     }
                 }
@@ -85,7 +131,7 @@ struct CategoryGridView: View {
         }
     }
     
-    var categoryGridViewTitle: some View {
+    var categoryGridViewHeader: some View {
         HStack {
             if isFromFoodDayView {
                 CustomBackButtonView()
@@ -95,7 +141,10 @@ struct CategoryGridView: View {
                 .font(.system(size: 24))
                 .fontWeight(.medium)
                 .foregroundColor(Color("TextColor"))
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
+                
+               
             
             Spacer()
             
@@ -105,54 +154,42 @@ struct CategoryGridView: View {
                     selectedProducts: $selectedProducts,
                     isFromFoodDayView: isFromFoodDayView
                 )) {
-                    Text("Любимые\nпродукты")
-                        .font(.system(size: 8))
-                        .foregroundColor(Color("TextColor"))
-                        .multilineTextAlignment(.center)
-                    
+                    HStack(spacing: 3) {
+                        Text("Любимые продукты")
+                            .font(.system(size: 10))
+                            .foregroundColor(Color("TextColor"))
+                            .multilineTextAlignment(.center)
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(2)
+
                         Image(systemName: "heart")
                             .font(.system(size: 17))
-                            .foregroundColor(Color("TextColor")) 
+                            .foregroundColor(Color("TextColor"))
+                    }
                 }
 
                 // Кнопка "Добавить категорию"
                 NavigationLink(destination: CategoryFormView(
                     productViewModel: productViewModel
                 )) {
-                    Text("Добавить\nкатегорию")
-                        .font(.system(size: 8))
-                        .foregroundColor(Color("TextColor"))
-                        .multilineTextAlignment(.center)
-                    
+                    HStack(spacing: 3) {
+                        Text("Добавить категорию")
+                            .font(.system(size: 10))
+                            .foregroundColor(Color("TextColor"))
+                            .multilineTextAlignment(.center)
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(2)
+                        
                         Image(systemName: "plus")
                             .font(.system(size: 17))
                             .foregroundColor(Color("TextColor"))
+                    }
                 }
             }
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal)
         .padding(.top)
-    }
-    
-    var selectedProductsSection: some View {
-        HStack {
-            Text("Выбрано \(selectedProducts.count) позиций".localized)
-                .font(.system(size: 18))
-                .foregroundColor(Color("TextColor"))
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }) {
-                Text("save_button".localized)
-                    .font(.system(size: 12))
-                    .foregroundColor(Color("ButtonTextColor"))
-                    .padding(8)
-                    .background(Color("ButtonColor"))
-                    .cornerRadius(10)
-            }
-        }
-        .padding(.horizontal)
     }
     
     var categoriesGrid: some View {
@@ -187,13 +224,43 @@ struct CategoryGridView_Previews: PreviewProvider {
         let productService = ProductService(context: PersistenceController.shared.container.viewContext)
         let mockProductViewModel = ProductViewModel(productService: productService)
         
+        // Создаем мок-категории
+        let fruitCategory = Category(name: "Фрукты", categoryImage: "fruit")
+        let meatCategory = Category(name: "Мясо", categoryImage: "meat")
+        
+        // Создаем мок-продукты
+        let apple = Product(
+            id: UUID(), // Уникальный идентификатор
+            name: "Яблоко",
+            category: fruitCategory, // Передаем объект Category
+            proteins: 0.3,
+            fats: 0.2,
+            carbohydrates: 14,
+            calories: 52
+        )
+        
+        let chickenBreast = Product(
+            id: UUID(), // Уникальный идентификатор
+            name: "Куриная грудка",
+            category: meatCategory, // Передаем объект Category
+            proteins: 31,
+            fats: 3.6,
+            carbohydrates: 0,
+            calories: 165
+        )
+        
+        // Создаем массив выбранных продуктов
+        let selectedProducts: [SelectedProductModel] = [
+            SelectedProductModel(product: apple),
+            SelectedProductModel(product: chickenBreast)
+        ]
         
         // Возвращаем CategoryGridView с мок-данными
         CategoryGridView(
-            selectedProducts: .constant([]), // Пустой массив выбранных продуктов
+            selectedProducts: .constant(selectedProducts), // Передаем массив выбранных продуктов
             selectedCategory: .constant(nil), // Никакая категория не выбрана
             isSelectingCategory: false,
-            isFromFoodDayView: true // Пример значения
+            isFromFoodDayView: true
         )
         .environmentObject(mockProductViewModel)
         .previewLayout(.sizeThatFits)

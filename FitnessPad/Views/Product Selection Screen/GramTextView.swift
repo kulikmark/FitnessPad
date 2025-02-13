@@ -14,7 +14,8 @@ struct GramTextView: View {
     
     var body: some View {
         Text(formatGrams(grams))
-            .frame(minWidth: 40, maxWidth: 70)
+            .font(.system(size: 14))
+            .frame(minWidth: 40, maxWidth: 60)
             .padding(6)
             .background(Color(.systemGray4))
             .foregroundColor(Color("ButtonTextColor"))

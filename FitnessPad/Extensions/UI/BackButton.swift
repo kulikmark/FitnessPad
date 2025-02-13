@@ -20,6 +20,6 @@ struct CustomBackButtonView: View {
                 .padding(8)
                 .background(Circle().fill(Color("ViewColor")))
         }
-        .padding(.trailing, 15)
+        .padding(.trailing, 5)
     }
 }

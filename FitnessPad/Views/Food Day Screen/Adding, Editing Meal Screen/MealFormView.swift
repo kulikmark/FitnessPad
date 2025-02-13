@@ -78,24 +78,18 @@ struct MealFormView: View {
                 Section {
                     TextField("meal_name_placeholder".localized, text: $mealName)
                 }
-                
-                Section(header: Text("selected_products_label".localized)) {
-                    ForEach($selectedProducts) { $selectedProduct in
-                        HStack {
-                            Text(selectedProduct.product.name)
-                            Spacer()
-                            
-                            // Текстовое поле для выбора граммовки
-                            GramTextView(grams: selectedProduct.quantity) {
-                                selectedProductForEditing = selectedProduct
-                                isGramInputPresented = true
-                            }
-
-                        }
-                        .contentShape(Rectangle())
-                    }
-                    .onDelete { indices in
-                        selectedProducts.remove(atOffsets: indices)
+               
+                    Section {
+                        if !selectedProducts.isEmpty {
+                        SelectedProductsSection(
+                            selectedProducts: $selectedProducts,
+                            selectedProductForEditing: $selectedProductForEditing,
+                            isGramInputPresented: $isGramInputPresented
+                        )
+                    } else {
+                        Text("Продукты еще не добавлены")
+                            .multilineTextAlignment(.center)
+                            .padding(40)
                     }
                     
                     // Add Product Button

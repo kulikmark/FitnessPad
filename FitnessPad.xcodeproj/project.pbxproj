@@ -100,6 +100,7 @@
 		6DF2CFF92D40085100DCFC9C /* MealFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF2CFF82D40085100DCFC9C /* MealFormView.swift */; };
 		6DFDCEA92D5B8640005921F4 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFDCEA82D5B8640005921F4 /* Product.swift */; };
 		6DFDCEAB2D5C1207005921F4 /* GramTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFDCEAA2D5C1207005921F4 /* GramTextView.swift */; };
+		6DFDCEAD2D5CD608005921F4 /* SelectedProductsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFDCEAC2D5CD608005921F4 /* SelectedProductsSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -201,6 +202,7 @@
 		6DF2CFF82D40085100DCFC9C /* MealFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealFormView.swift; sourceTree = "<group>"; };
 		6DFDCEA82D5B8640005921F4 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		6DFDCEAA2D5C1207005921F4 /* GramTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GramTextView.swift; sourceTree = "<group>"; };
+		6DFDCEAC2D5CD608005921F4 /* SelectedProductsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedProductsSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -459,6 +461,7 @@
 			isa = PBXGroup;
 			children = (
 				6DE619412D53C70A0036BCDF /* CategoryGridView.swift */,
+				6DFDCEAC2D5CD608005921F4 /* SelectedProductsSection.swift */,
 				6D3C26162D53F9C000C3DD12 /* CategoryTile.swift */,
 				6D9D8F802D5523DC00807D80 /* FavoritesView.swift */,
 				6D9D8F842D554AEC00807D80 /* CategoryFormView.swift */,
@@ -614,6 +617,7 @@
 			files = (
 				6D9D8F852D554AEC00807D80 /* CategoryFormView.swift in Sources */,
 				6DFDCEAB2D5C1207005921F4 /* GramTextView.swift in Sources */,
+				6DFDCEAD2D5CD608005921F4 /* SelectedProductsSection.swift in Sources */,
 				6DE619342D5370AA0036BCDF /* buttonWithLabelAndImage.swift in Sources */,
 				6DE6193A2D5378780036BCDF /* NutritionInfoRow.swift in Sources */,
 				6D55DB332D479D8F00A642C5 /* FoodDayHeaderView.swift in Sources */,

@@ -479,7 +479,7 @@ struct ExercisesView: View {
                 exercisesSection(for: category, exercises: exercises)
             }
         }
-        .scrollIndicators(.hidden)
+//        .scrollIndicators(.hidden)
         .scrollContentBackground(.hidden)
         .listStyle(PlainListStyle())
         .padding(.bottom, 33)

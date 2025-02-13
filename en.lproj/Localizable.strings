@@ -91,7 +91,7 @@
 
 // MARK: - WorkoutDayViewHeaderView
 "weight_label" = "Body weight:";
-"add_exercise_label" = "Add\nExercise";
+"add_exercise_label" = "Add Exercise";
 "weight_placeholder" = "0 kg";
 "save_button_title" = "Save";
 
@@ -466,8 +466,8 @@
 // MARK: - Exercises View
 "exercises_search_placeholder" = "Search Exercises";
 "exercises_list_title" = "Exercises List";
-"restore_exercises_button" = "Restore\nExercises";
-"add_exercise_button" = "New\nExercise";
+"restore_exercises_button" = "Restore Exercises";
+"add_exercise_button" = "New Exercise";
 "favourites_only_button" = "Favourite";
 "exercise_category_title" = "Exercise Category";
 "add_new_category_button" = "+ Add New Category";

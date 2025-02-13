@@ -21,6 +21,9 @@ extension View {
             Text(label.localized)
                 .font(labelFont)
                 .foregroundColor(labelColor)
+                .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.5)
+                .lineLimit(2)
             
             Button(action: action) {
                 Image(systemName: systemImageName)

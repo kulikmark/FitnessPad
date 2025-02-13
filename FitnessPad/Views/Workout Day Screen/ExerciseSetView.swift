@@ -57,7 +57,7 @@ struct ExerciseSetView: View {
             .scrollIndicators(.hidden)
             .frame(maxWidth: .infinity)
             .scrollContentBackground(.hidden)
-            .scrollDismissesKeyboard(.immediately)
+            .scrollDismissesKeyboard(.interactively)
             
             addSetButton(for: exercise)
         }
